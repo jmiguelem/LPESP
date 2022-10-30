@@ -1,0 +1,14 @@
+LpEsp prueba;
+
+Variables:
+    var entero a;
+    var flotante b;
+    var logico c;
+    var texto d;
+
+Esp:
+    a = 5;
+    a = a + 15;
+    b = 5.569;
+    c = falso;
+Pse

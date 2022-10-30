@@ -1,0 +1,27 @@
+Compiladores
+ - José Miguel Elizalde
+ - Luis Mario Trujillo
+
+-----     AVANCE 1     -----
+
+Se desarrollo parte del lexico
+Reconoce una parte inicial de lo necesario para nuestro compilador, basandonos en la documentacion de PLY(Python-Lex-Yacc)
+https://ply.readthedocs.io/en/latest/index.html
+
+No cuenta con la funcionalidad completa, ni con el avance esperado con lo visto en clase, pero decidimos enfocarnos en revisar la 
+documentacion de PLy y de investigar en otras fuentes maneras de implentar el lexico que nos servira a futuro en el proyecto
+
+
+-----     29/10/2022     -----
+
+Cosas Hechas
+ - Clase de directorio de funciones y tabla de variables
+ - Puntos neuralgicos (PNs) de estructura inicial
+ - PNs de Variables
+
+Cosas Pendientes
+ - Agregar gramatica de funciones
+ - Agregar gramatica de ciclos 
+ - Definir estructuras de datos
+ - Definir que se acepten variables como (entero a,b,c,d;)
+
