@@ -27,7 +27,14 @@ class TablaVariables:
 
     def crear(self, nombre, tipo):
         if nombre in self.tabla.keys():
-            print(f"Error en codigo \n Variable: {nombre} ya fue definida")
+            print(f"Error en codigo - Variable: {nombre} ya fue definida")
             exit()
         else:
             self.tabla[nombre] = [tipo, None]
+
+    def regresarTipo(self, nombre):
+        try:
+            return self.tabla[nombre][0]
+        except:
+            print("Error en codigo - Variable {nombre} no esta definida ")
+            exit() 

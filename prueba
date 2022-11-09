@@ -10,5 +10,6 @@ Esp:
     a = 5;
     a = a + 15;
     b = 5.569;
+    b = b * 2;
     c = falso;
-Pse
+Pse;
