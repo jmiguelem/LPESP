@@ -5,7 +5,11 @@ palabras_reservadas = {
     'LpEsp': 'LPESP',
     'Esp': 'ESP',
     'Variables': 'VARS',
+    'Funciones': 'FUNCS',
+    'func' : 'FUNC',
     'var': 'VAR',
+    'arreglo' : 'ARREGLO',
+    'matriz' : 'MATRIZ',
     'entero': 'ENTERO',
     'flotante': 'FLOTANTE',
     'texto': 'TEXTO',
@@ -79,7 +83,7 @@ def t_CTEENT(t):
     return t
 
 def t_CTETEXTO(t):
-    r'\'[A-Za-z_0-9$%&/\(\)\"#=\?\¿\´\+\*\-\.\,\{\}\[\]]\''
+    r'\'[A-Za-z_0-9$%&/\(\)\"#=\?\¿\´\+\*\-\.\,\{\}\[\]\ t]*\''
     t.type = 'CTETEXTO'
     return t
 

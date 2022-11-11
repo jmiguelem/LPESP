@@ -19,6 +19,13 @@ class Directorio:
         del self.directorio[id_funcion][1]
         self.directorio[id_funcion].append(None)
 
+    def imprimirTabla(self):
+        print(self.directorio, "\n")
+        for funcion in self.directorio.keys():
+            print(f"Funcion: {funcion}")
+            print(self.directorio[funcion][1].tabla)
+            print("\n")
+
         
 
 class TablaVariables:
@@ -38,3 +45,10 @@ class TablaVariables:
         except:
             print("Error en codigo - Variable {nombre} no esta definida ")
             exit() 
+
+    def verificarVariable(self, nombre):
+        if nombre in self.tabla.keys():
+            pass
+        else:
+            print(f"Error en codigo - Variable {nombre} no definida")
+            exit()

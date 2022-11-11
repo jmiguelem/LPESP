@@ -2,14 +2,10 @@ LpEsp prueba;
 
 Variables:
     var entero a;
-    var flotante b;
-    var logico c;
-    var texto d;
+    var flotante b, c, d; 
+
 
 Esp:
-    a = 5;
-    a = a + 15;
-    b = 5.569;
-    b = b * 2;
-    c = falso;
+    imprime('Hola mundo', 5 + 5);
+    a = 1 + 2 * 3 / 4 - 5;
 Pse;

@@ -13,23 +13,46 @@ contadorAvail = 0
 
 # ESTRUCTURA DEL PROGRAMA
 def p_inicio(p):
-    '''inicio : LPESP ID pn_crear_directorio PUNTOCOMA VARS DOSPUNTOS bloque_variables ESP DOSPUNTOS bloque PSE PUNTOCOMA pn_terminar_programa'''
+    '''inicio : LPESP ID pn_crear_directorio PUNTOCOMA VARS DOSPUNTOS pn_crear_tabla_variables bloque_variables ESP DOSPUNTOS bloque PSE PUNTOCOMA pn_terminar_programa'''
+    print("inicio")
 
 def p_bloque_variables(p):
-    '''bloque_variables : pn_crear_tabla_variables variables 
+    '''bloque_variables : variables
                         | empty '''
-
-def p_bloque(p):
-    '''bloque : estatutos
-                | empty'''
+    print("bloque_variables")
 
 # VARIABLES
+
 def p_variables(p):
-    '''variables : variable variables
+    '''variables : VAR tipo_variable id_variable PUNTOCOMA variables2'''
+    print("variables")
+
+def p_variables2(p):
+    '''variables2 : VAR tipo_variable id_variable PUNTOCOMA variables2
+                | empty'''
+    print("variables2")
+
+def p_id_variable(p):
+    '''id_variable : ID pn_agrega_variable id_variable2
+                    | empty'''
+    print("id_variable")
+
+def p_id_variable2(p):
+    '''id_variable2 : COMA ID pn_agrega_variable id_variable2
+                    | empty'''
+    print("id_variable2")
+
+
+def p_arreglos(p): 
+    '''arreglos : ARREGLO tipo_variable arreglo PUNTOCOMA'''
+
+def p_arreglo(p):
+    '''arreglo : arreglo2 arreglo
                 | empty'''
 
-def p_variable(p):
-    '''variable : VAR tipo_variable ID pn_agrega_variable PUNTOCOMA'''
+def p_arreglo2(p):
+    '''arreglo2 : ID CORIZQ CTEENT CORDER'''
+
 
 def p_tipo_variable(p):
     '''tipo_variable : ENTERO
@@ -40,6 +63,15 @@ def p_tipo_variable(p):
     global tipoVariable
     tipoVariable = p[1]
 
+
+
+#Codigo
+def p_bloque(p):
+    '''bloque : estatutos
+                | empty'''
+
+
+
 # ESTATUTOS DISPONIBLES
 def p_estatutos(p):
     '''estatutos : estatuto estatutos
@@ -47,8 +79,36 @@ def p_estatutos(p):
 
 def p_estatuto(p):
     '''estatuto : asigna
+                | imprimir
                 | si'''
+# ASIGNA
+def p_asigna(p):
+    '''asigna : ID IGUAL expr PUNTOCOMA'''
 
+#IMPRIME
+def p_imprimir(p):
+    '''imprimir : IMPRIME PARIZQ imprimir_par PARDER PUNTOCOMA'''
+
+def p_imprimir_par(p):
+    '''imprimir_par : expr pn_imprimir imprimir_exp'''
+
+def p_imprimir_exp(p):
+    '''imprimir_exp : COMA imprimir_par
+                    | empty'''
+
+def p_pn_imprimir(p):
+    '''pn_imprimir : empty'''
+    pilaCuadruplos.append(["IMPRIME", "", "", pilaOper.pop()])
+    pilaTipos.pop()
+
+#LEER
+
+
+
+
+
+
+#SI
 def p_si(p):
     '''si : SI PARIZQ expr PARDER estatuto si2'''
 
@@ -56,23 +116,37 @@ def p_si2(p):
     ''' si2 : SINO estatuto
             | empty'''
 
-def p_asigna(p):
-    '''asigna : ID IGUAL expr PUNTOCOMA'''
+
+#CICLO
+
+
+
+
 
 # EXPRESIONES
-def p_expr(p):
-    '''expr : expr OPERLOGICO gigaexpr
-            | gigaexpr'''
-
-def p_gigaexpr(p):
-    '''gigaexpr : megaexpr OPERREL megaexpr
-            | megaexpr'''
-
 def p_megaexpr(p):
-    '''megaexpr : term megaexpr2'''
+    '''megaexpr : expr megaexpr2'''
 
 def p_megaexpr2(p):
-    '''megaexpr2 : OPER1 pn_agregar_oper1 term pn_sacar_poper1 megaexpr2
+    '''megaexpr2 : OPERLOGICO megaexpr
+                        | OPERREL megaexpr
+                        | expr
+                        | empty'''
+def p_expr(p):
+    '''expr : exp comparacion'''
+
+def p_comparacion(p):
+    '''comparacion : OPERREL comparacion2
+            | empty'''
+
+def p_comparacion2(p):
+    '''comparacion2 : exp'''
+
+def p_exp(p):
+    '''exp : term operador'''
+
+def p_operador(p):
+    '''operador : OPER1 pn_agregar_oper1 term pn_sacar_poper1 operador
             | empty'''
 
 def p_term(p):
@@ -82,13 +156,18 @@ def p_term2(p):
     '''term2 : OPER2 pn_agregar_oper2 factor pn_sacar_poper2 term2
             | empty'''
 def p_factor(p):
-    '''factor : CTEENT pn_agregar_ENT
+    '''factor : PARIZQ pn_agregar_fondo_falso expr PARDER pn_checar_fondo_falso
+            | var_cte'''
+
+def p_var_cte(p):
+    '''var_cte : ID pn_agregar_id
+            | CTEENT pn_agregar_ENT
             | CTEFLOT pn_agregar_FLOT
             | CTETEXTO pn_agregar_TEXTO
             | FALSO pn_agregar_LOGICO
-            | VERDADERO pn_agregar_LOGICO
-            | PARIZQ expr PARDER
-            | ID pn_agregar_id'''
+            | VERDADERO pn_agregar_LOGICO'''
+
+
 
 # PUNTOS NEURALGICOS
 
@@ -114,6 +193,9 @@ def p_pn_crear_directorio(p):
 
 def p_pn_terminar_programa(p):
     '''pn_terminar_programa : empty'''
+    print("\n")
+    print("Tabla de Funciones")
+    directorio.imprimirTabla()
     directorio.eliminarTablaVariables(nombrePrograma)
     directorio.eliminarFuncion(nombrePrograma)
     print(f"Cuadruplos Generados \n {pilaCuadruplos}")
@@ -134,7 +216,15 @@ def p_pn_agrega_variable(p):
 
 def p_pn_agregar_id(p):
     '''pn_agregar_id : empty'''
+    directorio.directorio[funcionActual][1].verificarVariable(p[-1])
     pilaOper.append(p[-1])
+    tipo = directorio.directorio[funcionActual][1].regresarTipo(p[-1])
+    pilaTipos.append(tipo)
+
+def p_pn_agrega_arreglo(p):
+    '''pn_agrega_arreglo : empty'''
+    print(p[-9])
+    pilaOper.append[p[-1]]
     tipo = directorio.directorio[funcionActual][1].regresarTipo(p[-1])
     pilaTipos.append(tipo)
     print(pilaOper)
@@ -163,15 +253,17 @@ def p_pn_agregar_LOGICO(p):
 def p_pn_agregar_oper2(p):
     '''pn_agregar_oper2 : empty'''
     pOper.append(p[-1])
-    print(pOper)
 
 def p_pn_agregar_oper1(p):
     '''pn_agregar_oper1 : empty'''
     pOper.append(p[-1])
-    print(pOper)
 
 def p_pn_sacar_poper2(p):
     '''pn_sacar_poper2 : empty'''
+    print("\n")
+    print(f"Tipos: {pilaTipos}")
+    print(f"Operandos: {pilaOper}")
+    print(f"Operadores: {pOper}")
     if pOper[-1] == "*" or pOper[-1] == "/":
         op_der = pilaOper.pop()
         tipo_der = Semantica.obtener_tipo(pilaTipos.pop())
@@ -186,13 +278,17 @@ def p_pn_sacar_poper2(p):
             contadorAvail = contadorAvail + 1
             pilaCuadruplos.append([operador, op_der, op_izq, resultado])
             pilaOper.append(resultado)
-            pilaTipos.append(tipo_resultado)
+            pilaTipos.append(Semantica.obtener_token(tipo_resultado))
         else:
             print("Error - Tipo de dato erroneo")
             quit()
 
 def p_pn_sacar_poper1(p):
     '''pn_sacar_poper1 : empty'''
+    print("\n")
+    print(f"Tipos: {pilaTipos}")
+    print(f"Operandos: {pilaOper}")
+    print(f"Operadores: {pOper}")
     if pOper[-1] == "+" or pOper[-1] == "-":
         op_der = pilaOper.pop()
         tipo_der = Semantica.obtener_tipo(pilaTipos.pop())
@@ -207,10 +303,19 @@ def p_pn_sacar_poper1(p):
             contadorAvail = contadorAvail + 1
             pilaCuadruplos.append([operador, op_der, op_izq, resultado])
             pilaOper.append(resultado)
-            pilaTipos.append(tipo_resultado)
+            pilaTipos.append(Semantica.obtener_token(tipo_resultado))
         else:
             print("Error - Tipo de dato erroneo")
             quit()
+
+def p_pn_agregar_fondo_falso(p):
+    '''pn_agregar_fondo_falso : empty'''
+    pOper.append(p[-1])
+
+def p_pn_checar_fondo_falso(p):
+    '''pn_checar_fondo_falso : empty'''
+    if pOper[-1] == '(':
+        pOper.pop() 
 
 # Gramaticas Extra
 def p_error(p):
