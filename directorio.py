@@ -32,19 +32,27 @@ class TablaVariables:
     def __init__(self):
         self.tabla = {}
 
-    def crear(self, nombre, tipo):
+    def crear(self, nombre, tipo, direccion):
         if nombre in self.tabla.keys():
             print(f"Error en codigo - Variable: {nombre} ya fue definida")
             exit()
         else:
-            self.tabla[nombre] = [tipo, None]
+            self.tabla[nombre] = [tipo, direccion]
+            print(f"Se creo variable {nombre} con {self.tabla[nombre]}")
 
     def regresarTipo(self, nombre):
         try:
             return self.tabla[nombre][0]
         except:
-            print("Error en codigo - Variable {nombre} no esta definida ")
+            print(f"Error en codigo - Variable {nombre} no esta definida ")
             exit() 
+
+    def regresarDireccion(self, nombre):
+        try:
+            return self.tabla[nombre][1]
+        except:
+            print(f"Error en codigo -  Direccion de  {nombre} no esta definida")
+            exit()
 
     def verificarVariable(self, nombre):
         if nombre in self.tabla.keys():
@@ -52,3 +60,48 @@ class TablaVariables:
         else:
             print(f"Error en codigo - Variable {nombre} no definida")
             exit()
+
+class Constantes:
+    numeroConstantes = 2000
+    dirE = 30000
+    dirF = dirE + numeroConstantes
+    dirT = dirF + numeroConstantes
+    dirL = dirT + numeroConstantes
+
+    def __init__(self):
+        self.tablaConstantes = {}
+
+    def agregarConstante(self,valor, direccion, tipo):
+        if tipo == 0:
+            direccion = self.dirE + direccion
+            if direccion >= self.dirE + self.numeroConstantes:
+                print("Error - Se excedio el numero de constantes Tipo: entero")
+                quit()
+        elif tipo == 1:
+            direccion = self.dirF + direccion
+            if direccion >= self.dirF + self.numeroConstantes:
+                print("Error - Se excedio el numero de constantes Tipo: flotante")
+                quit()
+        elif tipo == 2:
+            direccion = self.dirT + direccion
+            if direccion >= self.dirT + self.numeroConstantes:
+                print("Error - Se excedio el numero de constantes Tipo: texto")
+                quit()
+        elif tipo == 3:
+            direccion = self.dirL + direccion
+            if direccion >= self.dirE + self.numeroConstantes:
+                print("Error - Se excedio el numero de constantes Tipo: logico")
+                quit()
+        try:
+            self.tablaConstantes[valor] = direccion
+            return 0
+        except:
+            return -1
+
+    def regresarDireccion(self, valor):
+        return self.tablaConstantes[valor]
+
+    def imprimir(self):
+        print("\n TABLA DE CONSTANTES")
+        for constante in self.tablaConstantes.keys():
+            print(f"{constante} : {self.tablaConstantes[constante]}")

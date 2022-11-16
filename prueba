@@ -2,10 +2,16 @@ LpEsp prueba;
 
 Variables:
     var entero a;
-    var flotante b, c, d; 
+    var flotante b, c, d;
+    var texto e;
+    var logico f;
 
 
 Esp:
     imprime('Hola mundo', 5 + 5);
-    a = 1 + 2 * 3 / 4 - 5;
+    b = 1 + 2 * 3 / 4 - 5;
+    e = 'Adios';
+    imprime(e);
+    f = a + b * c < d;
+    f = Falso
 Pse;
