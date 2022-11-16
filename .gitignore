@@ -1,4 +1,4 @@
 parser.out
 parsetab.py
 nada.py
-__pycache__
+*__pycache__*
