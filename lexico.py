@@ -20,6 +20,7 @@ palabras_reservadas = {
     'sino': 'SINO',
     'mientras': 'MIENTRAS',
     'imprime': 'IMPRIME',
+    'fin' : 'FIN',
     'Pse' : 'PSE'
 }
 

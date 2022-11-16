@@ -9,9 +9,19 @@ Cosas Hechas
  - Clase de directorio de funciones y tabla de variables
  - Puntos neuralgicos (PNs) de estructura inicial
  - PNs de Variables
+ - Expresiones relacionaes y logicas
+ - Asignacion
+ - Imprime
+ - Virtual address 1/2
+ - Se aceptan ifs
 
 Cosas Pendientes
- - Agregar gramatica de funciones
- - Agregar gramatica de ciclos 
- - Agregar gramatica de ifs
+1. Agregar gramatica y funcionalidad de read
+3. Agregar gramatica y funcionalidad de ciclos
+4. Memoria
+4. Agregar gramatica y funcinoalidad de funciones
+5. Agregar gramatica y funcionalidad de Arreglos
+6. Agregar gramatica y funcionalidad de Matrices
+7. Maquina Virtual
+
 

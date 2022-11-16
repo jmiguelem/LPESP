@@ -70,6 +70,8 @@ class Constantes:
 
     def __init__(self):
         self.tablaConstantes = {}
+        self.tablaConstantes["FALSO"] = self.dirL
+        self.tablaConstantes["VERDADERO"] = self.dirL + 1
 
     def agregarConstante(self,valor, direccion, tipo):
         if tipo == 0:
@@ -89,7 +91,7 @@ class Constantes:
                 quit()
         elif tipo == 3:
             direccion = self.dirL + direccion
-            if direccion >= self.dirE + self.numeroConstantes:
+            if direccion >= self.dirL + self.numeroConstantes:
                 print("Error - Se excedio el numero de constantes Tipo: logico")
                 quit()
         try:
