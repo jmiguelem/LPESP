@@ -31,7 +31,7 @@ def p_bloque_variables(p):
     '''bloque_variables : variables
                         | empty '''
 
-# VARIABLES
+# # ----- GRAMATICA Y PNS DE VARIABLES -----
 
 def p_variables(p):
     '''variables : VAR tipo_variable id_variable PUNTOCOMA variables2'''
@@ -58,16 +58,34 @@ def p_tipo_variable(p):
     global tipoVariable
     tipoVariable = p[1]
 
+def p_pn_agrega_variable(p):
+    '''pn_agrega_variable : empty'''
+    global cge, cgf, cgl, cgt
+    if tipoVariable == "entero":
+        cge += 1
+        direccion = 1000 + cge
+    elif tipoVariable == "flotante":
+        cgf += 1
+        direccion = 5000 + cgf
+    elif tipoVariable == "texto":
+        cgt += 1
+        direccion = 9000 + cgt
+    elif tipoVariable == "logico":
+        cgl += 1
+        direccion = 13000 + cgl
+    directorio.directorio[nombrePrograma][1].crear(p[-1], tipoVariable, direccion)
+    print("VARIABLES GLOBALES",cge,cgf,cgt, cgl)
 
 
-#Codigo
+
+# ----- BLOQUE DE CODIGO -----
 def p_bloque(p):
     '''bloque : estatutos
                 | empty'''
 
 
 
-# ESTATUTOS DISPONIBLES
+# ----- ESTATUTOS PERMITIDOS -----
 def p_estatutos(p):
     '''estatutos : estatuto estatutos
                 | empty'''
@@ -75,8 +93,12 @@ def p_estatutos(p):
 def p_estatuto(p):
     '''estatuto : asigna
                 | imprimir
-                | si'''
-# ASIGNA
+                | lectura
+                | si
+                | ciclo_dowhile
+                | ciclo_while'''
+
+# ----- GRAMATICA Y PNS DE ASSIGN -----
 def p_asigna(p):
     '''asigna : ID pn_agregar_id IGUAL pn_agregar_igual expr pn_asignar PUNTOCOMA'''
 
@@ -106,7 +128,7 @@ def p_pn_asignar(p):
         quit()
 
 
-#IMPRIME
+# ----- GRAMATICA Y PNS DE PRINT -----
 def p_imprimir(p):
     '''imprimir : IMPRIME PARIZQ imprimir_par PARDER PUNTOCOMA'''
 
@@ -126,12 +148,33 @@ def p_pn_imprimir(p):
     pilaTipos.pop()
     print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
 
-#LEER
+# ----- GRAMATICA Y PNS DE READ -----
+def p_lectura(p):
+    '''lectura : LEER PARIZQ lectura_par PARDER PUNTOCOMA'''
+
+def p_lectura_par(p):
+    '''lectura_par : ID pn_lectura lectura_exp'''
+
+def p_lectura_exp(p):
+    '''lectura_exp : COMA lectura_par
+                | empty'''
+
+def p_pn_lectura(p):
+    '''pn_lectura : empty'''
+    global contadorCuadruplos
+    contadorCuadruplos += 1
+    direc = directorio.directorio[funcionActual]
+    tabla = direc[1]
+    variable = tabla.verificarVariable(p[-1])
+    dir_variable = tabla.regresarDireccion(p[-1])
+    pilaCuadruplos.append(["LEER", "", "", p[-1]])
+    pCuadruplos.generarCuadruplo(contadorCuadruplos, "LEER", "", "", dir_variable)
+    print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
+    
 
 
 
-
-#SI
+# ----- GRAMATICA Y PNS DE IF -----
 def p_si(p):
     '''si : SI PARIZQ megaexpr pn_agregar_exp_if PARDER DOSPUNTOS estatutos si2 FIN PUNTOCOMA pn_salida_if'''
 
@@ -180,11 +223,104 @@ def p_pn_generar_goto(p):
     print(f"Se relleno cuadruplo {pilaCuadruplos[falso-1]}")
     print(f"Pila SALTOS: {pilaSaltos}")
 
+# ----- GRAMATICA Y PNS DE WHILE -----
+def p_ciclo_while(p):
+    '''ciclo_while : MIENTRAS PARIZQ pn_salto_exp megaexpr pn_agregar_exp_while PARDER DOSPUNTOS estatutos FIN pn_salida_while PUNTOCOMA'''
 
-#CICLO
+def p_pn_salto_exp(p):
+    '''pn_salto_exp : empty'''
+    global contadorCuadruplos
+    pilaSaltos.append(contadorCuadruplos + 1)
+    print(f"\nSe guardo salto de while: {pilaSaltos}")
+    
 
+def p_pn_agregar_exp_while(p):
+    '''pn_agregar_exp_while : empty'''
+    print(f"\nPila SALTOS: {pilaSaltos}")
+    condicion = pilaOper.pop()
+    tipo_condicion = pilaTipos.pop()
+    dir = pilaDir.pop()
+    if tipo_condicion != "logico":
+        print("Error - Expresion no es logica")
+        quit()
+    global contadorCuadruplos
+    contadorCuadruplos += 1
+    pilaCuadruplos.append(["GOTOF", condicion, "", "PENDIENTE"])
+    pCuadruplos.generarCuadruplo(contadorCuadruplos, "GOTOF", dir, "", "PENDIENTE")
+    print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
+    pilaSaltos.append(contadorCuadruplos)
+    print(f"Pila SALTOS: {pilaSaltos}")
 
+def p_pn_salida_while(p):
+    '''pn_salida_while : empty'''
+    print(f"\nPila SALTOS: {pilaSaltos}")
+    falso = pilaSaltos.pop()
+    salto_exp = pilaSaltos.pop()
 
+    global contadorCuadruplos
+    contadorCuadruplos += 1
+
+    pilaCuadruplos.append(["GOTO", "", "", salto_exp])
+    pCuadruplos.generarCuadruplo(contadorCuadruplos, "GOTO", "", "", salto_exp)
+    print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
+    
+
+    pilaCuadruplos[falso-2][3] = contadorCuadruplos+1
+    pCuadruplos.rellenarSalto(falso, contadorCuadruplos+1)
+    print(f"Se relleno cuadruplo {pilaCuadruplos[falso-2]}")
+    print(f"Pila SALTOS: {pilaSaltos}")
+    
+
+# ----- GRAMATICA Y PNS DE DOWHILE -----
+def p_ciclo_dowhile(p):
+    '''ciclo_dowhile : EJECUTA DOSPUNTOS estatutos do_while'''
+
+def p_dowhile(p):
+    '''do_while : MIENTRAS PARIZQ megaexpr PARDER PUNTOCOMA'''
+
+def p_pn_salto_exp2(p):
+    '''pn_salto_exp2 : empty'''
+    global contadorCuadruplos
+    contadorCuadruplos += 1
+    pilaSaltos.append(contadorCuadruplos)
+    print(f"\nSe guardo salto de while: {pilaSaltos}")
+    
+
+def p_pn_agregar_exp_while2(p):
+    '''pn_agregar_exp_while2 : empty'''
+    print(f"\nPila SALTOS: {pilaSaltos}")
+    condicion = pilaOper.pop()
+    tipo_condicion = pilaTipos.pop()
+    dir = pilaDir.pop()
+    if tipo_condicion != "logico":
+        print("Error - Expresion no es logica")
+        quit()
+    global contadorCuadruplos
+    contadorCuadruplos += 1
+    pilaCuadruplos.append(["GOTOF", condicion, "", "PENDIENTE"])
+    pCuadruplos.generarCuadruplo(contadorCuadruplos, "GOTOF", dir, "", "PENDIENTE")
+    print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
+    pilaSaltos.append(contadorCuadruplos)
+    print(f"Pila SALTOS: {pilaSaltos}")
+
+def p_pn_salida_while2(p):
+    '''pn_salida_while2 : empty'''
+    print(f"\nPila SALTOS: {pilaSaltos}")
+    falso = pilaSaltos.pop()
+    salto_exp = pilaSaltos.pop()
+
+    global contadorCuadruplos
+    contadorCuadruplos += 1
+
+    pilaCuadruplos.append(["GOTO", "", "", salto_exp])
+    pCuadruplos.generarCuadruplo(contadorCuadruplos, "GOTO", "", "", salto_exp)
+    print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
+    
+
+    pilaCuadruplos[falso-2][3] = contadorCuadruplos+1
+    pCuadruplos.rellenarSalto(falso, contadorCuadruplos+1)
+    print(f"Se relleno cuadruplo {pilaCuadruplos[falso-2]}")
+    print(f"Pila SALTOS: {pilaSaltos}")
 
 
 # EXPRESIONES
@@ -280,24 +416,6 @@ def p_pn_crear_tabla_variables(p):
     '''pn_crear_tabla_variables : empty'''
     directorio.crearTablaVariables(nombrePrograma)
     #print("Se creo tabla")
-
-def p_pn_agrega_variable(p):
-    '''pn_agrega_variable : empty'''
-    global cge, cgf, cgl, cgt
-    if tipoVariable == "entero":
-        cge += 1
-        direccion = 1000 + cge
-    elif tipoVariable == "flotante":
-        cgf += 1
-        direccion = 5000 + cgf
-    elif tipoVariable == "texto":
-        cgt += 1
-        direccion = 9000 + cgt
-    elif tipoVariable == "logico":
-        cgl += 1
-        direccion = 13000 + cgl
-    directorio.directorio[nombrePrograma][1].crear(p[-1], tipoVariable, direccion)
-    print("VARIABLES GLOBALES",cge,cgf,cgt, cgl)
     
 
 
@@ -391,7 +509,7 @@ def p_pn_sacar_poperLog(p):
             resultado = "t" + str(contadorAvail)
             pilaDir.append(direccionAvail + contadorAvail)
             contadorAvail = contadorAvail + 1
-            pilaCuadruplos.append([operador, op_der, op_izq, resultado])
+            pilaCuadruplos.append([operador, op_izq, op_der, resultado])
             pilaOper.append(resultado)
             pilaTipos.append(Semantica.obtener_token(tipo_resultado))
             pCuadruplos.generarCuadruplo(contadorCuadruplos, operador, dir_izq, dir_der, pilaDir[-1])
@@ -427,7 +545,7 @@ def p_pn_sacar_poperRel(p):
             resultado = "t" + str(contadorAvail)
             pilaDir.append(direccionAvail + contadorAvail)
             contadorAvail = contadorAvail + 1
-            pilaCuadruplos.append([operador, op_der, op_izq, resultado])
+            pilaCuadruplos.append([operador, op_izq, op_der, resultado])
             pilaOper.append(resultado)
             pilaTipos.append(Semantica.obtener_token(tipo_resultado))
             pCuadruplos.generarCuadruplo(contadorCuadruplos, operador, dir_izq, dir_der, pilaDir[-1])
@@ -463,7 +581,7 @@ def p_pn_sacar_poper2(p):
             resultado = "t" + str(contadorAvail)
             pilaDir.append(direccionAvail + contadorAvail)
             contadorAvail = contadorAvail + 1
-            pilaCuadruplos.append([operador, op_der, op_izq, resultado])
+            pilaCuadruplos.append([operador, op_izq, op_der, resultado])
             pilaOper.append(resultado)
             pilaTipos.append(Semantica.obtener_token(tipo_resultado))
             pCuadruplos.generarCuadruplo(contadorCuadruplos, operador, dir_izq, dir_der, pilaDir[-1])
@@ -498,7 +616,7 @@ def p_pn_sacar_poper1(p):
             resultado = "t" + str(contadorAvail)
             pilaDir.append(direccionAvail + contadorAvail)
             contadorAvail = contadorAvail + 1
-            pilaCuadruplos.append([operador, op_der, op_izq, resultado])
+            pilaCuadruplos.append([operador, op_izq, op_der, resultado])
             pilaOper.append(resultado)
             pilaTipos.append(Semantica.obtener_token(tipo_resultado))
             pCuadruplos.generarCuadruplo(contadorCuadruplos ,operador, dir_izq, dir_der, pilaDir[-1])
@@ -529,7 +647,7 @@ def p_empty(p):
 
 
 # Ejecutar Codigo
-code = open("prueba", 'r')
+code = open("ejercicioWhile", 'r')
 data = str(code.read())
 yacc.yacc()
 yacc.parse(data)

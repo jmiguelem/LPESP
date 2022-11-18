@@ -19,7 +19,9 @@ palabras_reservadas = {
     'si': 'SI',
     'sino': 'SINO',
     'mientras': 'MIENTRAS',
+    'leer' : 'LEER',
     'imprime': 'IMPRIME',
+    'ejecuta' : 'EJECUTA',
     'fin' : 'FIN',
     'Pse' : 'PSE'
 }
@@ -84,7 +86,7 @@ def t_CTEENT(t):
     return t
 
 def t_CTETEXTO(t):
-    r'\'[A-Za-z_0-9$%&/\(\)\"#=\?\¿\´\+\*\-\.\,\{\}\[\]\ t]*\''
+    r'\'.*\''
     t.type = 'CTETEXTO'
     return t
 

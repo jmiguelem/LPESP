@@ -1,0 +1,16 @@
+LpEsp prueba;
+
+Variables:
+    var entero a, b;
+
+Esp:
+    leer(a,b);
+
+    mientras(a < b* b):
+        a = a * a;
+        imprime('Valor de a: ');
+        imprime(a);
+        a = a * 1;
+
+    fin;
+Pse;
