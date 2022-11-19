@@ -33,7 +33,7 @@ ccl = 0
 
 
 def p_inicio(p):
-    '''inicio : LPESP ID pn_crear_directorio PUNTOCOMA VARS DOSPUNTOS pn_crear_tabla_variables bloque_variables ESP DOSPUNTOS bloque PSE PUNTOCOMA pn_terminar_programa'''
+    '''inicio : LPESP ID pn_crear_directorio PUNTOCOMA VARS DOSPUNTOS pn_crear_tabla_variables bloque_variables bloque_funciones ESP DOSPUNTOS bloque PSE PUNTOCOMA pn_terminar_programa'''
 
 
 def p_bloque_variables(p):
@@ -314,7 +314,7 @@ def p_pn_terminar_programa(p):
 def p_pn_crear_tabla_variables(p):
     '''pn_crear_tabla_variables : empty'''
     directorio.crearTablaVariables(nombrePrograma)
-    #print("Se creo tabla")
+    # print("Se creo tabla")
 
 
 def p_pn_agrega_variable(p):
@@ -575,43 +575,60 @@ def p_empty(p):
     pass
 
 
-def p_variables(p):
-    '''variables : VAR tipo_variable id_variable PUNTOCOMA variables2'''
-    '''imprimir : IMPRIME PARIZQ imprimir_par PARDER PUNTOCOMA'''
-    '''inicio : LPESP ID pn_crear_directorio PUNTOCOMA VARS DOSPUNTOS pn_crear_tabla_variables bloque_variables ESP DOSPUNTOS bloque PSE PUNTOCOMA pn_terminar_programa'''
-
-
 # FUNCIONES
-def p_function_definition(p):
-    '''function: ID PARIZQ parametros ID PARDER VARS DOSPUNTOS pn_crear_tabla_variables bloque_variables ESP DOSPUNTOS bloque PUNTOCOMA'''
-    #directorio.agregarNuevaFuncion(nombrePrograma, "void")
+def p_bloque_funciones(p):
+    '''bloque_funciones : FUNCS DOSPUNTOS definicion_funcion FIN PUNTOCOMA'''
 
 
-def p_parametros(p):
-    '''parametros : tipo_variable_parametro id_variable_parametro COMA parametros2'''
+def p_definicion_funcion(p):
+    '''definicion_funcion : tipo_funcion id_funcion PARIZQ funcion_par PARDER'''
+
+    # '''function: declaracion_funcion PARIZQ parametros PARDER DOSPUNTOS VARS DOSPUNTOS pn_crear_tabla_variables bloque_variables ESP DOSPUNTOS bloque PUNTOCOMA'''
 
 
-def p_parametros_2(p):
-    '''parametros2:  tipo_variable_parametro id_variable_parametro COMA parametros2 | empty'''
-
-
-def p_tipo_variable_parametro(p):
-    '''tipo_variable : ENTERO
+def p_tipo_funcion(p):
+    '''tipo_funcion : ENTERO
                     | FLOTANTE
                     | TEXTO
                     | LOGICO'''
 
-    #global tipoVariable
-    #tipoVariable = p[1]
+    global tipoFuncion
+    tipoFuncion = p[1]
 
 
-def id_variable_parametro(p):
-    '''id_variable_parametro : ID pn_agrega_variable_parametro'''
+def p_id_funcion(p):
+    '''id_funcion : ID'''
+    idFuncion = p[1]
+    directorio.agregarNuevaFuncion(idFuncion, tipoFuncion)
+    directorio.crearTablaVariables(idFuncion)
 
 
-def pn_agrega_variable_parametro(p):
-    '''pn_agrega_variable : empty'''
-    #global cge, cgf, cgl, cgt
+def p_funcion_par(p):
+    '''funcion_par : tipo_par_funcion id_par_funcion funcion_par_2'''
+
+
+def p_tipo_par_funcion(p):
+    '''tipo_par_funcion : ENTERO
+                    | FLOTANTE
+                    | TEXTO
+                    | LOGICO'''
+
+    global tipoParFuncion
+    tipoParFuncion = p[1]
+
+
+def p_id_par_funcion(p):
+    '''id_par_funcion : ID'''
+    global idParFuncion
+    idParFuncion = p[1]
+    print("DUKA", tipoParFuncion, idParFuncion)
+    # AGREGAR A TABLA DE VARIABLES
+    # PASAR A ENTERO Y AGREGAR A PARAMETRO DE FUNCION
+
+
+def p_funcion_par_2(p):
+    '''funcion_par_2 : COMA funcion_par 
+        | empty'''
 
 
 # Ejecutar Codigo

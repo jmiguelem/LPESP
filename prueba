@@ -5,7 +5,10 @@ Variables:
     var flotante b, c, d;
     var texto e;
     var logico f;
-
+        
+Funciones:
+    entero funcion3(entero parametro1, texto parametro2)
+    fin;
 
 Esp:
     imprime('Hola mundo', 5 + 5);
