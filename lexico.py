@@ -6,10 +6,12 @@ palabras_reservadas = {
     'Esp': 'ESP',
     'Variables': 'VARS',
     'Funciones': 'FUNCS',
-    'func' : 'FUNC',
+    'Bloque': 'BLOQUE',
+    'Regresa': 'REGRESA',
+    'func': 'FUNC',
     'var': 'VAR',
-    'arreglo' : 'ARREGLO',
-    'matriz' : 'MATRIZ',
+    'arreglo': 'ARREGLO',
+    'matriz': 'MATRIZ',
     'entero': 'ENTERO',
     'flotante': 'FLOTANTE',
     'texto': 'TEXTO',
@@ -20,8 +22,8 @@ palabras_reservadas = {
     'sino': 'SINO',
     'mientras': 'MIENTRAS',
     'imprime': 'IMPRIME',
-    'fin' : 'FIN',
-    'Pse' : 'PSE'
+    'fin': 'FIN',
+    'Pse': 'PSE'
 }
 
 # TOKENS
@@ -45,7 +47,7 @@ tokens = [
     'PUNTO',
     'IGUAL',
     'DOSPUNTOS'
-] 
+]
 
 # TOKENS FINALES
 tokens = tokens + list(palabras_reservadas.values())
@@ -73,32 +75,39 @@ def t_ID(t):
     t.type = palabras_reservadas.get(t.value, 'ID')
     return t
 
+
 def t_CTEFLOT(t):
     r'[-+]?([0-9]+[.])[0-9]+'
     t.value = float(t.value)
     return t
+
 
 def t_CTEENT(t):
     r'[-+]?[0-9][0-9]*'
     t.value = int(t.value)
     return t
 
+
 def t_CTETEXTO(t):
     r'\'[A-Za-z_0-9$%&/\(\)\"#=\?\¿\´\+\*\-\.\,\{\}\[\]\ t]*\''
     t.type = 'CTETEXTO'
     return t
+
 
 def t_OPERREL(t):
     r'<= | >= | <> | < | > | =='
     t.type = 'OPERREL'
     return t
 
+
 def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
 
+
 def t_error(t):
     print(f"Error lexico  {t.value[0]} en linea  {t.lineno}")
     t.lexer.skip(1)
+
 
 lexer = lex.lex()

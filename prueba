@@ -8,13 +8,30 @@ Variables:
         
 Funciones:
     entero funcion1(entero parametro1, texto parametro2, logico parametro3):
-    fin;
+
+    Variables:
+
+    Bloque:
+
+
+    Regresa
 
     flotante funcion2(flotante parametro1):
-    fin;
+
+    Variables:
+
+    Bloque:
+
+    Regresa
+
 
     flotante funcion3():
-    fin;
+
+    Variables:
+
+    Bloque:
+
+    Regresa
 
 Esp:
     imprime('Hola mundo', 5 + 5);

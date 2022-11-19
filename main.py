@@ -576,12 +576,13 @@ def p_empty(p):
 
 
 # FUNCIONES
+
 def p_bloque_funciones(p):
     '''bloque_funciones : FUNCS DOSPUNTOS definicion_funciones'''
 
 
 def p_definicion_funciones(p):
-    '''definicion_funciones : tipo_funcion id_funcion PARIZQ funcion_params PARDER DOSPUNTOS FIN PUNTOCOMA definicion_funcion'''
+    '''definicion_funciones : tipo_funcion id_funcion PARIZQ funcion_params PARDER DOSPUNTOS funcion_variables funcion_bloque definicion_funcion'''
 
 
 def p_definicion_funcion(p):
@@ -636,6 +637,14 @@ def p_id_param_funcion(p):
 def p_funcion_param(p):
     '''funcion_param : COMA funcion_params 
         | empty'''
+
+
+def p_funcion_variables(p):
+    '''funcion_variables : VARS DOSPUNTOS'''
+
+
+def p_funcion_bloque(p):
+    '''funcion_bloque : BLOQUE DOSPUNTOS REGRESA'''
 
 
 # Ejecutar Codigo
