@@ -23,6 +23,12 @@ cgf = 0
 cgt = 0
 cgl = 0
 
+# Contadores de Variables Locales
+cle = 0
+clf = 0
+clt = 0
+cll = 0
+
 # Contadores de Constantes
 cce = 0
 ccf = 0
@@ -337,6 +343,26 @@ def p_pn_agrega_variable(p):
     print("VARIABLES GLOBALES", cge, cgf, cgt, cgl)
 
 
+def p_pn_agrega_variable_local(p):
+    '''pn_agrega_variable_local : empty'''
+    global cle, clf, cll, clt
+    if tipoParamFuncion == "entero":
+        cle += 1
+        direccion = 10000 + cle
+    elif tipoParamFuncion == "flotante":
+        clf += 1
+        direccion = 50000 + clf
+    elif tipoParamFuncion == "texto":
+        clt += 1
+        direccion = 90000 + clt
+    elif tipoParamFuncion == "logico":
+        cll += 1
+        direccion = 130000 + cll
+    directorio.directorio[idFuncion][1].crear(
+        p[-1], tipoParamFuncion, direccion)
+    print("VARIABLES LOCALES", cle, clf, clt, cll)
+
+
 # EXPRESIONES
 
 # IDS Y CTES
@@ -630,7 +656,7 @@ def p_id_param_funcion(p):
     '''id_param_funcion : ID'''
     global idParamFuncion
     idParamFuncion = p[1]
-    # AGREGAR VARIABLE EN TABLA TEMPORAL VARIABLES
+    p_pn_agrega_variable_local(idParamFuncion)
     directorio.agregarTipoParametrosFuncion(idFuncion, tipoParamFuncion)
 
 
