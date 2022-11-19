@@ -581,7 +581,7 @@ def p_bloque_funciones(p):
 
 
 def p_definicion_funcion(p):
-    '''definicion_funcion : tipo_funcion id_funcion PARIZQ funcion_par PARDER'''
+    '''definicion_funcion : tipo_funcion id_funcion PARIZQ funcion_param PARDER'''
 
     # '''function: declaracion_funcion PARIZQ parametros PARDER DOSPUNTOS VARS DOSPUNTOS pn_crear_tabla_variables bloque_variables ESP DOSPUNTOS bloque PUNTOCOMA'''
 
@@ -603,31 +603,31 @@ def p_id_funcion(p):
     directorio.crearTablaVariables(idFuncion)
 
 
-def p_funcion_par(p):
-    '''funcion_par : tipo_par_funcion id_par_funcion funcion_par_2'''
+def p_funcion_param(p):
+    '''funcion_param : tipo_param_funcion id_param_funcion funcion_param_2'''
 
 
-def p_tipo_par_funcion(p):
-    '''tipo_par_funcion : ENTERO
+def p_tipo_param_funcion(p):
+    '''tipo_param_funcion : ENTERO
                     | FLOTANTE
                     | TEXTO
                     | LOGICO'''
 
-    global tipoParFuncion
-    tipoParFuncion = p[1]
+    global tipoParamFuncion
+    tipoParamFuncion = p[1]
 
 
-def p_id_par_funcion(p):
-    '''id_par_funcion : ID'''
-    global idParFuncion
-    idParFuncion = p[1]
-    print("DUKA", tipoParFuncion, idParFuncion)
+def p_id_param_funcion(p):
+    '''id_param_funcion : ID'''
+    global idParamFuncion
+    idParamFuncion = p[1]
+    print("DUKY", tipoParamFuncion, idParamFuncion)
     # AGREGAR A TABLA DE VARIABLES
     # PASAR A ENTERO Y AGREGAR A PARAMETRO DE FUNCION
 
 
-def p_funcion_par_2(p):
-    '''funcion_par_2 : COMA funcion_par 
+def p_funcion_param_2(p):
+    '''funcion_param_2 : COMA funcion_param 
         | empty'''
 
 

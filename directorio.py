@@ -11,7 +11,7 @@ class Directorio:
             self.directorio[id_funcion][1] = tablaVariables
         else:
             print(f"DEV: Funcion {id_funcion} ya tenia tabla de variables")
-        
+
     def eliminarFuncion(self, id_funcion):
         del self.directorio[id_funcion]
 
@@ -26,7 +26,6 @@ class Directorio:
             print(self.directorio[funcion][1].tabla)
             print("\n")
 
-        
 
 class TablaVariables:
     def __init__(self):
@@ -45,13 +44,14 @@ class TablaVariables:
             return self.tabla[nombre][0]
         except:
             print(f"Error en codigo - Variable {nombre} no esta definida ")
-            exit() 
+            exit()
 
     def regresarDireccion(self, nombre):
         try:
             return self.tabla[nombre][1]
         except:
-            print(f"Error en codigo -  Direccion de  {nombre} no esta definida")
+            print(
+                f"Error en codigo -  Direccion de  {nombre} no esta definida")
             exit()
 
     def verificarVariable(self, nombre):
@@ -60,6 +60,7 @@ class TablaVariables:
         else:
             print(f"Error en codigo - Variable {nombre} no definida")
             exit()
+
 
 class Constantes:
     numeroConstantes = 2000
@@ -73,7 +74,7 @@ class Constantes:
         self.tablaConstantes["FALSO"] = self.dirL
         self.tablaConstantes["VERDADERO"] = self.dirL + 1
 
-    def agregarConstante(self,valor, direccion, tipo):
+    def agregarConstante(self, valor, direccion, tipo):
         if tipo == 0:
             direccion = self.dirE + direccion
             if direccion >= self.dirE + self.numeroConstantes:

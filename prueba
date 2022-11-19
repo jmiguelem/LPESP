@@ -7,7 +7,7 @@ Variables:
     var logico f;
         
 Funciones:
-    entero funcion3(entero parametro1, texto parametro2)
+    entero funcion3(entero parametro1, texto parametro2, logico parametro3)
     fin;
 
 Esp:
