@@ -223,6 +223,34 @@ def p_pn_generar_goto(p):
     print(f"Se relleno cuadruplo {pilaCuadruplos[falso-1]}")
     print(f"Pila SALTOS: {pilaSaltos}")
 
+# ----- GRAMATICA Y PNS DE DOWHILE -----
+def p_ciclo_dowhile(p):
+    '''ciclo_dowhile : EJECUTA DOSPUNTOS pn_salto_dowhile estatutos FIN MIENTRAS PARIZQ megaexpr PARDER pn_retorno_dowhile PUNTOCOMA'''
+
+def p_pn_salto_dowhile(p):
+    '''pn_salto_dowhile : empty'''
+    global contadorCuadruplos
+    pilaSaltos.append(contadorCuadruplos + 1)
+    print(f"\nSe guardo salto de dowhile: {pilaSaltos}")
+    
+
+def p_pn_retorno_dowhile(p):
+    '''pn_retorno_dowhile : empty'''
+    print(f"\nPila SALTOS: {pilaSaltos}")
+    retorno = pilaSaltos.pop()
+    condicion = pilaOper.pop()
+    tipo_condicion = pilaTipos.pop()
+    dir = pilaDir.pop()
+    if tipo_condicion != "logico":
+        print("Error - Expresion no es logica")
+        quit()
+    global contadorCuadruplos
+    contadorCuadruplos += 1
+    pilaCuadruplos.append(["GOTOT", condicion, "", retorno])
+    pCuadruplos.generarCuadruplo(contadorCuadruplos, "GOTOT", dir, "", retorno)
+    print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
+    print(f"Pila SALTOS: {pilaSaltos}")
+
 # ----- GRAMATICA Y PNS DE WHILE -----
 def p_ciclo_while(p):
     '''ciclo_while : MIENTRAS PARIZQ pn_salto_exp megaexpr pn_agregar_exp_while PARDER DOSPUNTOS estatutos FIN pn_salida_while PUNTOCOMA'''
@@ -253,58 +281,6 @@ def p_pn_agregar_exp_while(p):
 
 def p_pn_salida_while(p):
     '''pn_salida_while : empty'''
-    print(f"\nPila SALTOS: {pilaSaltos}")
-    falso = pilaSaltos.pop()
-    salto_exp = pilaSaltos.pop()
-
-    global contadorCuadruplos
-    contadorCuadruplos += 1
-
-    pilaCuadruplos.append(["GOTO", "", "", salto_exp])
-    pCuadruplos.generarCuadruplo(contadorCuadruplos, "GOTO", "", "", salto_exp)
-    print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
-    
-
-    pilaCuadruplos[falso-2][3] = contadorCuadruplos+1
-    pCuadruplos.rellenarSalto(falso, contadorCuadruplos+1)
-    print(f"Se relleno cuadruplo {pilaCuadruplos[falso-2]}")
-    print(f"Pila SALTOS: {pilaSaltos}")
-    
-
-# ----- GRAMATICA Y PNS DE DOWHILE -----
-def p_ciclo_dowhile(p):
-    '''ciclo_dowhile : EJECUTA DOSPUNTOS estatutos do_while'''
-
-def p_dowhile(p):
-    '''do_while : MIENTRAS PARIZQ megaexpr PARDER PUNTOCOMA'''
-
-def p_pn_salto_exp2(p):
-    '''pn_salto_exp2 : empty'''
-    global contadorCuadruplos
-    contadorCuadruplos += 1
-    pilaSaltos.append(contadorCuadruplos)
-    print(f"\nSe guardo salto de while: {pilaSaltos}")
-    
-
-def p_pn_agregar_exp_while2(p):
-    '''pn_agregar_exp_while2 : empty'''
-    print(f"\nPila SALTOS: {pilaSaltos}")
-    condicion = pilaOper.pop()
-    tipo_condicion = pilaTipos.pop()
-    dir = pilaDir.pop()
-    if tipo_condicion != "logico":
-        print("Error - Expresion no es logica")
-        quit()
-    global contadorCuadruplos
-    contadorCuadruplos += 1
-    pilaCuadruplos.append(["GOTOF", condicion, "", "PENDIENTE"])
-    pCuadruplos.generarCuadruplo(contadorCuadruplos, "GOTOF", dir, "", "PENDIENTE")
-    print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
-    pilaSaltos.append(contadorCuadruplos)
-    print(f"Pila SALTOS: {pilaSaltos}")
-
-def p_pn_salida_while2(p):
-    '''pn_salida_while2 : empty'''
     print(f"\nPila SALTOS: {pilaSaltos}")
     falso = pilaSaltos.pop()
     salto_exp = pilaSaltos.pop()

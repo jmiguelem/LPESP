@@ -8,6 +8,9 @@ Esp:
     mientras(a + b * c < d):
         si(a + b < c):
             a = b + c;
+            ejecuta:
+                a = a - 1;
+            fin mientras(a > b + c);
         sino:
             mientras(b > c + b):
                 a = b + c * d;
