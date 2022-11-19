@@ -577,11 +577,16 @@ def p_empty(p):
 
 # FUNCIONES
 def p_bloque_funciones(p):
-    '''bloque_funciones : FUNCS DOSPUNTOS definicion_funcion FIN PUNTOCOMA'''
+    '''bloque_funciones : FUNCS DOSPUNTOS definicion_funciones'''
+
+
+def p_definicion_funciones(p):
+    '''definicion_funciones : tipo_funcion id_funcion PARIZQ funcion_params PARDER DOSPUNTOS FIN PUNTOCOMA definicion_funcion'''
 
 
 def p_definicion_funcion(p):
-    '''definicion_funcion : tipo_funcion id_funcion PARIZQ funcion_param PARDER'''
+    '''definicion_funcion : definicion_funciones 
+        | empty'''
 
     # '''function: declaracion_funcion PARIZQ parametros PARDER DOSPUNTOS VARS DOSPUNTOS pn_crear_tabla_variables bloque_variables ESP DOSPUNTOS bloque PUNTOCOMA'''
 
@@ -598,13 +603,16 @@ def p_tipo_funcion(p):
 
 def p_id_funcion(p):
     '''id_funcion : ID'''
+    global idFuncion
     idFuncion = p[1]
     directorio.agregarNuevaFuncion(idFuncion, tipoFuncion)
     directorio.crearTablaVariables(idFuncion)
+    directorio.crearArregloTiposParam(idFuncion)
 
 
-def p_funcion_param(p):
-    '''funcion_param : tipo_param_funcion id_param_funcion funcion_param_2'''
+def p_funcion_params(p):
+    '''funcion_params : tipo_param_funcion id_param_funcion funcion_param
+    | empty'''
 
 
 def p_tipo_param_funcion(p):
@@ -621,13 +629,12 @@ def p_id_param_funcion(p):
     '''id_param_funcion : ID'''
     global idParamFuncion
     idParamFuncion = p[1]
-    print("DUKY", tipoParamFuncion, idParamFuncion)
-    # AGREGAR A TABLA DE VARIABLES
-    # PASAR A ENTERO Y AGREGAR A PARAMETRO DE FUNCION
+    # AGREGAR VARIABLE EN TABLA TEMPORAL VARIABLES
+    directorio.agregarTipoParametrosFuncion(idFuncion, tipoParamFuncion)
 
 
-def p_funcion_param_2(p):
-    '''funcion_param_2 : COMA funcion_param 
+def p_funcion_param(p):
+    '''funcion_param : COMA funcion_params 
         | empty'''
 
 

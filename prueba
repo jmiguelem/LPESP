@@ -7,7 +7,13 @@ Variables:
     var logico f;
         
 Funciones:
-    entero funcion3(entero parametro1, texto parametro2, logico parametro3)
+    entero funcion1(entero parametro1, texto parametro2, logico parametro3):
+    fin;
+
+    flotante funcion2(flotante parametro1):
+    fin;
+
+    flotante funcion3():
     fin;
 
 Esp:

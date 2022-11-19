@@ -3,7 +3,15 @@ class Directorio:
         self.directorio = {}
 
     def agregarNuevaFuncion(self, id_funcion, tipo):
-        self.directorio[id_funcion] = [tipo, None]
+        self.directorio[id_funcion] = [tipo, None, None]
+
+    def agregarTipoParametrosFuncion(self, id_funcion, tipo_param):
+        arregloTipoParametrosFuncion = self.directorio[id_funcion][2]
+        arregloTipoParametrosFuncion.append(tipo_param)
+        self.directorio[id_funcion][2] = arregloTipoParametrosFuncion
+
+    def crearArregloTiposParam(self, id_funcion):
+        self.directorio[id_funcion][2] = []
 
     def crearTablaVariables(self, id_funcion):
         if self.directorio[id_funcion][1] == None:
