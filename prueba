@@ -9,29 +9,34 @@ Variables:
 Funciones:
     entero funcion1(entero parametro1, texto parametro2, logico parametro3):
 
-    Variables:
+        Variables:
+        var entero func1var1, func1var2;
+        var flotante func1var3;
 
-    Bloque:
+        Bloque:
 
 
-    Regresa
+        Regresa
 
     flotante funcion2(flotante parametro1):
 
-    Variables:
+        Variables:
+        var entero func2var1, func2var2;
+        var flotante func2var3;
 
-    Bloque:
 
-    Regresa
+        Bloque:
+
+        Regresa
 
 
     flotante funcion3():
 
-    Variables:
+        Variables:
 
-    Bloque:
+        Bloque:
 
-    Regresa
+        Regresa
 
 Esp:
     imprime('Hola mundo', 5 + 5);

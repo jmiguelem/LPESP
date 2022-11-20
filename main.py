@@ -344,7 +344,26 @@ def p_pn_agrega_variable(p):
 
 
 def p_pn_agrega_variable_local(p):
-    '''pn_agrega_variable_local : empty'''
+    global cle, clf, cll, clt
+    if tipoVariableFuncion == "entero":
+        cle += 1
+        direccion = 10000 + cle
+    elif tipoVariableFuncion == "flotante":
+        clf += 1
+        direccion = 50000 + clf
+    elif tipoVariableFuncion == "texto":
+        clt += 1
+        direccion = 90000 + clt
+    elif tipoVariableFuncion == "logico":
+        cll += 1
+        direccion = 130000 + cll
+
+    directorio.directorio[idFuncion][1].crear(
+        p[1], tipoVariableFuncion, direccion)
+    print("VARIABLES LOCALES", cle, clf, clt, cll)
+
+
+def p_pn_agrega_variable_local_param(p):
     global cle, clf, cll, clt
     if tipoParamFuncion == "entero":
         cle += 1
@@ -359,7 +378,7 @@ def p_pn_agrega_variable_local(p):
         cll += 1
         direccion = 130000 + cll
     directorio.directorio[idFuncion][1].crear(
-        p[-1], tipoParamFuncion, direccion)
+        p, tipoParamFuncion, direccion)
     print("VARIABLES LOCALES", cle, clf, clt, cll)
 
 
@@ -608,14 +627,12 @@ def p_bloque_funciones(p):
 
 
 def p_definicion_funciones(p):
-    '''definicion_funciones : tipo_funcion id_funcion PARIZQ funcion_params PARDER DOSPUNTOS funcion_variables funcion_bloque definicion_funcion'''
+    '''definicion_funciones : tipo_funcion id_funcion PARIZQ funcion_params PARDER DOSPUNTOS bloque_funcion_variables funcion_bloque_codigo regresa_bloque definicion_funcion'''
 
 
 def p_definicion_funcion(p):
     '''definicion_funcion : definicion_funciones 
         | empty'''
-
-    # '''function: declaracion_funcion PARIZQ parametros PARDER DOSPUNTOS VARS DOSPUNTOS pn_crear_tabla_variables bloque_variables ESP DOSPUNTOS bloque PUNTOCOMA'''
 
 
 def p_tipo_funcion(p):
@@ -633,7 +650,7 @@ def p_id_funcion(p):
     global idFuncion
     idFuncion = p[1]
     directorio.agregarNuevaFuncion(idFuncion, tipoFuncion)
-    directorio.crearTablaVariables(idFuncion)
+    directorio.asignarTablaVariablesLocales(idFuncion)
     directorio.crearArregloTiposParam(idFuncion)
 
 
@@ -656,7 +673,7 @@ def p_id_param_funcion(p):
     '''id_param_funcion : ID'''
     global idParamFuncion
     idParamFuncion = p[1]
-    p_pn_agrega_variable_local(idParamFuncion)
+    p_pn_agrega_variable_local_param(idParamFuncion)
     directorio.agregarTipoParametrosFuncion(idFuncion, tipoParamFuncion)
 
 
@@ -665,12 +682,63 @@ def p_funcion_param(p):
         | empty'''
 
 
+def p_bloque_funcion_variables(p):
+    '''bloque_funcion_variables : VARS DOSPUNTOS funcion_bloque_variables'''
+
+
+def p_funcion_bloque_variables(p):
+    '''funcion_bloque_variables : funcion_variables 
+    | empty '''
+
+
 def p_funcion_variables(p):
-    '''funcion_variables : VARS DOSPUNTOS'''
+    '''funcion_variables : VAR funcion_tipo_variable funcion_id_variables PUNTOCOMA funcion_variable_2'''
 
 
-def p_funcion_bloque(p):
-    '''funcion_bloque : BLOQUE DOSPUNTOS REGRESA'''
+def p_funcion_variable_2(p):
+    '''funcion_variable_2 : funcion_variables
+                | empty'''
+
+
+def p_funcion_tipo_variable(p):
+    '''funcion_tipo_variable : ENTERO
+                    | FLOTANTE
+                    | TEXTO
+                    | LOGICO'''
+
+    global tipoVariableFuncion
+    tipoVariableFuncion = p[1]
+
+
+def p_funcion_id_variables(p):
+    '''funcion_id_variables : id_variable_local_funcion funcion_id_variable
+        | empty'''
+
+
+def p_id_variable_local_funcion(p):
+    '''id_variable_local_funcion : ID'''
+    p_pn_agrega_variable_local(p)
+
+
+def p_funcion_id_variable(p):
+    '''funcion_id_variable : COMA funcion_id_variables
+                    | empty'''
+
+
+def p_funcion_bloque_codigo(p):
+    '''funcion_bloque_codigo : BLOQUE DOSPUNTOS'''
+
+
+def p_regresa_bloque(p):
+    '''regresa_bloque : REGRESA'''
+    # REGRESAR LOS ESPACIOS DE MEMORIA A CERO
+    directorio.directorio[idFuncion][1].imprimirTablaVariables()
+    directorio.limpiarTablaVariablesLocales(idFuncion)
+    global cle, clf, cll, clt
+    cle = 0
+    clf = 0
+    clt = 0
+    cll = 0
 
 
 # Ejecutar Codigo

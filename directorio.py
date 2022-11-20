@@ -1,6 +1,7 @@
 class Directorio:
     def __init__(self):
         self.directorio = {}
+        self.tablaVariablesLocales = TablaVariables()
 
     def agregarNuevaFuncion(self, id_funcion, tipo):
         self.directorio[id_funcion] = [tipo, None, None]
@@ -19,6 +20,17 @@ class Directorio:
             self.directorio[id_funcion][1] = tablaVariables
         else:
             print(f"DEV: Funcion {id_funcion} ya tenia tabla de variables")
+
+    def asignarTablaVariablesLocales(self, id_funcion):
+        if self.directorio[id_funcion][1] == None:
+            self.directorio[id_funcion][1] = self.tablaVariablesLocales
+        else:
+            print(
+                f"DEV: Funcion {id_funcion} ya tenia tabla de variables locales")
+
+    def limpiarTablaVariablesLocales(self, id_funcion):
+        self.tablaVariablesLocales.limpiarTabla()
+        self.directorio[id_funcion][1] = self.tablaVariablesLocales
 
     def eliminarFuncion(self, id_funcion):
         del self.directorio[id_funcion]
@@ -68,6 +80,13 @@ class TablaVariables:
         else:
             print(f"Error en codigo - Variable {nombre} no definida")
             exit()
+
+    def limpiarTabla(self):
+        del (self.tabla)
+        self.tabla = {}
+
+    def imprimirTablaVariables(self):
+        print("TABLA VARIABLES LOCALES: ", self.tabla)
 
 
 class Constantes:
