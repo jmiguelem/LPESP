@@ -23,21 +23,64 @@ cge = 0; cgf = 0; cgt = 0; cgl = 0
 #Contadores de Constantes
 cce = 0; ccf= 0; cct = 0; ccl = 0
 
-# ESTRUCTURA DEL PROGRAMA
+# ----- GRAMATICA Y PNS DE ESTRUCTURA DEL PROGRAMA -----
 def p_inicio(p):
     '''inicio : LPESP ID pn_crear_directorio PUNTOCOMA VARS DOSPUNTOS pn_crear_tabla_variables bloque_variables ESP DOSPUNTOS bloque PSE PUNTOCOMA pn_terminar_programa'''
 
-def p_bloque_variables(p):
-    '''bloque_variables : variables
-                        | empty '''
 
-# # ----- GRAMATICA Y PNS DE VARIABLES -----
+def p_pn_crear_directorio(p):
+    '''pn_crear_directorio : empty'''
+
+    #Se crean variables globales
+    global directorio
+    global nombrePrograma
+    global funcionActual
+    global tablaConstantes 
+
+    #Se crea el directorio de funciones
+    directorio = Directorio()
+
+    #Se crea la tabla de constantes
+    tablaConstantes = Constantes()
+
+    #Actualiza las variables con el id del programa
+    nombrePrograma = p[-1]
+    funcionActual = nombrePrograma
+
+    #Se agrega la funcion de global
+    directorio.agregarNuevaFuncion(nombrePrograma, "void")
+
+
+def p_pn_crear_tabla_variables(p):
+    '''pn_crear_tabla_variables : empty'''
+    directorio.crearTablaVariables(nombrePrograma)
+
+
+def p_pn_terminar_programa(p):
+    '''pn_terminar_programa : empty'''
+    print("\n")
+    print("Tabla de Funciones")
+    directorio.imprimirTabla()
+    directorio.eliminarTablaVariables(nombrePrograma)
+    directorio.eliminarFuncion(nombrePrograma)
+    tablaConstantes.imprimir()
+    print(f"\n Cuadruplos Generados \n")
+    contador = 1
+    for cuadruplo in pilaCuadruplos:
+        print(f"{contador} : {cuadruplo}")
+        contador += 1
+    pCuadruplos.imprimir()
+
+
+def p_bloque_variables(p):
+    '''bloque_variables : matrices bloque_variables
+                        | arreglos bloque_variables
+                        | variables bloque_variables
+                        | empty '''
+# # ----- GRAMATICA Y PNS DE DECLARACION DE VARIABLES -----
 
 def p_variables(p):
-    '''variables : VAR tipo_variable id_variable PUNTOCOMA variables2'''
-
-def p_variables2(p):
-    '''variables2 : VAR tipo_variable id_variable PUNTOCOMA variables2
+    '''variables : VAR tipo_variable id_variable PUNTOCOMA variables
                 | empty'''
 
 def p_id_variable(p):
@@ -73,9 +116,74 @@ def p_pn_agrega_variable(p):
     elif tipoVariable == "logico":
         cgl += 1
         direccion = 13000 + cgl
-    directorio.directorio[nombrePrograma][1].crear(p[-1], tipoVariable, direccion)
+    directorio.directorio[funcionActual][1].crear(p[-1], tipoVariable, direccion)
     print("VARIABLES GLOBALES",cge,cgf,cgt, cgl)
 
+
+# ----- GRAMATICA Y PNS DE DECLARACION DE ARREGLOS -----
+def p_arreglos(p):
+    '''arreglos : ARREGLO tipo_variable ID pn_agrega_variable_arreglo CORIZQ CTEENT pn_agregar_dimension CORDER PUNTOCOMA
+                | empty'''
+
+def p_pn_agrega_variable_arreglo(p):
+    '''pn_agrega_variable_arreglo : empty'''
+    global cge, cgf, cgl, cgt
+    if tipoVariable == "entero":
+        cge += 1
+        direccion = 1000 + cge
+    elif tipoVariable == "flotante":
+        cgf += 1
+        direccion = 5000 + cgf
+    elif tipoVariable == "texto":
+        cgt += 1
+        direccion = 9000 + cgt
+    elif tipoVariable == "logico":
+        cgl += 1
+        direccion = 13000 + cgl
+    
+    global id_arreglo
+    id_arreglo = p[-1]
+    directorio.directorio[funcionActual][1].crear(id_arreglo, tipoVariable, direccion, True)
+
+def p_pn_agregar_dimension(p):
+    '''pn_agregar_dimension : empty'''
+    dimension = p[-1]
+    global cge, cgf, cgl, cgt
+    if tipoVariable == "entero":
+        cge += dimension
+    elif tipoVariable == "flotante":
+        cgf += dimension
+    elif tipoVariable == "texto":
+        cgt += dimension
+    elif tipoVariable == "logico":
+        cgl += 1
+    directorio.directorio[funcionActual][1].agregarTraslado(id_arreglo, dimension)
+
+# ----- GRAMATICA Y PNS DE MATRICES -----
+def p_matrices(p):
+    '''matrices : MATRIZ tipo_variable ID pn_agrega_variable_arreglo CORIZQ CTEENT pn_guarda_dim1 CORDER CORIZQ CTEENT pn_guarda_dim2 CORDER PUNTOCOMA
+                | empty'''
+
+def p_pn_guarda_dim1(p):
+    '''pn_guarda_dim1 : empty'''
+    global dim1
+    dim1 = p[-1]
+
+def p_pn_guarda_dim2(p):
+    '''pn_guarda_dim2 : empty'''
+    dimension = dim1 * p[-1]
+
+    global cge, cgf, cgl, cgt
+    if tipoVariable == "entero":
+        cge += dimension
+    elif tipoVariable == "flotante":
+        cgf += dimension
+    elif tipoVariable == "texto":
+        cgt += dimension
+    elif tipoVariable == "logico":
+        cgl += 1
+    
+    directorio.directorio[funcionActual][1].agregarTraslado(id_arreglo,dim1, p[-1], dimension)
 
 
 # ----- BLOQUE DE CODIGO -----
@@ -113,8 +221,8 @@ def p_pn_asignar(p):
     operador = pOper.pop()
     op_der = pilaOper.pop()
     op_izq = pilaOper.pop()
-    dir_izq = pilaDir.pop()
     dir_der = pilaDir.pop()
+    dir_izq = pilaDir.pop()
 
     if tipo_izq == tipo_der:
         global contadorAvail, contadorCuadruplos
@@ -299,7 +407,7 @@ def p_pn_salida_while(p):
     print(f"Pila SALTOS: {pilaSaltos}")
 
 
-# EXPRESIONES
+# ----- GRAMATICA DE EXPRESIONES -----
 def p_megaexpr(p):
     '''megaexpr : expr megaexpr2'''
 
@@ -336,68 +444,20 @@ def p_factor(p):
             | var_cte'''
 
 def p_var_cte(p):
-    '''var_cte : ID pn_agregar_id
+    '''var_cte : ID pn_agregar_id acceder_arreglo
             | CTEENT pn_agregar_ENT
             | CTEFLOT pn_agregar_FLOT
             | CTETEXTO pn_agregar_TEXTO
             | FALSO pn_agregar_LOGICO
             | VERDADERO pn_agregar_LOGICO'''
 
+def p_acceder_arreglo(p):
+    '''acceder_arreglo : CORIZQ pn_verificar_arreglo exp pn_crear_cuadruplo_arreglo CORDER
+                    | empty'''
 
+# ----- PNS DE EXPRESIONES -----
 
-# PUNTOS NEURALGICOS
-
-# ESTRUCTURA DEL PROGRAMA
-
-def p_pn_crear_directorio(p):
-    '''pn_crear_directorio : empty'''
-
-    #Se crean variables globales
-    global directorio
-    global nombrePrograma
-    global funcionActual
-    global tablaConstantes 
-
-    #Se crea el directorio de funciones
-    directorio = Directorio()
-
-    #Se crea la tabla de constantes
-    tablaConstantes = Constantes()
-
-    #Actualiza las variables con el id del programa
-    nombrePrograma = p[-1]
-    funcionActual = nombrePrograma
-
-    #Se agrega la funcion de global
-    directorio.agregarNuevaFuncion(nombrePrograma, "void")
-
-def p_pn_terminar_programa(p):
-    '''pn_terminar_programa : empty'''
-    print("\n")
-    print("Tabla de Funciones")
-    directorio.imprimirTabla()
-    directorio.eliminarTablaVariables(nombrePrograma)
-    directorio.eliminarFuncion(nombrePrograma)
-    tablaConstantes.imprimir()
-    print(f"\n Cuadruplos Generados \n")
-    contador = 1
-    for cuadruplo in pilaCuadruplos:
-        print(f"{contador} : {cuadruplo}")
-        contador += 1
-    pCuadruplos.imprimir()
-
-# VARIABLES
-
-def p_pn_crear_tabla_variables(p):
-    '''pn_crear_tabla_variables : empty'''
-    directorio.crearTablaVariables(nombrePrograma)
-    #print("Se creo tabla")
-    
-
-
-# EXPRESIONES
-
-#IDS Y CTES
+# AGREGAR ID
 def p_pn_agregar_id(p):
     '''pn_agregar_id : empty'''
     directorio.directorio[funcionActual][1].verificarVariable(p[-1])
@@ -407,7 +467,7 @@ def p_pn_agregar_id(p):
     direccion = directorio.directorio[funcionActual][1].regresarDireccion(p[-1])
     pilaDir.append(direccion)
 
-
+# AGREGAR CONSTANTES
 def p_pn_agregar_ENT(p):
     '''pn_agregar_ENT : empty'''
     global cce
@@ -449,6 +509,41 @@ def p_pn_agregar_LOGICO(p):
         pilaDir.append(tablaConstantes.regresarDireccion("VERDADERO"))
     pilaOper.append(p[-1])
     pilaTipos.append("logico")
+
+# ----- PNS DE ACCEDER ARREGLOS -----
+def p_pn_verificar_arreglo(p):
+    '''pn_verificar_arreglo : empty'''
+    global id_arreglo
+    id_arreglo = pilaOper[-1]
+    directorio.directorio[funcionActual][1].verificarArreglo(id_arreglo)
+
+def p_pn_crear_cuadruplo_arreglo(p):
+    '''pn_crear_cuadruplo_arreglo : empty'''
+    global contadorCuadruplos
+    contadorCuadruplos += 1
+    indice = pilaOper.pop()
+    tipos = pilaTipos.pop()
+    dir_indice = pilaDir.pop()
+    if tipos != "entero":
+        print("Error - Indice debe ser entero")
+        quit()
+    
+    dimension = directorio.directorio[funcionActual][1].regresaDimension(id_arreglo)
+    pCuadruplos.generarCuadruplo(contadorCuadruplos, "VERIFICADIM", dir_indice, 0, dimension)
+    
+    dir_arreglo = pilaDir.pop()
+
+    global contadorAvail
+    global direccionAvail
+
+    contadorCuadruplos +=1
+
+    pilaDir.append(direccionAvail + contadorAvail)
+    contadorAvail = contadorAvail + 1
+    
+    pCuadruplos.generarCuadruplo(contadorCuadruplos, "+", f"({dir_indice})", dir_arreglo, pilaDir[-1])
+    pilaOper.append(f"({pilaDir[-1]}")
+    
         
     
 
@@ -601,7 +696,7 @@ def p_pn_sacar_poper1(p):
             print("Error - Tipo de dato erroneo")
             quit()
 
-#FONDOS FALSOS
+# FONDOS FALSOS
 def p_pn_agregar_fondo_falso(p):
     '''pn_agregar_fondo_falso : empty'''
     pOper.append(p[-1])
@@ -611,7 +706,8 @@ def p_pn_checar_fondo_falso(p):
     if pOper[-1] == '(':
         pOper.pop() 
 
-# Gramaticas Extra
+
+# ----- GRAMATICAS EXTRA -----
 def p_error(p):
     print(f"Error de sintaxis en {p}")
     exit()
@@ -622,8 +718,8 @@ def p_empty(p):
     
 
 
-# Ejecutar Codigo
-code = open("ejercicioWhile", 'r')
+# ----- EJECUTAR CODIGO -----
+code = open("arreglos1", 'r')
 data = str(code.read())
 yacc.yacc()
 yacc.parse(data)
