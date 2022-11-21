@@ -150,13 +150,13 @@ def p_pn_agregar_dimension(p):
     dimension = p[-1]
     global cge, cgf, cgl, cgt
     if tipoVariable == "entero":
-        cge += dimension
+        cge += dimension + 1
     elif tipoVariable == "flotante":
-        cgf += dimension
+        cgf += dimension + 1
     elif tipoVariable == "texto":
-        cgt += dimension
+        cgt += dimension + 1
     elif tipoVariable == "logico":
-        cgl += 1
+        cgl += dimension + 1
     directorio.directorio[funcionActual][1].agregarTraslado(id_arreglo, dimension)
 
 # ----- GRAMATICA Y PNS DE MATRICES -----
@@ -208,7 +208,24 @@ def p_estatuto(p):
 
 # ----- GRAMATICA Y PNS DE ASSIGN -----
 def p_asigna(p):
-    '''asigna : ID pn_agregar_id IGUAL pn_agregar_igual expr pn_asignar PUNTOCOMA'''
+    '''asigna : asignaID expr pn_asignar PUNTOCOMA'''
+
+def p_asginaID(p):
+    '''asignaID : ID pn_agregar_id IGUAL pn_agregar_igual
+                | ID pn_agregar_idarreglo CORIZQ exp pn_crear_cuadruplo_arreglo CORDER asigna_matriz'''
+
+def p_asigna_matriz(p):
+    '''asigna_matriz : CORIZQ exp pn_crear_cuadruplo_matriz CORDER IGUAL pn_agregar_igual
+                    | IGUAL pn_agregar_igual'''
+
+def p_pn_agregar_idarreglo(p):
+    '''pn_agregar_idarreglo : empty'''
+    global id_arreglo
+    id_arreglo = p[-1]
+    print(id_arreglo)
+    pilaOper.append(p[-1])
+    tipo = directorio.directorio[funcionActual][1].regresarTipo(p[-1])
+    pilaTipos.append(tipo)
 
 def p_pn_agregar_igual(p):
     '''pn_agregar_igual :  empty'''
@@ -311,9 +328,7 @@ def p_pn_salida_if(p):
     '''pn_salida_if : empty'''
     print(f"\nPila SALTOS: {pilaSaltos}")
     pendiente = pilaSaltos.pop()
-    pilaCuadruplos[pendiente - 1][3] = contadorCuadruplos + 1
     pCuadruplos.rellenarSalto(pendiente, contadorCuadruplos + 1)
-    print(f"Se relleno cuadruplo {pilaCuadruplos[pendiente - 1]}")
     print(f"Pila SALTOS: {pilaSaltos}")
 
 def p_pn_generar_goto(p):
@@ -326,9 +341,7 @@ def p_pn_generar_goto(p):
     pCuadruplos.generarCuadruplo(contadorCuadruplos, "GOTO", "", "", "PENDIENTE")
     print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
     pilaSaltos.append(contadorCuadruplos)
-    pilaCuadruplos[falso-1][3] = contadorCuadruplos+1
     pCuadruplos.rellenarSalto(falso, contadorCuadruplos+1)
-    print(f"Se relleno cuadruplo {pilaCuadruplos[falso-1]}")
     print(f"Pila SALTOS: {pilaSaltos}")
 
 # ----- GRAMATICA Y PNS DE DOWHILE -----
@@ -400,10 +413,7 @@ def p_pn_salida_while(p):
     pCuadruplos.generarCuadruplo(contadorCuadruplos, "GOTO", "", "", salto_exp)
     print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
     
-
-    pilaCuadruplos[falso-2][3] = contadorCuadruplos+1
     pCuadruplos.rellenarSalto(falso, contadorCuadruplos+1)
-    print(f"Se relleno cuadruplo {pilaCuadruplos[falso-2]}")
     print(f"Pila SALTOS: {pilaSaltos}")
 
 
@@ -452,7 +462,11 @@ def p_var_cte(p):
             | VERDADERO pn_agregar_LOGICO'''
 
 def p_acceder_arreglo(p):
-    '''acceder_arreglo : CORIZQ pn_verificar_arreglo exp pn_crear_cuadruplo_arreglo CORDER
+    '''acceder_arreglo : CORIZQ pn_verificar_arreglo exp pn_crear_cuadruplo_arreglo CORDER acceder_matriz
+                    | empty'''
+
+def p_acceder_matriz(p):
+    '''acceder_matriz : CORIZQ pn_verificar_matriz exp pn_crear_cuadruplo_matriz CORDER
                     | empty'''
 
 # ----- PNS DE EXPRESIONES -----
@@ -519,6 +533,12 @@ def p_pn_verificar_arreglo(p):
 
 def p_pn_crear_cuadruplo_arreglo(p):
     '''pn_crear_cuadruplo_arreglo : empty'''
+    print(f"Tipos: {pilaTipos}")
+    print(f"Operandos: {pilaOper}")
+    print(f"Operadores: {pOper}")
+    print(f"Direccion : {pilaDir}")
+    if directorio.directorio[funcionActual][1].esArregloMatriz(id_arreglo) == 5:
+        return
     global contadorCuadruplos
     contadorCuadruplos += 1
     indice = pilaOper.pop()
@@ -531,7 +551,8 @@ def p_pn_crear_cuadruplo_arreglo(p):
     dimension = directorio.directorio[funcionActual][1].regresaDimension(id_arreglo)
     pCuadruplos.generarCuadruplo(contadorCuadruplos, "VERIFICADIM", dir_indice, 0, dimension)
     
-    dir_arreglo = pilaDir.pop()
+    base = pilaOper.pop()
+    dir_base = pilaDir.pop()
 
     global contadorAvail
     global direccionAvail
@@ -541,9 +562,79 @@ def p_pn_crear_cuadruplo_arreglo(p):
     pilaDir.append(direccionAvail + contadorAvail)
     contadorAvail = contadorAvail + 1
     
-    pCuadruplos.generarCuadruplo(contadorCuadruplos, "+", f"({dir_indice})", dir_arreglo, pilaDir[-1])
-    pilaOper.append(f"({pilaDir[-1]}")
+    pCuadruplos.generarCuadruplo(contadorCuadruplos, "+DIR", f"({dir_indice})", dir_base, pilaDir[-1])
+    pilaOper.append(f"({pilaDir[-1]})")
     
+
+def p_pn_verificar_matriz(p):
+    '''pn_verificar_matriz : empty'''
+    directorio.directorio[funcionActual][1].verificarMatriz(id_arreglo)
+
+def p_pn_crear_cuadruplo_matriz(p):
+    '''pn_crear_cuadruplo_matriz : empty'''
+    if directorio.directorio[funcionActual][1].esArregloMatriz(id_arreglo) != 5:
+        print(f"Error - Se esta tratando de acceder a {id_arreglo} como matriz")
+        quit()
+    print(f"Tipos: {pilaTipos}")
+    print(f"Operandos: {pilaOper}")
+    print(f"Operadores: {pOper}")
+    print(f"Direccion : {pilaDir}")
+    global contadorCuadruplos
+
+    s2 = pilaOper.pop()
+    tipo = pilaTipos.pop()
+    dir_s2 = pilaDir.pop()
+    if tipo != "entero":
+        print("Error - Indice debe ser entero")
+        quit()
+
+    s1 = pilaOper.pop()
+    tipo = pilaTipos.pop()
+    dir_s1 = pilaDir.pop()
+    if tipo != "entero":
+        print("Error - Indice debe ser entero")
+        quit()
+    
+
+    
+    d1,d2 = directorio.directorio[funcionActual][1].regresaDimensionM(id_arreglo)
+    dir_d1 = tablaConstantes.regresarDireccion(d1)
+    dir_d2 = tablaConstantes.regresarDireccion(d2)
+    contadorCuadruplos +=1
+    pCuadruplos.generarCuadruplo(contadorCuadruplos, "VERIFICADIM", dir_s1, 0, d1)
+    contadorCuadruplos +=1
+    pCuadruplos.generarCuadruplo(contadorCuadruplos, "VERIFICADIM", dir_s2, 0, d2)
+    
+    base = pilaOper.pop()
+    dir_base = pilaDir.pop()
+
+    global contadorAvail
+    global direccionAvail
+
+    
+
+    pilaDir.append(direccionAvail + contadorAvail)
+    t0 = pilaDir[-1]
+    contadorAvail = contadorAvail + 1
+
+    pilaDir.append(direccionAvail + contadorAvail)
+    t1 = pilaDir[-1]
+    contadorAvail = contadorAvail + 1
+
+    pilaDir.append(direccionAvail + contadorAvail)
+    contadorAvail = contadorAvail + 1
+    apuntador = pilaDir[-1]
+    
+    contadorCuadruplos +=1
+    pCuadruplos.generarCuadruplo(contadorCuadruplos, "*", dir_s1, dir_d2, t0)
+    contadorCuadruplos +=1
+    pCuadruplos.generarCuadruplo(contadorCuadruplos, "+", t0, dir_s2, t1)
+    contadorCuadruplos +=1
+    pCuadruplos.generarCuadruplo(contadorCuadruplos, "+DIR", dir_base, t1, apuntador)
+
+    pilaOper.append(f"({pilaDir[-1]})")
+    
+
         
     
 

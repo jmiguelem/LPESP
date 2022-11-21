@@ -1,22 +1,28 @@
 LpEsp arreglo1;
 
 Variables:
-    matriz entero h [2][2];
-    var entero a;
-    var flotante b;
-    arreglo entero c [50];
-    arreglo flotante e [500];
+    var entero a, i, j, cont;
+    arreglo entero b[5];
+    matriz entero c[2][2];
     var entero d;
-    var flotante f;
 
 Esp:
-    imprime(a);
-    imprime(b);
-    imprime(c);
-    imprime(d);
-    imprime(e);
-    imprime(f);
-    a = a + 1 ;
-    a = c[49] ;
-    d = c[a * 2]; 
+    a = b[4];
+    d = c[1][2];
+    a = 5 * 5 + 6;
+
+
+    i = 0;
+    j = 0;
+    cont = 0;
+    mientras(i < 10):
+        imprime(i);
+        b[i] = i;
+        mientras(j < 2):
+            c[i][j] = cont;
+            cont = cont + 1;
+            j = j + 1;
+        fin;
+        i = i + 1;
+    fin;
 Pse;

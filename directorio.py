@@ -66,21 +66,34 @@ class TablaVariables:
             exit()
 
     def agregarTraslado(self,nombre,dimension, segundaDimension=None, traslado=None):
-        self.tabla[nombre][2] = dimension - 1
+        self.tabla[nombre][2] = dimension
         if segundaDimension:
             self.tabla[nombre].append(segundaDimension)
         if traslado:
             self.tabla[nombre].append(traslado)
 
     def verificarArreglo(self, nombre):
-        try:
-            esArreglo = self.tabla[nombre][2]
-        except:
+        if len(self.tabla[nombre]) >= 3:
+            pass
+        else:
             print(f"Error - Se esta tratando de indexar la variable: {nombre} como arreglo")
             quit()
 
+    def verificarMatriz(self, nombre):
+        if len(self.tabla[nombre]) == 5:
+            pass
+        else:
+            print(f"Error - Se esta tratando de indexar la variable: {nombre} como matriz")
+            quit()
+
+    def esArregloMatriz(self, nombre):
+        return len(self.tabla[nombre])
+
     def regresaDimension(self, nombre):
         return self.tabla[nombre][2]
+
+    def regresaDimensionM(self, nombre):
+        return self.tabla[nombre][2], self.tabla[nombre][3]
 
 
 class Constantes:
