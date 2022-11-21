@@ -21,11 +21,15 @@ Funciones:
     flotante funcion2(flotante parametro1):
 
         Variables:
-        var entero func2var1, func2var2;
-        var flotante func2var3;
+        var entero func2var1, func2var2, func2var3;
+        var flotante func2var4;
 
 
         Bloque:
+        func2var1 = 3;
+        func2var2 = 5;
+        func2var3 = func2var1 + func2var2;
+
 
         Regresa
 
@@ -33,6 +37,9 @@ Funciones:
     flotante funcion3():
 
         Variables:
+        var texto func3var1, func3var2;
+        var entero func3var3, func3var4;
+        var logico func3var5;
 
         Bloque:
 

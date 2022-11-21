@@ -360,6 +360,7 @@ def p_pn_agrega_variable_local(p):
 
     directorio.directorio[idFuncion][1].crear(
         p[1], tipoVariableFuncion, direccion)
+    directorio.contadorNuevaVariableLocal(idFuncion)
     print("VARIABLES LOCALES", cle, clf, clt, cll)
 
 
@@ -648,7 +649,9 @@ def p_tipo_funcion(p):
 def p_id_funcion(p):
     '''id_funcion : ID'''
     global idFuncion
+    global funcionActual
     idFuncion = p[1]
+    funcionActual = idFuncion
     directorio.agregarNuevaFuncion(idFuncion, tipoFuncion)
     directorio.asignarTablaVariablesLocales(idFuncion)
     directorio.crearArregloTiposParam(idFuncion)
@@ -726,7 +729,7 @@ def p_funcion_id_variable(p):
 
 
 def p_funcion_bloque_codigo(p):
-    '''funcion_bloque_codigo : BLOQUE DOSPUNTOS'''
+    '''funcion_bloque_codigo : BLOQUE DOSPUNTOS bloque'''
 
 
 def p_regresa_bloque(p):
@@ -734,7 +737,9 @@ def p_regresa_bloque(p):
     # REGRESAR LOS ESPACIOS DE MEMORIA A CERO
     directorio.directorio[idFuncion][1].imprimirTablaVariables()
     directorio.limpiarTablaVariablesLocales(idFuncion)
+    global funcionActual
     global cle, clf, cll, clt
+    funcionActual = nombrePrograma
     cle = 0
     clf = 0
     clt = 0
