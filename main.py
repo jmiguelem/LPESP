@@ -208,7 +208,7 @@ def p_estatuto(p):
 
 # ----- GRAMATICA Y PNS DE ASSIGN -----
 def p_asigna(p):
-    '''asigna : asignaID expr pn_asignar PUNTOCOMA'''
+    '''asigna : asignaID megaexpr pn_asignar PUNTOCOMA'''
 
 def p_asginaID(p):
     '''asignaID : ID pn_agregar_id IGUAL pn_agregar_igual
