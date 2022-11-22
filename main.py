@@ -1235,7 +1235,7 @@ def p_pn_verificar_numero_de_parametros(p):
 
 
 # ----- EJECUTAR CODIGO -----
-code = open("arreglos1", 'r')
+code = open("prueba", 'r')
 data = str(code.read())
 yacc.yacc()
 yacc.parse(data)
