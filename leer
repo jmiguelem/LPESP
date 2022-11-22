@@ -1,0 +1,9 @@
+LpEsp prueba;
+
+Variables:
+    
+
+Esp:
+    imprime('HOLA');
+    a = 5;
+Pse;

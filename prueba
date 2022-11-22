@@ -1,7 +1,7 @@
 LpEsp prueba;
 
 Variables:
-    var entero a, a1, b1, c1, d1, entero1, entero2;
+    var entero a, a1, b1, c1, d1, entero1, entero2, z,x,y,w,v;
     var flotante b, c, d;
     var texto e;
     var logico f;
@@ -61,4 +61,24 @@ Esp:
         a1 = d1 - c1;
     fin;
     b1 = a1 * c1 + d1;
+
+    leer(a,b);
+
+    mientras(a < b* b):
+        a = a * a;
+        imprime('Valor de a:');
+        imprime(a);
+        a = a * 1;
+
+    fin;
+
+    si(z + x * y > w - v):
+        w = z + x;
+        imprime(w);
+        si(w > y * x):
+            z = w + v;
+        fin;
+        x = y - w;
+    fin;
+    x = z + w * v;
 Pse;

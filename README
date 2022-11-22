@@ -14,14 +14,13 @@ Cosas Hechas
  - Imprime
  - Virtual address 1/2
  - Se aceptan ifs
+ - Se aceptan while
+ - Se aceptan dowhile
+ - Se aceptan arreglos y matrices
 
 Cosas Pendientes
-1. Agregar gramatica y funcionalidad de read
-3. Agregar gramatica y funcionalidad de ciclos
 4. Memoria
 4. Agregar gramatica y funcinoalidad de funciones
-5. Agregar gramatica y funcionalidad de Arreglos
-6. Agregar gramatica y funcionalidad de Matrices
 7. Maquina Virtual
 
 

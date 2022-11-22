@@ -5,6 +5,7 @@ class Cuadruplos:
 
     def generarCuadruplo(self, numero, operador, oper_izq, oper_der, resultado):
         self.pilaCuadruplos[numero] = [operador, oper_izq, oper_der, resultado]
+        print(f"Se genero cuadruplo {numero}: {self.pilaCuadruplos[numero]}")
 
     def imprimir(self):
         print("\n CUADRUPLOS CON DRECCIONES")

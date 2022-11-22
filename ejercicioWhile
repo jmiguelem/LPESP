@@ -1,0 +1,23 @@
+LpEsp prueba;
+
+Variables:
+    var entero a, b,c,d;
+
+
+Esp:
+    mientras(a + b * c < d):
+        si(a + b < c):
+            a = b + c;
+            ejecuta:
+                a = a - 1;
+            fin mientras(a > b + c);
+        sino:
+            mientras(b > c + b):
+                a = b + c * d;
+                b = a - d;
+            fin;
+        fin;
+    fin;
+    a = b * c;
+    c = 0;
+Pse;
