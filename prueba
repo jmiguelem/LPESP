@@ -14,9 +14,10 @@ Funciones:
         var flotante func1var3;
 
         Bloque:
+        func1var1 = func1var2;
+        func1var3 = 3.9;
 
-
-        Regresa
+        Regresa 2;
 
     flotante funcion2(flotante parametro1):
 
@@ -31,7 +32,7 @@ Funciones:
         func2var3 = func2var1 + func2var2;
 
 
-        Regresa
+        Regresa 3.1;
 
 
     flotante funcion3():
@@ -43,9 +44,10 @@ Funciones:
 
         Bloque:
 
-        Regresa
+        Regresa 1.2;
 
 Esp:
+    funcion1(3, 'Holakk', verdadero)
     imprime('Hola mundo', 5 + 5);
     b = 1 + 2 * 3 / 4 - 5;
     e = 'Adios';

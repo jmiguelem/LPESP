@@ -16,6 +16,7 @@ contadorAvail = 0
 direccionAvail = 20000
 pCuadruplos = Cuadruplos()
 contadorCuadruplos = 0
+parameterCounterK = 0
 
 # Contadores de Variables Globales
 cge = 0
@@ -39,7 +40,7 @@ ccl = 0
 
 
 def p_inicio(p):
-    '''inicio : LPESP ID pn_crear_directorio PUNTOCOMA VARS DOSPUNTOS pn_crear_tabla_variables bloque_variables bloque_funciones ESP DOSPUNTOS bloque PSE PUNTOCOMA pn_terminar_programa'''
+    '''inicio : LPESP ID pn_crear_directorio PUNTOCOMA VARS DOSPUNTOS pn_crear_tabla_variables bloque_variables bloque_funciones ESP DOSPUNTOS llamada_funcion bloque PSE PUNTOCOMA pn_terminar_programa'''
 
 
 def p_bloque_variables(p):
@@ -343,7 +344,7 @@ def p_pn_agrega_variable(p):
     print("VARIABLES GLOBALES", cge, cgf, cgt, cgl)
 
 
-def p_pn_agrega_variable_local(p):
+def agrega_variable_local(p):
     global cle, clf, cll, clt
     if tipoVariableFuncion == "entero":
         cle += 1
@@ -359,12 +360,11 @@ def p_pn_agrega_variable_local(p):
         direccion = 130000 + cll
 
     directorio.directorio[idFuncion][1].crear(
-        p[1], tipoVariableFuncion, direccion)
-    directorio.contadorNuevaVariableLocal(idFuncion)
+        p, tipoVariableFuncion, direccion)
     print("VARIABLES LOCALES", cle, clf, clt, cll)
 
 
-def p_pn_agrega_variable_local_param(p):
+def agrega_variable_local_param(p):
     global cle, clf, cll, clt
     if tipoParamFuncion == "entero":
         cle += 1
@@ -621,14 +621,14 @@ def p_empty(p):
     pass
 
 
-# FUNCIONES
+# Definicion Funciones
 
 def p_bloque_funciones(p):
     '''bloque_funciones : FUNCS DOSPUNTOS definicion_funciones'''
 
 
 def p_definicion_funciones(p):
-    '''definicion_funciones : tipo_funcion id_funcion PARIZQ funcion_params PARDER DOSPUNTOS bloque_funcion_variables funcion_bloque_codigo regresa_bloque definicion_funcion'''
+    '''definicion_funciones : tipo_funcion ID pn_insertar_funcion_tabla PARIZQ funcion_params PARDER DOSPUNTOS bloque_funcion_variables funcion_bloque_codigo regresa_bloque definicion_funcion'''
 
 
 def p_definicion_funcion(p):
@@ -646,11 +646,11 @@ def p_tipo_funcion(p):
     tipoFuncion = p[1]
 
 
-def p_id_funcion(p):
-    '''id_funcion : ID'''
+def p_pn_insertar_funcion_tabla(p):
+    '''pn_insertar_funcion_tabla : empty'''
     global idFuncion
     global funcionActual
-    idFuncion = p[1]
+    idFuncion = p[-1]
     funcionActual = idFuncion
     directorio.agregarNuevaFuncion(idFuncion, tipoFuncion)
     directorio.asignarTablaVariablesLocales(idFuncion)
@@ -658,7 +658,7 @@ def p_id_funcion(p):
 
 
 def p_funcion_params(p):
-    '''funcion_params : tipo_param_funcion id_param_funcion funcion_param
+    '''funcion_params : tipo_param_funcion ID pn_agregar_parametro_funcion funcion_param
     | empty'''
 
 
@@ -672,11 +672,11 @@ def p_tipo_param_funcion(p):
     tipoParamFuncion = p[1]
 
 
-def p_id_param_funcion(p):
-    '''id_param_funcion : ID'''
+def p_pn_agregar_parametro_funcion(p):
+    '''pn_agregar_parametro_funcion : empty'''
     global idParamFuncion
-    idParamFuncion = p[1]
-    p_pn_agrega_variable_local_param(idParamFuncion)
+    idParamFuncion = p[-1]
+    agrega_variable_local_param(idParamFuncion)
     directorio.agregarTipoParametrosFuncion(idFuncion, tipoParamFuncion)
 
 
@@ -695,11 +695,11 @@ def p_funcion_bloque_variables(p):
 
 
 def p_funcion_variables(p):
-    '''funcion_variables : VAR funcion_tipo_variable funcion_id_variables PUNTOCOMA funcion_variable_2'''
+    '''funcion_variables : VAR funcion_tipo_variable funcion_id_variables PUNTOCOMA funcion_variable'''
 
 
-def p_funcion_variable_2(p):
-    '''funcion_variable_2 : funcion_variables
+def p_funcion_variable(p):
+    '''funcion_variable : funcion_variables
                 | empty'''
 
 
@@ -714,13 +714,15 @@ def p_funcion_tipo_variable(p):
 
 
 def p_funcion_id_variables(p):
-    '''funcion_id_variables : id_variable_local_funcion funcion_id_variable
+    '''funcion_id_variables : ID pn_agrega_variable_local funcion_id_variable
         | empty'''
 
 
-def p_id_variable_local_funcion(p):
-    '''id_variable_local_funcion : ID'''
-    p_pn_agrega_variable_local(p)
+def p_pn_agrega_variable_local(p):
+    '''pn_agrega_variable_local : empty'''
+    agrega_variable_local(p[-1])
+    directorio.contadorNuevaVariableLocal(idFuncion)
+    directorio.guardarContadorCuadruplos(idFuncion, contadorCuadruplos)
 
 
 def p_funcion_id_variable(p):
@@ -733,17 +735,109 @@ def p_funcion_bloque_codigo(p):
 
 
 def p_regresa_bloque(p):
-    '''regresa_bloque : REGRESA'''
-    # REGRESAR LOS ESPACIOS DE MEMORIA A CERO
-    directorio.directorio[idFuncion][1].imprimirTablaVariables()
-    directorio.limpiarTablaVariablesLocales(idFuncion)
+    '''regresa_bloque : REGRESA expr pn_verificar_tipo_retorno PUNTOCOMA'''
+
+
+def p_pn_verificar_tipo_retorno(p):
+    '''pn_verificar_tipo_retorno : empty'''
+    global argumento
+    global tipoArgumento
     global funcionActual
     global cle, clf, cll, clt
-    funcionActual = nombrePrograma
-    cle = 0
-    clf = 0
-    clt = 0
-    cll = 0
+    argumento = pilaOper.pop()
+    tipoArgumento = pilaTipos.pop()
+    if tipoArgumento != directorio.directorio[idFuncion][0]:
+        print(
+            f"El valor de retorno de la funcion {idFuncion} de tipo {tipoArgumento} no coincide con el esperado.")
+        exit()
+    else:
+        # REGRESAR LOS ESPACIOS DE MEMORIA A CERO
+        directorio.directorio[idFuncion][1].imprimirTablaVariables()
+        directorio.limpiarTablaVariablesLocales(idFuncion)
+        funcionActual = nombrePrograma
+        cle = 0
+        clf = 0
+        clt = 0
+        cll = 0
+        global contadorCuadruplos
+        contadorCuadruplos += 1
+        pilaCuadruplos.append(["ENDFunc", "", "", ""])
+        pCuadruplos.generarCuadruplo(
+            contadorCuadruplos, "ENDFunc", "", "", "")
+
+
+# Llamada Funciones
+def p_llamada_funcion(p):
+    '''llamada_funcion : ID pn_verificar_funcion_existe PARIZQ pn_inicializacion_llamada_funciones bloque_expresiones_llamada_funciones pn_verificar_tipo_parametro PARDER pn_verificar_numero_de_parametros'''
+
+
+def p_pn_verificar_funcion_existe(p):
+    '''pn_verificar_funcion_existe : empty'''
+    global funcionAChecarParams
+    funcionAChecarParams = p[-1]
+    directorio.verificarFuncionExiste(funcionAChecarParams)
+
+
+def p_pn_inicializacion_llamada_funciones(p):
+    '''pn_inicializacion_llamada_funciones : empty'''
+    # Ya que se checó que existe
+    global parameterCounterK
+    parameterCounterK = 1
+    global contadorCuadruplos
+    contadorCuadruplos += 1
+    pilaCuadruplos.append(["ERA", "", "", p[-1]])
+    pCuadruplos.generarCuadruplo(
+        contadorCuadruplos, "ERA", "", "", p[-1])
+
+
+def p_bloque_expresiones_llamada_funciones(p):
+    '''bloque_expresiones_llamada_funciones : expr bloque_expresiones_llamada_funcion'''
+
+
+def p_bloque_expresiones_llamada_funcion(p):
+    '''bloque_expresiones_llamada_funcion : COMA pn_mover_parametro bloque_expresiones_llamada_funciones 
+    | empty'''
+
+
+def p_pn_mover_parametro(p):
+    '''pn_mover_parametro : empty'''
+    global parameterCounterK
+    parameterCounterK += 1
+
+
+def p_pn_verificar_tipo_parametro(p):
+    '''pn_verificar_tipo_parametro : empty'''
+    global argumento
+    global tipoArgumento
+    argumento = pilaOper.pop()
+    tipoArgumento = pilaTipos.pop()
+    if tipoArgumento != directorio.directorio[funcionAChecarParams][2][parameterCounterK-1]:
+        print(
+            f"El parametro {parameterCounterK} de la funcion {funcionAChecarParams} de tipo {tipoArgumento} no coincide con el esperado.")
+        exit()
+    else:
+        global contadorCuadruplos
+        contadorCuadruplos += 1
+        argumentok = str(argumento)+str(parameterCounterK)
+        pilaCuadruplos.append(
+            ["PARAMETER", argumento, "", argumentok])
+        pCuadruplos.generarCuadruplo(
+            contadorCuadruplos, "PARAMETER", argumento, "", pilaDir.pop())
+
+
+def p_pn_verificar_numero_de_parametros(p):
+    '''pn_verificar_numero_de_parametros : empty'''
+    if len(directorio.directorio[funcionAChecarParams][2]) != parameterCounterK:
+        print(
+            f"La llamada de la funcion {funcionAChecarParams} contiene un numero incorrecto de parametros.")
+        exit()
+    else:
+        global contadorCuadruplos
+        contadorCuadruplos += 1
+        pilaCuadruplos.append(
+            ["GOSUB", "argumento", "", directorio.directorio[funcionAChecarParams][5]])
+        pCuadruplos.generarCuadruplo(
+            contadorCuadruplos, "GOSUB", "", "", "")
 
 
 # Ejecutar Codigo

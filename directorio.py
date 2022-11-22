@@ -4,8 +4,8 @@ class Directorio:
         self.tablaVariablesLocales = TablaVariables()
 
     def agregarNuevaFuncion(self, id_funcion, tipo):
-        # [key] = [tipo_retorno, tabla_variables, tipo_parametros, numero_parametros, numero_variables_locales]
-        self.directorio[id_funcion] = [tipo, None, None, 0, 0]
+        # [key] = [tipo_retorno, tabla_variables, tipo_parametros, numero_parametros, numero_variables_locales, numero_de_cuadruplo]
+        self.directorio[id_funcion] = [tipo, None, None, 0, 0, 0]
 
     def agregarTipoParametrosFuncion(self, id_funcion, tipo_param):
         arregloTipoParametrosFuncion = self.directorio[id_funcion][2]
@@ -58,6 +58,16 @@ class Directorio:
         totalVariablesLocales = self.directorio[id_funcion][4]
         totalVariablesLocales += 1
         self.directorio[id_funcion][4] = totalVariablesLocales
+
+    def guardarContadorCuadruplos(self, id_funcion, numero_cuadruplo):
+        self.directorio[id_funcion][5] = numero_cuadruplo
+
+    def verificarFuncionExiste(self, id_funcion):
+        try:
+            return self.directorio[id_funcion]
+        except:
+            print(f"La funcion: {id_funcion} no esta definida")
+            exit()
 
 
 class TablaVariables:
