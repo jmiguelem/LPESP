@@ -1,6 +1,7 @@
 LpEsp prueba;
 
 Variables:
+    var entero a;
 Funciones: 
 
 Esp:

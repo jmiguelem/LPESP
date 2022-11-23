@@ -1,5 +1,4 @@
 import ply.yacc as yacc
-import os 
 import lexico
 from directorio import Directorio
 from semantica import Semantica
@@ -75,16 +74,15 @@ def p_pn_crear_tabla_variables(p):
 
 def p_pn_terminar_programa(p):
     '''pn_terminar_programa : empty'''
-    #directorio.eliminarTablaVariables(nombrePrograma)
-    #directorio.eliminarFuncion(nombrePrograma)
+    # directorio.eliminarTablaVariables(nombrePrograma)
+    # directorio.eliminarFuncion(nombrePrograma)
     #print(f"\n Cuadruplos Generados \n")
-    f = open("archivoOBJ","w")
-    
+    f = open("archivoOBJ", "w")
+
     directorio.imprimirTabla()
     tablaConstantes.imprimir()
     pCuadruplos.imprimir()
     f.close()
-    
 
 
 def p_bloque_variables(p):
@@ -1243,7 +1241,7 @@ yacc.yacc()
 yacc.parse(data)
 lexer = lexico.lexer
 lexer.input(data)
-#mv = MaquinaVirtual(pilaCuadruplos)
-# mv.imprimir_cuadruplos()
+#mv = MaquinaVirtual(pilaCuadruplos, directorio, tablaConstantes)
+# mv.ejecucion()
 # for tok in lexer:
 # print(tok)
