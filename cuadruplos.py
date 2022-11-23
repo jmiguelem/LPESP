@@ -8,9 +8,12 @@ class Cuadruplos:
         print(f"Se genero cuadruplo {numero}: {self.pilaCuadruplos[numero]}")
 
     def imprimir(self):
-        print("\n CUADRUPLOS CON DRECCIONES")
+        f = open("archivoOBJ","a")
+        f.write("Cuadruplos \n")
         for numero in self.pilaCuadruplos.keys():
-            print(f"{numero} : {self.pilaCuadruplos[numero]}")
+            f.write(f"{numero} : {self.pilaCuadruplos[numero]}")
+            f.write("\n")
+        f.close()
 
     def rellenarSalto(self, numero, salto):
         self.pilaCuadruplos[numero][3] = salto

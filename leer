@@ -1,7 +1,7 @@
 LpEsp prueba;
 
 Variables:
-    
+Funciones: 
 
 Esp:
     imprime('HOLA');

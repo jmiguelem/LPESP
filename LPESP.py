@@ -1,4 +1,5 @@
 import ply.yacc as yacc
+import os 
 import lexico
 from directorio import Directorio
 from semantica import Semantica
@@ -74,18 +75,16 @@ def p_pn_crear_tabla_variables(p):
 
 def p_pn_terminar_programa(p):
     '''pn_terminar_programa : empty'''
-    print("\n")
-    print("Tabla de Funciones")
+    #directorio.eliminarTablaVariables(nombrePrograma)
+    #directorio.eliminarFuncion(nombrePrograma)
+    #print(f"\n Cuadruplos Generados \n")
+    f = open("archivoOBJ","w")
+    
     directorio.imprimirTabla()
-    directorio.eliminarTablaVariables(nombrePrograma)
-    directorio.eliminarFuncion(nombrePrograma)
     tablaConstantes.imprimir()
-    print(f"\n Cuadruplos Generados \n")
-    contador = 1
-    for cuadruplo in pilaCuadruplos:
-        print(f"{contador} : {cuadruplo}")
-        contador += 1
     pCuadruplos.imprimir()
+    f.close()
+    
 
 
 def p_bloque_variables(p):
@@ -1022,7 +1021,8 @@ def p_bloque_funciones(p):
 
 
 def p_definicion_funciones(p):
-    '''definicion_funciones : tipo_funcion ID pn_insertar_funcion_tabla PARIZQ funcion_params PARDER DOSPUNTOS bloque_funcion_variables funcion_bloque_codigo regresa_bloque definicion_funcion'''
+    '''definicion_funciones : tipo_funcion ID pn_insertar_funcion_tabla PARIZQ funcion_params PARDER DOSPUNTOS bloque_funcion_variables funcion_bloque_codigo regresa_bloque definicion_funcion
+                        | empty'''
 
 
 def p_definicion_funcion(p):
@@ -1235,7 +1235,9 @@ def p_pn_verificar_numero_de_parametros(p):
 
 
 # ----- EJECUTAR CODIGO -----
-code = open("prueba", 'r')
+print("Bienvenido a LPESP")
+archivo = input("Escribe el nombre del archivo a leer:")
+code = open(archivo, 'r')
 data = str(code.read())
 yacc.yacc()
 yacc.parse(data)
