@@ -4,6 +4,7 @@ from directorio import Directorio
 from semantica import Semantica
 from cuadruplos import Cuadruplos
 from directorio import Constantes
+from maquinaVirtual import MaquinaVirtual
 tokens = lexico.tokens
 
 pilaTipos = []
@@ -564,21 +565,6 @@ def p_pn_crear_directorio(p):
     directorio.agregarNuevaFuncion(nombrePrograma, "void")
 
 
-def p_pn_terminar_programa(p):
-    '''pn_terminar_programa : empty'''
-    print("\n")
-    print("Tabla de Funciones")
-    directorio.imprimirTabla()
-    directorio.eliminarTablaVariables(nombrePrograma)
-    directorio.eliminarFuncion(nombrePrograma)
-    tablaConstantes.imprimir()
-    print(f"\n Cuadruplos Generados \n")
-    contador = 1
-    for cuadruplo in pilaCuadruplos:
-        print(f"{contador} : {cuadruplo}")
-        contador += 1
-    pCuadruplos.imprimir()
-
 # VARIABLES
 
 
@@ -1046,7 +1032,8 @@ def p_pn_insertar_funcion_tabla(p):
     idFuncion = p[-1]
     funcionActual = idFuncion
     directorio.agregarNuevaFuncion(idFuncion, tipoFuncion)
-    directorio.asignarTablaVariablesLocales(idFuncion)
+    directorio.crearTablaVariables(idFuncion)
+    # directorio.asignarTablaVariablesLocales(idFuncion)
 
 
 def p_funcion_params(p):
@@ -1145,7 +1132,7 @@ def p_pn_verificar_tipo_retorno(p):
     else:
         # REGRESAR LOS ESPACIOS DE MEMORIA A CERO
         directorio.directorio[idFuncion][1].imprimirTablaVariables()
-        directorio.limpiarTablaVariablesLocales(idFuncion)
+        # directorio.limpiarTablaVariablesLocales(idFuncion)
         funcionActual = nombrePrograma
         cle = 0
         clf = 0
@@ -1241,7 +1228,8 @@ yacc.yacc()
 yacc.parse(data)
 lexer = lexico.lexer
 lexer.input(data)
-#mv = MaquinaVirtual(pilaCuadruplos, directorio, tablaConstantes)
-# mv.ejecucion()
+mv = MaquinaVirtual(nombrePrograma, pilaCuadruplos,
+                    directorio, tablaConstantes)
+mv.ejecucion()
 # for tok in lexer:
 # print(tok)
