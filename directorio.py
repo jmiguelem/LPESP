@@ -40,11 +40,12 @@ class Directorio:
         self.directorio[id_funcion].append(None)
 
     def imprimirTabla(self):
-        print(self.directorio, "\n")
+        f = open("archivoOBJ","w")
+        f.write("Directorio de Funciones \n")
         for funcion in self.directorio.keys():
-            print(f"Funcion: {funcion}")
-            print(self.directorio[funcion][1].tabla)
-            print("\n")
+            f.write(f"Funcion: {funcion}")
+            f.write(f"{self.directorio[funcion][1].tabla}")
+            f.write("\n")
 
     def contadorNuevoParametro(self, id_funcion):
         totalParametros = self.directorio[id_funcion][3]
@@ -110,7 +111,9 @@ class TablaVariables:
         self.tabla = {}
 
     def imprimirTablaVariables(self):
-        print("TABLA VARIABLES LOCALES: ", self.tabla)
+        f = open("archivoOBJ","w")
+        f.write(f"{self.tabla}")
+        f.close()
 
     def agregarTraslado(self, nombre, dimension, segundaDimension=None, traslado=None):
         self.tabla[nombre][2] = dimension
@@ -188,6 +191,12 @@ class Constantes:
         return self.tablaConstantes[valor]
 
     def imprimir(self):
-        print("\n TABLA DE CONSTANTES")
+        f = open("archivoOBJ","a")
+        f.write("Tabla de Constantes")
+        f.write("\n")
         for constante in self.tablaConstantes.keys():
-            print(f"{constante} : {self.tablaConstantes[constante]}")
+            t = f"{constante} : {self.tablaConstantes[constante]}"
+            f.write(t)
+            f.write("\n")
+            
+        f.close()
