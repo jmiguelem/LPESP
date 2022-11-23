@@ -41,7 +41,7 @@ ccl = 0
 
 # ----- GRAMATICA Y PNS DE ESTRUCTURA DEL PROGRAMA -----
 def p_inicio(p):
-    '''inicio : LPESP ID pn_crear_directorio PUNTOCOMA VARS DOSPUNTOS pn_crear_tabla_variables bloque_variables bloque_funciones ESP DOSPUNTOS llamada_funcion bloque PSE PUNTOCOMA pn_terminar_programa'''
+    '''inicio : LPESP ID pn_crear_directorio PUNTOCOMA VARS DOSPUNTOS pn_crear_tabla_variables bloque_variables bloque_funciones ESP DOSPUNTOS bloque PSE PUNTOCOMA pn_terminar_programa'''
 
 
 def p_pn_crear_directorio(p):
@@ -234,7 +234,8 @@ def p_estatuto(p):
                 | lectura
                 | si
                 | ciclo_dowhile
-                | ciclo_while'''
+                | ciclo_while
+                | llamada_funcion'''
 
 # ----- GRAMATICA Y PNS DE ASSIGN -----
 
@@ -1048,7 +1049,6 @@ def p_pn_insertar_funcion_tabla(p):
     funcionActual = idFuncion
     directorio.agregarNuevaFuncion(idFuncion, tipoFuncion)
     directorio.asignarTablaVariablesLocales(idFuncion)
-    directorio.crearArregloTiposParam(idFuncion)
 
 
 def p_funcion_params(p):
@@ -1241,5 +1241,7 @@ yacc.yacc()
 yacc.parse(data)
 lexer = lexico.lexer
 lexer.input(data)
+#mv = MaquinaVirtual(pilaCuadruplos)
+# mv.imprimir_cuadruplos()
 # for tok in lexer:
 # print(tok)

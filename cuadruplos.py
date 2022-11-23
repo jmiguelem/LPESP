@@ -1,5 +1,5 @@
 class Cuadruplos:
-    
+
     def __init__(self):
         self.pilaCuadruplos = {}
 

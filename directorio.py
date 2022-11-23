@@ -5,7 +5,7 @@ class Directorio:
 
     def agregarNuevaFuncion(self, id_funcion, tipo):
         # [key] = [tipo_retorno, tabla_variables, tipo_parametros, numero_parametros, numero_variables_locales, numero_de_cuadruplo]
-        self.directorio[id_funcion] = [tipo, None, None, 0, 0, 0]
+        self.directorio[id_funcion] = [tipo, None, [], 0, 0, 0]
 
     def agregarTipoParametrosFuncion(self, id_funcion, tipo_param):
         arregloTipoParametrosFuncion = self.directorio[id_funcion][2]
@@ -13,9 +13,6 @@ class Directorio:
         self.directorio[id_funcion][2] = arregloTipoParametrosFuncion
         # Sumar numero parametros contador
         self.contadorNuevoParametro(id_funcion)
-
-    def crearArregloTiposParam(self, id_funcion):
-        self.directorio[id_funcion][2] = []
 
     def crearTablaVariables(self, id_funcion):
         if self.directorio[id_funcion][1] == None:
