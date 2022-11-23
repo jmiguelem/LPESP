@@ -4,6 +4,7 @@ from directorio import Directorio
 from semantica import Semantica
 from cuadruplos import Cuadruplos
 from directorio import Constantes
+from maquinaVirtual import MaquinaVirtual
 tokens = lexico.tokens
 
 pilaTipos = []
@@ -41,7 +42,7 @@ ccl = 0
 
 # ----- GRAMATICA Y PNS DE ESTRUCTURA DEL PROGRAMA -----
 def p_inicio(p):
-    '''inicio : LPESP ID pn_crear_directorio PUNTOCOMA VARS DOSPUNTOS pn_crear_tabla_variables bloque_variables bloque_funciones ESP DOSPUNTOS bloque PSE PUNTOCOMA pn_terminar_programa'''
+    '''inicio : LPESP ID pn_crear_directorio PUNTOCOMA pn_generaroGOTOMAIN VARS DOSPUNTOS pn_crear_tabla_variables bloque_variables bloque_funciones ESP DOSPUNTOS pn_rellenaGOTOMAIN bloque PSE PUNTOCOMA pn_terminar_programa'''
 
 
 def p_pn_crear_directorio(p):
@@ -66,11 +67,24 @@ def p_pn_crear_directorio(p):
     # Se agrega la funcion de global
     directorio.agregarNuevaFuncion(nombrePrograma, "void")
 
-
 def p_pn_crear_tabla_variables(p):
     '''pn_crear_tabla_variables : empty'''
     directorio.crearTablaVariables(nombrePrograma)
 
+def p_pn_generaroGOTOMAIN(p):
+    '''pn_generaroGOTOMAIN : empty'''
+    global contadorCuadruplos
+    contadorCuadruplos += 1
+    pCuadruplos.generarCuadruplo(contadorCuadruplos, "GOTO MAIN", "", "", "PENDIENTE")
+    pilaSaltos.append(contadorCuadruplos)
+    print("GOTOMAIN",pilaSaltos)
+
+def p_pn_rellenaGOTOMAIN(p):
+    '''pn_rellenaGOTOMAIN : empty'''
+    print(pilaSaltos)
+    global contadorCuadruplos
+    uno = pilaSaltos.pop()
+    pCuadruplos.rellenarSalto(uno,contadorCuadruplos + 1)
 
 def p_pn_terminar_programa(p):
     '''pn_terminar_programa : empty'''
@@ -421,7 +435,8 @@ def p_pn_retorno_dowhile(p):
     global contadorCuadruplos
     contadorCuadruplos += 1
     pilaCuadruplos.append(["GOTOT", condicion, "", retorno])
-    pCuadruplos.generarCuadruplo(contadorCuadruplos, "GOTOT", dir, "", retorno)
+    pCuadruplos.generarCuadruplo(
+        contadorCuadruplos, "GOTOT", dir, "", retorno)
     print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
     print(f"Pila SALTOS: {pilaSaltos}")
 
@@ -1241,7 +1256,7 @@ yacc.yacc()
 yacc.parse(data)
 lexer = lexico.lexer
 lexer.input(data)
-#mv = MaquinaVirtual(pilaCuadruplos, directorio, tablaConstantes)
-# mv.ejecucion()
+mv = MaquinaVirtual(pCuadruplos, directorio, tablaConstantes)
+mv.ejecucion()
 # for tok in lexer:
 # print(tok)
