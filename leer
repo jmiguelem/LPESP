@@ -6,5 +6,8 @@ Funciones:
 
 Esp:
     imprime('HOLA');
+    leer(a);
+    imprime(a);
     a = 5;
+    imprime(a);
 Pse;
