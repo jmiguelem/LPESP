@@ -1,7 +1,7 @@
 LpEsp prueba;
 
 Variables:
-    var entero a, a1, b1, c1, d1, entero1, entero2, z,x,y,w,v;
+    var entero a, a1, b1, c1, d1, entero1, entero2, z,x,y,w,v, i, j;
     var flotante b, c, d;
     var texto e;
     var logico f;
@@ -11,53 +11,20 @@ Variables:
 Funciones:
 
 Esp:
-    imprime('Hola mundo', 5 + 5);
-    b = 1 + 2 * 3 / 4 - 5;
-    e = 'Adios';
-    imprime(e);
-    c = 5.1;
-    d = 8.9;
-    a = 9;
-    f = a + b * c < d;
-    f = falso;
-
-    a1 = 10;
-    b1 = 15;
-    c1 = 30;
-    d1 = 45;
-
-    si(a1 + b1 > c1 * d1):
-        a1 = b1 + d1;
-        imprime('a1 :', a1);
-    sino:
-        a1 = d1 - c1;
-        imprime('a1 :', a1);
-    fin;
-    b1 = a1 * c1 + d1;
-
-    leer(a,b);
-
-    mientras(a < b* b):
-        a = a * 3 / 2;
-        imprime('Valor de a:');
-        imprime(a);
-
-    fin;
-    f = verdadero;
+    i = 0;
+    j = 0;
     a = 0;
-    ejecuta:
-        si(a == 2):
-            f = falso;
+    mientras(i < 2):
+        j = 0;
+        mientras(j < 2):
+            matrix[i][j] = a;
+            a = a + 1;
+            j = j + 1;
         fin;
-        a = a + 1;
-        imprime(a,f);
-    fin mientras(f);
-    
-    a = 0;
-    mientras(a < 5):
-        array[a] = a;
-        a = a + 1;
-        imprime(a);
+        i = i + 1;
     fin;
-    imprime(array);
+    imprime(matrix);
+    i = matrix[0][1];
+    imprime(i);
+
 Pse;
