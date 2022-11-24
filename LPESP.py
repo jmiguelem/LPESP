@@ -94,7 +94,7 @@ def p_pn_terminar_programa(p):
     '''pn_terminar_programa : empty'''
     # directorio.eliminarTablaVariables(nombrePrograma)
     # directorio.eliminarFuncion(nombrePrograma)
-    #print(f"\n Cuadruplos Generados \n")
+    # print(f"\n Cuadruplos Generados \n")
     f = open("archivoOBJ", "w")
 
     directorio.imprimirTabla()
@@ -1041,7 +1041,7 @@ def p_definicion_funciones(p):
 
 
 def p_definicion_funcion(p):
-    '''definicion_funcion : definicion_funciones 
+    '''definicion_funcion : definicion_funciones
         | empty'''
 
 
@@ -1090,7 +1090,7 @@ def p_pn_agregar_parametro_funcion(p):
 
 
 def p_funcion_param(p):
-    '''funcion_param : COMA funcion_params 
+    '''funcion_param : COMA funcion_params
         | empty'''
 
 
@@ -1104,7 +1104,7 @@ def p_pn_guardar_cuadruplo_inicio_funcion(p):
 
 
 def p_funcion_bloque_variables(p):
-    '''funcion_bloque_variables : funcion_variables 
+    '''funcion_bloque_variables : funcion_variables
     | empty '''
 
 
@@ -1211,7 +1211,7 @@ def p_bloque_expresiones_llamada_funciones(p):
 
 
 def p_bloque_expresiones_llamada_funcion(p):
-    '''bloque_expresiones_llamada_funcion : COMA bloque_expresiones_llamada_funciones 
+    '''bloque_expresiones_llamada_funcion : COMA bloque_expresiones_llamada_funciones
     | empty'''
 
 
@@ -1220,6 +1220,8 @@ def p_pn_verificar_tipo_parametro(p):
     global argumento
     global tipoArgumento
     global parameterCounterK
+    global memoriaExp
+    memoriaExp = pilaDir.pop()
     parameterCounterK += 1
     argumento = pilaOper.pop()
     tipoArgumento = pilaTipos.pop()
@@ -1248,7 +1250,7 @@ def p_pn_verificar_tipo_parametro(p):
             direccion = 130000 + cll
 
         pCuadruplos.generarCuadruplo(
-            contadorCuadruplos, "PARAMETER", argumento, "", direccion)
+            contadorCuadruplos, "PARAMETER", memoriaExp, "", direccion)
 
 
 def p_pn_verificar_numero_de_parametros(p):
@@ -1267,6 +1269,24 @@ def p_pn_verificar_numero_de_parametros(p):
         pCuadruplos.generarCuadruplo(
             contadorCuadruplos, "GOSUB", funcionAChecarParams, "", directorio.directorio[funcionAChecarParams][5])
 
+        global tipoFuncion
+        global cge, cgf, cgl, cgt
+        if tipoFuncion == "entero":
+            cge += 1
+            direccion = 1000 + cge
+        elif tipoFuncion == "flotante":
+            cgf += 1
+            direccion = 5000 + cgf
+        elif tipoFuncion == "texto":
+            cgt += 1
+            direccion = 9000 + cgt
+        elif tipoFuncion == "logico":
+            cgl += 1
+            direccion = 13000 + cgl
+        directorio.directorio[nombrePrograma][1].crear(
+            funcionAChecarParams, tipoFuncion, direccion)
+        print("VARIABLES GLOBALES", cge, cgf, cgt, cgl)
+
 
 # ----- EJECUTAR CODIGO -----
 print("Bienvenido a LPESP")
@@ -1277,8 +1297,8 @@ yacc.yacc()
 yacc.parse(data)
 lexer = lexico.lexer
 lexer.input(data)
-mv = MaquinaVirtual(nombrePrograma, pCuadruplos,
-                    directorio, tablaConstantes)
-mv.ejecucion()
+# mv = MaquinaVirtual(nombrePrograma, pCuadruplos,
+#                    directorio, tablaConstantes)
+# mv.ejecucion()
 # for tok in lexer:
 # print(tok)

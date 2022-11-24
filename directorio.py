@@ -151,7 +151,7 @@ class Constantes:
         self.tablaConstantes = {}
         self.tablaConstantes["FALSO"] = self.dirL
         self.tablaConstantes["VERDADERO"] = self.dirL + 1
-        self.tablaConstantes["NULO"] = self.dirL + 1
+        self.tablaConstantes["NULO"] = self.dirL + 2
 
     def agregarConstante(self, valor, direccion, tipo):
         if valor in self.tablaConstantes:

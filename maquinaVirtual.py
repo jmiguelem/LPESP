@@ -10,34 +10,35 @@ class MemoriaVirtual:
     def agregar(self, dirMemoria, id, valor):
         if dirMemoria in self.memoriaVirtual.keys():
             print(self.memoriaVirtual)
-            print("Ese espacio de memoria ya esta en uso")
+            print("Ese espacio de memoria ya esta en uso", dirMemoria)
             exit()
         else:
             self.memoriaVirtual[dirMemoria] = [id, valor]
 
-    def agregarArre(self, dirMemoria, id, valor, dimension1 = None):
+    def agregarArre(self, dirMemoria, id, valor, dimension1=None):
         if dirMemoria in self.memoriaVirtual.keys():
             print(self.memoriaVirtual)
-            print("Ese espacio de memoria ya esta en uso")
+            print("Ese espacio de memoria ya esta en uso", dirMemoria)
             exit()
         else:
             self.memoriaVirtual[dirMemoria] = [id, valor, dimension1]
 
-    def agregarMat(self, dirMemoria, id, valor, dimension1 = None, dimension2 = None, desplazo = None):
+    def agregarMat(self, dirMemoria, id, valor, dimension1=None, dimension2=None, desplazo=None):
         if dirMemoria in self.memoriaVirtual.keys():
             print(self.memoriaVirtual)
-            print("Ese espacio de memoria ya esta en uso")
+            print("Ese espacio de memoria ya esta en uso", dirMemoria)
             exit()
         else:
-            self.memoriaVirtual[dirMemoria] = [id, valor, dimension1, dimension2, desplazo]
+            self.memoriaVirtual[dirMemoria] = [
+                id, valor, dimension1, dimension2, desplazo]
 
     def actualizarValor(self, dirMemoria, valor):
         if dirMemoria in self.memoriaVirtual.keys():
             self.memoriaVirtual[dirMemoria][1] = valor
         else:
             if dirMemoria >= 200000:
-                self.agregar(dirMemoria,"", valor )
-            else :
+                self.agregar(dirMemoria, "", valor)
+            else:
                 print(self.memoriaVirtual)
                 print("Ese espacio de memoria no existe")
                 exit()
@@ -58,13 +59,14 @@ class MemoriaVirtual:
     def obtenerValor(self, dirMemoria):
         if dirMemoria in self.memoriaVirtual.keys():
             if self.memoriaVirtual[dirMemoria][1] == '':
-                print(f"Error en Ejecucion- Vairable {self.memoriaVirtual[dirMemoria][0]} no tiene asignado un valor")
+                print(
+                    f"Error en Ejecucion- Variable {self.memoriaVirtual[dirMemoria][0]} no tiene asignado un valor")
                 quit()
 
             return self.memoriaVirtual[dirMemoria][1]
         else:
             if dirMemoria >= 200000:
-                self.agregar(dirMemoria,"","" )
+                self.agregar(dirMemoria, "", "")
             else:
                 print(f"Espacio {dirMemoria} de memoria no existe")
                 print(self.memoriaVirtual)
@@ -115,11 +117,13 @@ class MaquinaVirtual:
         '<>': 19,
         '==': 20,
         '||': 21,
-        '&&': 22
+        '&&': 22,
+        'FUNC': 23
     }
     directorioFunciones = Directorio()
     tablaConstantes = Constantes()
     memoriaVirtual = MemoriaVirtual()
+    memoriaLocal = MemoriaVirtual()
 
     def __init__(self, nombrePrograma, cuadruplos, directorio, tablaConstantes):
         self.nombrePrograma = nombrePrograma
@@ -145,6 +149,39 @@ class MaquinaVirtual:
     def debug(self, indice):
         print(f"Corriendo cuaduplo: {indice}")
 
+    def crearMemoriaLocal(self, nombre_funcion):
+        # Tabla Globales
+        global tablaVariablesLocales
+        tablaVariablesLocales = TablaVariables()
+        tablaVariablesLocales = self.directorioFunciones.directorio[nombre_funcion][1]
+
+        for variableLocal in tablaVariablesLocales.tabla:
+            if len(tablaVariablesLocales.tabla[variableLocal]) == 3:
+                dir = tablaVariablesLocales.tabla[variableLocal][1]
+                dim = tablaVariablesLocales.tabla[variableLocal][2]
+
+                self.memoriaVirtual.agregarArre(
+                    dir, variableLocal, "OBJETO DE ARREGLO", dim)
+
+                for i in range(dim):
+                    self.memoriaVirtual.agregar(
+                        dir+i + 1, f"{variableLocal}{i}", "")
+
+            elif len(tablaVariablesLocales.tabla[variableLocal]) == 5:
+                dir = tablaVariablesLocales.tabla[variableLocal][1]
+                dim = tablaVariablesLocales.tabla[variableLocal][4]
+
+                self.memoriaVirtual.agregarMat(
+                    dir, variableLocal, "OBJETO DE ARREGLO", tablaVariablesLocales.tabla[variableLocal][2], tablaVariablesLocales.tabla[variableLocal][3], dim)
+
+                for i in range(dim):
+                    self.memoriaVirtual.agregar(
+                        dir+i+1, f"{variableLocal}{i}", "")
+
+            else:
+                self.memoriaVirtual.agregar(
+                    tablaVariablesLocales.tabla[variableLocal][1], variableLocal, "")
+
     def inicializarMemoriaVirtual(self):
         # Tabla Constantes
         for constante in self.tablaConstantes.tablaConstantes:
@@ -166,22 +203,22 @@ class MaquinaVirtual:
                     dir, variable, "OBJETO DE ARREGLO", dim)
 
                 for i in range(dim):
-                    self.memoriaVirtual.agregar(dir+i + 1, f"{variable}{i}", "")
+                    self.memoriaVirtual.agregar(
+                        dir+i + 1, f"{variable}{i}", "")
 
             elif len(tablaVariablesGlobales.tabla[variable]) == 5:
                 dir = tablaVariablesGlobales.tabla[variable][1]
                 dim = tablaVariablesGlobales.tabla[variable][4]
 
                 self.memoriaVirtual.agregarMat(
-                    dir, variable, "OBJETO DE ARREGLO",tablaVariablesGlobales.tabla[variable][2],tablaVariablesGlobales.tabla[variable][3], dim)
+                    dir, variable, "OBJETO DE ARREGLO", tablaVariablesGlobales.tabla[variable][2], tablaVariablesGlobales.tabla[variable][3], dim)
 
                 for i in range(dim):
                     self.memoriaVirtual.agregar(dir+i+1, f"{variable}{i}", "")
-                    
+
             else:
                 self.memoriaVirtual.agregar(
-                tablaVariablesGlobales.tabla[variable][1], variable, "")
-            
+                    tablaVariablesGlobales.tabla[variable][1], variable, "")
 
         self.memoriaVirtual.imprimirMemoriaVirtual()
         # print(self.memoriaVirtual.obtenerId(30001))
@@ -207,19 +244,22 @@ class MaquinaVirtual:
                     try:
                         valor = int(valor)
                     except:
-                        print(f"Error de Ejecucion - se esta tratando de asignar un tipo de dato incorrecto a: {variable}")
+                        print(
+                            f"Error de Ejecucion - se esta tratando de asignar un tipo de dato incorrecto a: {variable}")
                         quit()
                 elif cuadruplo[-1] >= 5000 and cuadruplo[-1] < 9000:
                     try:
                         valor = float(valor)
                     except:
-                        print(f"Error de Ejecucion - se esta tratando de asignar un tipo de dato incorrecto a: {variable}")
+                        print(
+                            f"Error de Ejecucion - se esta tratando de asignar un tipo de dato incorrecto a: {variable}")
                         quit()
                 elif cuadruplo[-1] >= 9000 and cuadruplo[-1] < 13000:
                     try:
                         valor = str(valor)
                     except:
-                        print(f"Error de Ejecucion - se esta tratando de asignar un tipo de dato incorrecto a: {variable}")
+                        print(
+                            f"Error de Ejecucion - se esta tratando de asignar un tipo de dato incorrecto a: {variable}")
                         quit()
                 memoria.actualizarValor(cuadruplo[-1], valor)
                 indice += 1
@@ -281,14 +321,40 @@ class MaquinaVirtual:
 
             elif cuadruplo[0] == 7:  # ERA
                 # CARGAR MEMORIA LOCAL
+                self.crearMemoriaLocal(cuadruplo[-1])
+                self.migajas.append(indice + 1)
                 indice += 1
 
             elif cuadruplo[0] == 8:  # PARAMETER
+                direccion = cuadruplo[1]
+                valor = memoria.obtenerValor(direccion)
+                if cuadruplo[-1] >= 10000 and cuadruplo[-1] < 50000:
+                    try:
+                        valor = int(valor)
+                    except:
+                        print(
+                            f"Error de Ejecucion - se esta tratando de asignar un tipo de dato incorrecto a: {variable}")
+                        quit()
+                elif cuadruplo[-1] >= 50000 and cuadruplo[-1] < 90000:
+                    try:
+                        valor = float(valor)
+                    except:
+                        print(
+                            f"Error de Ejecucion - se esta tratando de asignar un tipo de dato incorrecto a: {variable}")
+                        quit()
+                elif cuadruplo[-1] >= 90000 and cuadruplo[-1] < 130000:
+                    try:
+                        valor = str(valor)
+                    except:
+                        print(
+                            f"Error de Ejecucion - se esta tratando de asignar un tipo de dato incorrecto a: {variable}")
+                        quit()
+                memoria.actualizarValor(cuadruplo[-1], valor)
 
                 indice += 1
 
             elif cuadruplo[0] == 9:  # GOSUB
-                indice += 1
+                indice = cuadruplo[-1]
 
             elif cuadruplo[0] == 10:  # IMPRIME
                 direccion = cuadruplo[-1]
@@ -321,21 +387,24 @@ class MaquinaVirtual:
                     try:
                         valor = int(valor)
                     except:
-                        print(f"Error de Ejecucion - se esta tratando de asignar un tipo de dato incorrecto a: {variable}")
+                        print(
+                            f"Error de Ejecucion - se esta tratando de asignar un tipo de dato incorrecto a: {variable}")
                         quit()
                 elif cuadruplo[-1] >= 5000 and cuadruplo[-1] < 9000:
                     try:
                         valor = float(valor)
                     except:
-                        print(f"Error de Ejecucion - se esta tratando de asignar un tipo de dato incorrecto a: {variable}")
+                        print(
+                            f"Error de Ejecucion - se esta tratando de asignar un tipo de dato incorrecto a: {variable}")
                         quit()
                 elif cuadruplo[-1] >= 9000 and cuadruplo[-1] < 13000:
                     try:
                         valor = str(valor)
                     except:
-                        print(f"Error de Ejecucion - se esta tratando de asignar un tipo de dato incorrecto a: {variable}")
+                        print(
+                            f"Error de Ejecucion - se esta tratando de asignar un tipo de dato incorrecto a: {variable}")
                         quit()
-                memoria.actualizarValor(cuadruplo[-1],valor)
+                memoria.actualizarValor(cuadruplo[-1], valor)
                 indice += 1
 
             elif cuadruplo[0] == 12:  # GOTOF
@@ -416,7 +485,7 @@ class MaquinaVirtual:
                 op1 = memoria.obtenerValor(dir_op1)
                 dir_op2 = cuadruplo[2]
                 op2 = memoria.obtenerValor(dir_op2)
-                res = op1 or  op2
+                res = op1 or op2
                 memoria.actualizarValor(cuadruplo[-1], res)
                 indice += 1
 
@@ -427,6 +496,8 @@ class MaquinaVirtual:
                 op2 = memoria.obtenerValor(dir_op2)
                 res = op1 and op2
                 memoria.actualizarValor(cuadruplo[-1], res)
+                indice += 1
+            elif cuadruplo[0] == 23:  # RET
                 indice += 1
             else:
                 print("CICLOOOOO")
