@@ -772,17 +772,18 @@ def p_pn_crear_cuadruplo_arreglo(p):
 
     contadorCuadruplos += 1
 
-    pilaDir.append(direccionAvail + contadorAvail)
+    pilaDir.append(f"({direccionAvail + contadorAvail})")
     contadorAvail = contadorAvail + 1
 
     pCuadruplos.generarCuadruplo(
-        contadorCuadruplos, "+DIR", dir_indice, dir_base, pilaDir[-1])
+        contadorCuadruplos, "+DIR", dir_indice, dir_base, direccionAvail+ + contadorAvail - 1)
     pilaOper.append(f"({pilaDir[-1]})")
 
 
 def p_pn_verificar_matriz(p):
     '''pn_verificar_matriz : empty'''
     directorio.directorio[funcionActual][1].verificarMatriz(id_arreglo)
+    
 
 
 def p_pn_crear_cuadruplo_matriz(p):
@@ -797,16 +798,16 @@ def p_pn_crear_cuadruplo_matriz(p):
     print(f"Direccion : {pilaDir}")
     global contadorCuadruplos
 
-    s2 = pilaOper.pop()
+    j = pilaOper.pop()
     tipo = pilaTipos.pop()
-    dir_s2 = pilaDir.pop()
+    dir_j = pilaDir.pop()
     if tipo != "entero":
         print("Error - Indice debe ser entero")
         quit()
 
-    s1 = pilaOper.pop()
+    i = pilaOper.pop()
     tipo = pilaTipos.pop()
-    dir_s1 = pilaDir.pop()
+    dir_i = pilaDir.pop()
     if tipo != "entero":
         print("Error - Indice debe ser entero")
         quit()
@@ -817,38 +818,44 @@ def p_pn_crear_cuadruplo_matriz(p):
     dir_d2 = tablaConstantes.regresarDireccion(d2)
     contadorCuadruplos += 1
     pCuadruplos.generarCuadruplo(
-        contadorCuadruplos, "VERIFICADIM", dir_s1, 0, d1)
+        contadorCuadruplos, "VERIFICADIM", dir_i, 0, d1)
     contadorCuadruplos += 1
     pCuadruplos.generarCuadruplo(
-        contadorCuadruplos, "VERIFICADIM", dir_s2, 0, d2)
+        contadorCuadruplos, "VERIFICADIM", dir_j, 0, d2)
 
     base = pilaOper.pop()
-    dir_base = pilaDir.pop()
+    dir_base = directorio.directorio[funcionActual][1].regresarDireccion(id_arreglo)
 
     global contadorAvail
     global direccionAvail
 
-    pilaDir.append(direccionAvail + contadorAvail)
-    t0 = pilaDir[-1]
+    
+    t0 = direccionAvail + contadorAvail
     contadorAvail = contadorAvail + 1
 
-    pilaDir.append(direccionAvail + contadorAvail)
-    t1 = pilaDir[-1]
+    t1 = direccionAvail + contadorAvail
     contadorAvail = contadorAvail + 1
-
-    pilaDir.append(direccionAvail + contadorAvail)
+    pilaDir.append(f"({direccionAvail + contadorAvail})")
     contadorAvail = contadorAvail + 1
     apuntador = pilaDir[-1]
 
     contadorCuadruplos += 1
-    pCuadruplos.generarCuadruplo(contadorCuadruplos, "*", dir_s1, dir_d2, t0)
+    pCuadruplos.generarCuadruplo(contadorCuadruplos, "*", dir_i, dir_d2, t0)
     contadorCuadruplos += 1
-    pCuadruplos.generarCuadruplo(contadorCuadruplos, "+", t0, dir_s2, t1)
+    pCuadruplos.generarCuadruplo(contadorCuadruplos, "+", t0, dir_j, t1)
     contadorCuadruplos += 1
     pCuadruplos.generarCuadruplo(
-        contadorCuadruplos, "+DIR", dir_base, t1, f"({apuntador})")
+        contadorCuadruplos, "+DIR", t1, dir_base, direccionAvail + contadorAvail - 1)
+    if dir_base in pilaDir:
+        pilaDir.remove(dir_base)
 
     pilaOper.append(f"({pilaDir[-1]})")
+    print(f"Tipos: {pilaTipos}")
+    print(f"Operandos: {pilaOper}")
+    print(f"Operadores: {pOper}")
+    print(f"Direccion : {pilaDir}")
+    print("\n")
+
 
 
 # AGREGAR OPERADORES
