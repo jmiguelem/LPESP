@@ -1,11 +1,14 @@
 class Directorio:
     def __init__(self):
         self.directorio = {}
-        self.tablaVariablesLocales = TablaVariables()
 
     def agregarNuevaFuncion(self, id_funcion, tipo):
         # [key] = [tipo_retorno, tabla_variables, tipo_parametros, numero_parametros, numero_variables_locales, numero_de_cuadruplo]
-        self.directorio[id_funcion] = [tipo, None, [], 0, 0, 0]
+        if id_funcion in self.directorio.keys():
+            print("Error: Ya existe una funcion con dicho nombre")
+            exit()
+        else:
+            self.directorio[id_funcion] = [tipo, None, [], 0, 0, 0]
 
     def agregarTipoParametrosFuncion(self, id_funcion, tipo_param):
         arregloTipoParametrosFuncion = self.directorio[id_funcion][2]
@@ -21,17 +24,6 @@ class Directorio:
         else:
             print(f"DEV: Funcion {id_funcion} ya tenia tabla de variables")
 
-    def asignarTablaVariablesLocales(self, id_funcion):
-        if self.directorio[id_funcion][1] == None:
-            self.directorio[id_funcion][1] = self.tablaVariablesLocales
-        else:
-            print(
-                f"DEV: Funcion {id_funcion} ya tenia tabla de variables locales")
-
-    def limpiarTablaVariablesLocales(self, id_funcion):
-        self.tablaVariablesLocales.limpiarTabla()
-        self.directorio[id_funcion][1] = self.tablaVariablesLocales
-
     def eliminarFuncion(self, id_funcion):
         del self.directorio[id_funcion]
 
@@ -40,7 +32,7 @@ class Directorio:
         self.directorio[id_funcion].append(None)
 
     def imprimirTabla(self):
-        f = open("archivoOBJ","w")
+        f = open("archivoOBJ", "w")
         f.write("Directorio de Funciones \n")
         for funcion in self.directorio.keys():
             f.write(f"Funcion: {funcion}")
@@ -111,7 +103,7 @@ class TablaVariables:
         self.tabla = {}
 
     def imprimirTablaVariables(self):
-        f = open("archivoOBJ","w")
+        f = open("archivoOBJ", "w")
         f.write(f"{self.tabla}")
         f.close()
 
@@ -159,6 +151,7 @@ class Constantes:
         self.tablaConstantes = {}
         self.tablaConstantes["FALSO"] = self.dirL
         self.tablaConstantes["VERDADERO"] = self.dirL + 1
+        self.tablaConstantes["NULO"] = self.dirL + 1
 
     def agregarConstante(self, valor, direccion, tipo):
         if tipo == 0:
@@ -191,12 +184,12 @@ class Constantes:
         return self.tablaConstantes[valor]
 
     def imprimir(self):
-        f = open("archivoOBJ","a")
+        f = open("archivoOBJ", "a")
         f.write("Tabla de Constantes")
         f.write("\n")
         for constante in self.tablaConstantes.keys():
             t = f"{constante} : {self.tablaConstantes[constante]}"
             f.write(t)
             f.write("\n")
-            
+
         f.close()

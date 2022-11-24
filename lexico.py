@@ -25,7 +25,8 @@ palabras_reservadas = {
     'imprime': 'IMPRIME',
     'ejecuta': 'EJECUTA',
     'fin': 'FIN',
-    'Pse': 'PSE'
+    'Pse': 'PSE',
+    'nulo': 'NULO'
 }
 
 # TOKENS
