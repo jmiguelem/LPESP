@@ -9,6 +9,31 @@ Variables:
     matriz entero matrix [2][2];
         
 Funciones:
+    entero funcion1(entero parametro1, texto parametro2, logico parametro3):
+        Variables:
+        var entero func1var1, func1var2;
+        var flotante func1var3;
+        Bloque:
+        func1var1 = func1var2;
+        func1var3 = 3.9;
+        Regresa 2;
+    flotante funcion2(flotante parametro1):
+        Variables:
+        var entero func2var1, func2var2, func2var3;
+        var flotante func2var4;
+        Bloque:
+        func2var1 = 3;
+        func2var2 = 5;
+        func2var3 = func2var1 + func2var2;
+        Regresa 3.1;
+    flotante funcion3():
+        Variables:
+        var texto func3var1, func3var2;
+        var entero func3var3, func3var4;
+        var logico func3var5;
+        Bloque:
+        Regresa 1.2;
+    
 
 Esp:
     i = 0;
