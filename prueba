@@ -5,6 +5,8 @@ Variables:
     var flotante b, c, d;
     var texto e;
     var logico f;
+    arreglo entero array [5];
+    matriz entero matrix [2][2];
         
 Funciones:
 
@@ -13,33 +15,49 @@ Esp:
     b = 1 + 2 * 3 / 4 - 5;
     e = 'Adios';
     imprime(e);
+    c = 5.1;
+    d = 8.9;
+    a = 9;
     f = a + b * c < d;
     f = falso;
 
+    a1 = 10;
+    b1 = 15;
+    c1 = 30;
+    d1 = 45;
+
     si(a1 + b1 > c1 * d1):
         a1 = b1 + d1;
+        imprime('a1 :', a1);
     sino:
         a1 = d1 - c1;
+        imprime('a1 :', a1);
     fin;
     b1 = a1 * c1 + d1;
 
     leer(a,b);
 
     mientras(a < b* b):
-        a = a * a;
+        a = a * 3 / 2;
         imprime('Valor de a:');
         imprime(a);
-        a = a * 1;
 
     fin;
-
-    si(z + x * y > w - v):
-        w = z + x;
-        imprime(w);
-        si(w > y * x):
-            z = w + v;
+    f = verdadero;
+    a = 0;
+    ejecuta:
+        si(a == 2):
+            f = falso;
         fin;
-        x = y - w;
+        a = a + 1;
+        imprime(a,f);
+    fin mientras(f);
+    
+    a = 0;
+    mientras(a < 5):
+        array[a] = a;
+        a = a + 1;
+        imprime(a);
     fin;
-    x = z + w * v;
+    imprime(array);
 Pse;

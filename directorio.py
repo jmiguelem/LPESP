@@ -161,6 +161,8 @@ class Constantes:
         self.tablaConstantes["VERDADERO"] = self.dirL + 1
 
     def agregarConstante(self, valor, direccion, tipo):
+        if valor in self.tablaConstantes:
+            return -1
         if tipo == 0:
             direccion = self.dirE + direccion
             if direccion >= self.dirE + self.numeroConstantes:

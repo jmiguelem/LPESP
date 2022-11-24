@@ -14,7 +14,7 @@ pOper = [""]
 pilaCuadruplos = []
 pilaSaltos = []
 contadorAvail = 0
-direccionAvail = 20000
+direccionAvail = 200000
 pCuadruplos = Cuadruplos()
 contadorCuadruplos = 0
 parameterCounterK = 0
@@ -190,13 +190,13 @@ def p_pn_agregar_dimension(p):
     dimension = p[-1]
     global cge, cgf, cgl, cgt
     if tipoVariable == "entero":
-        cge += dimension + 1
+        cge += dimension
     elif tipoVariable == "flotante":
-        cgf += dimension + 1
+        cgf += dimension
     elif tipoVariable == "texto":
-        cgt += dimension + 1
+        cgt += dimension
     elif tipoVariable == "logico":
-        cgl += dimension + 1
+        cgl += dimension
     directorio.directorio[funcionActual][1].agregarTraslado(
         id_arreglo, dimension)
 
@@ -295,7 +295,7 @@ def p_pn_asignar(p):
     dir_der = pilaDir.pop()
     dir_izq = pilaDir.pop()
 
-    if tipo_izq == tipo_der:
+    if tipo_izq == tipo_der or (tipo_izq == 'flotante' and tipo_der == 'entero'):
         global contadorAvail, contadorCuadruplos
         contadorCuadruplos += 1
         pilaCuadruplos.append([operador, op_der, "", op_izq])
@@ -716,9 +716,10 @@ def p_pn_agregar_LOGICO(p):
     global constantes
     if p[-1] == "falso":
         pilaDir.append(tablaConstantes.regresarDireccion("FALSO"))
+        pilaOper.append("FALSO")
     else:
         pilaDir.append(tablaConstantes.regresarDireccion("VERDADERO"))
-    pilaOper.append(p[-1])
+        pilaOper.append("VERDADERO")
     pilaTipos.append("logico")
 
 # ----- PNS DE ACCEDER ARREGLOS -----
@@ -754,7 +755,7 @@ def p_pn_crear_cuadruplo_arreglo(p):
         contadorCuadruplos, "VERIFICADIM", dir_indice, 0, dimension)
 
     base = pilaOper.pop()
-    dir_base = pilaDir.pop()
+    dir_base = directorio.directorio[funcionActual][1].regresarDireccion(id_arreglo)
 
     global contadorAvail
     global direccionAvail
@@ -765,7 +766,7 @@ def p_pn_crear_cuadruplo_arreglo(p):
     contadorAvail = contadorAvail + 1
 
     pCuadruplos.generarCuadruplo(
-        contadorCuadruplos, "+DIR", f"({dir_indice})", dir_base, pilaDir[-1])
+        contadorCuadruplos, "+DIR", dir_indice, dir_base, pilaDir[-1])
     pilaOper.append(f"({pilaDir[-1]})")
 
 
@@ -835,7 +836,7 @@ def p_pn_crear_cuadruplo_matriz(p):
     pCuadruplos.generarCuadruplo(contadorCuadruplos, "+", t0, dir_s2, t1)
     contadorCuadruplos += 1
     pCuadruplos.generarCuadruplo(
-        contadorCuadruplos, "+DIR", dir_base, t1, apuntador)
+        contadorCuadruplos, "+DIR", dir_base, t1, f"({apuntador})")
 
     pilaOper.append(f"({pilaDir[-1]})")
 
@@ -1247,7 +1248,7 @@ yacc.yacc()
 yacc.parse(data)
 lexer = lexico.lexer
 lexer.input(data)
-mv = MaquinaVirtual(nombrePrograma, pilaCuadruplos,
+mv = MaquinaVirtual(nombrePrograma, pCuadruplos,
                     directorio, tablaConstantes)
 mv.ejecucion()
 # for tok in lexer:

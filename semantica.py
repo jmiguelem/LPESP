@@ -20,7 +20,7 @@ class Semantica:
             [-1,    -1,         -1,     -1], #LOGICO
         ],
         "/" : [
-            [1,     1,          -1,     -1], #ENTERO
+            [0,     1,          -1,     -1], #ENTERO
             [1,     1,          -1,     -1], #FLOTANTE
             [-1,    -1,         -1,     -1], #TEXTO
             [-1,    -1,         -1,     -1], #LOGICO
