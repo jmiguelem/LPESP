@@ -211,11 +211,7 @@ class MaquinaVirtual:
                 dim = tablaVariablesGlobales.tabla[variable][4]
 
                 self.memoriaVirtual.agregarMat(
-<<<<<<< HEAD
-                    dir, variable, "OBJETO DE ARREGLO", tablaVariablesGlobales.tabla[variable][2], tablaVariablesGlobales.tabla[variable][3], dim)
-=======
-                    dir, variable, "OBJETO DE MATRIZ",tablaVariablesGlobales.tabla[variable][2],tablaVariablesGlobales.tabla[variable][3], dim)
->>>>>>> 32b35e64ccf9a330fec27ed5a35896d542f6800d
+                    dir, variable, "OBJETO DE MATRIZ", tablaVariablesGlobales.tabla[variable][2], tablaVariablesGlobales.tabla[variable][3], dim)
 
                 for i in range(dim):
                     self.memoriaVirtual.agregar(dir+i+1, f"{variable}{i}", "")
@@ -224,7 +220,7 @@ class MaquinaVirtual:
                 self.memoriaVirtual.agregar(
                     tablaVariablesGlobales.tabla[variable][1], variable, "")
 
-        #self.memoriaVirtual.imprimirMemoriaVirtual()
+        # self.memoriaVirtual.imprimirMemoriaVirtual()
         # print(self.memoriaVirtual.obtenerId(30001))
         # self.memoriaVirtual.actualizarValor(30001, "holA")
         # self.memoriaVirtual.imprimirMemoriaVirtual()
@@ -235,42 +231,15 @@ class MaquinaVirtual:
         indice = 1
         while indice <= len(pila):
             cuadruplo = pila[indice]
-            #print("\n")
-            #self.debug(indice)
-            #print(cuadruplo)
-            #memoria.imprimirMemoriaVirtual()
+            # print("\n")
+            # self.debug(indice)
+            # print(cuadruplo)
+            # memoria.imprimirMemoriaVirtual()
 
             if cuadruplo[0] == 0:  # GOTOMAIN
                 indice = cuadruplo[-1]
 
             elif cuadruplo[0] == 1:  # ASIGNACION
-<<<<<<< HEAD
-                direccion = cuadruplo[1]
-                valor = memoria.obtenerValor(direccion)
-                if cuadruplo[-1] >= 1000 and cuadruplo[-1] < 5000:
-                    try:
-                        valor = int(valor)
-                    except:
-                        print(
-                            f"Error de Ejecucion - se esta tratando de asignar un tipo de dato incorrecto a: {variable}")
-                        quit()
-                elif cuadruplo[-1] >= 5000 and cuadruplo[-1] < 9000:
-                    try:
-                        valor = float(valor)
-                    except:
-                        print(
-                            f"Error de Ejecucion - se esta tratando de asignar un tipo de dato incorrecto a: {variable}")
-                        quit()
-                elif cuadruplo[-1] >= 9000 and cuadruplo[-1] < 13000:
-                    try:
-                        valor = str(valor)
-                    except:
-                        print(
-                            f"Error de Ejecucion - se esta tratando de asignar un tipo de dato incorrecto a: {variable}")
-                        quit()
-                memoria.actualizarValor(cuadruplo[-1], valor)
-                indice += 1
-=======
                 try:
                     direccion = cuadruplo[1]
                     valor = memoria.obtenerValor(direccion)
@@ -286,7 +255,7 @@ class MaquinaVirtual:
                 elif type(cuadruplo[1]) == type(""):
                     dir_valor = int(cuadruplo[1][1:-1])
                     valor = memoria.obtenerValor(dir_valor)
-                    valor = memoria.obtenerValor(valor) #1
+                    valor = memoria.obtenerValor(valor)  # 1
                     direccion = cuadruplo[-1]
                     memoria.actualizarValor(direccion, valor)
                     indice += 1
@@ -295,23 +264,25 @@ class MaquinaVirtual:
                         try:
                             valor = int(valor)
                         except:
-                            print(f"Error de Ejecucion - se esta tratando de asignar un tipo de dato incorrecto a: {variable}")
+                            print(
+                                f"Error de Ejecucion - se esta tratando de asignar un tipo de dato incorrecto a: {variable}")
                             quit()
                     elif cuadruplo[-1] >= 5000 and cuadruplo[-1] < 9000:
                         try:
                             valor = float(valor)
                         except:
-                            print(f"Error de Ejecucion - se esta tratando de asignar un tipo de dato incorrecto a: {variable}")
+                            print(
+                                f"Error de Ejecucion - se esta tratando de asignar un tipo de dato incorrecto a: {variable}")
                             quit()
                     elif cuadruplo[-1] >= 9000 and cuadruplo[-1] < 13000:
                         try:
                             valor = str(valor)
                         except:
-                            print(f"Error de Ejecucion - se esta tratando de asignar un tipo de dato incorrecto a: {variable}")
+                            print(
+                                f"Error de Ejecucion - se esta tratando de asignar un tipo de dato incorrecto a: {variable}")
                             quit()
                     memoria.actualizarValor(cuadruplo[-1], valor)
                     indice += 1
->>>>>>> 32b35e64ccf9a330fec27ed5a35896d542f6800d
 
             elif cuadruplo[0] == 2:  # SUMA
                 dir_op1 = cuadruplo[1]

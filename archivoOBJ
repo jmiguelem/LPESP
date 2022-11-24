@@ -1,34 +1,4 @@
 Directorio de Funciones 
-<<<<<<< HEAD
-Funcion: funciones{'a': ['entero', 1001], 'b': ['entero', 1002], 'funcion1': ['entero', 1003]}
-Funcion: funcion1{'parametro1': ['entero', 10001], 'parametro2': ['texto', 90001], 'parametro3': ['logico', 130001], 'func1var1': ['entero', 10002], 'func1var2': ['entero', 10003], 'func1var3': ['flotante', 50001]}
-Tabla de Constantes
-FALSO : 36000
-VERDADERO : 36001
-NULO : 36002
-9 : 30001
-3.9 : 32001
-128 : 30002
-4 : 30003
-20 : 30004
-1 : 30005
-'a' : 34001
-Cuadruplos 
-1 : ['GOTO MAIN', '', '', 7]
-2 : ['=', 30001, '', 10002]
-3 : ['=', 10002, '', 10003]
-4 : ['=', 32001, '', 50001]
-5 : ['RET', '', '', 30002]
-6 : ['ENDFunc', '', '', '']
-7 : ['=', 30003, '', 1002]
-8 : ['=', 30004, '', 1001]
-9 : ['ERA', '', '', 'funcion1']
-10 : ['PARAMETER', 30005, '', 10001]
-11 : ['PARAMETER', 34001, '', 90001]
-12 : ['PARAMETER', 36001, '', 130001]
-13 : ['GOSUB', 'funcion1', '', 2]
-14 : ['IMPRIME', '', '', 1002]
-=======
 Funcion: prueba{'a': ['entero', 1001], 'a1': ['entero', 1002], 'b1': ['entero', 1003], 'c1': ['entero', 1004], 'd1': ['entero', 1005], 'entero1': ['entero', 1006], 'entero2': ['entero', 1007], 'z': ['entero', 1008], 'x': ['entero', 1009], 'y': ['entero', 1010], 'w': ['entero', 1011], 'v': ['entero', 1012], 'i': ['entero', 1013], 'j': ['entero', 1014], 'b': ['flotante', 5001], 'c': ['flotante', 5002], 'd': ['flotante', 5003], 'e': ['texto', 9001], 'f': ['logico', 13001], 'array': ['entero', 1015, 5], 'matrix': ['entero', 1021, 2, 2, 4]}
 Tabla de Constantes
 FALSO : 36000
@@ -68,4 +38,3 @@ Cuadruplos
 29 : ['+DIR', 200009, 1021, 200010]
 30 : ['=', '(200010)', '', 1013]
 31 : ['IMPRIME', '', '', 1013]
->>>>>>> 32b35e64ccf9a330fec27ed5a35896d542f6800d
