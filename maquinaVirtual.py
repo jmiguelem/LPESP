@@ -118,7 +118,7 @@ class MaquinaVirtual:
         '==': 20,
         '||': 21,
         '&&': 22,
-        'FUNC': 23
+        'RET': 23
     }
     directorioFunciones = Directorio()
     tablaConstantes = Constantes()
@@ -342,7 +342,6 @@ class MaquinaVirtual:
             elif cuadruplo[0] == 7:  # ERA
                 # CARGAR MEMORIA LOCAL
                 self.crearMemoriaLocal(cuadruplo[-1])
-                self.migajas.append(indice + 1)
                 indice += 1
 
             elif cuadruplo[0] == 8:  # PARAMETER
@@ -374,6 +373,7 @@ class MaquinaVirtual:
                 indice += 1
 
             elif cuadruplo[0] == 9:  # GOSUB
+                self.migajas.append(indice + 1)
                 indice = cuadruplo[-1]
 
             elif cuadruplo[0] == 10:  # IMPRIME

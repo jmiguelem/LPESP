@@ -9,14 +9,14 @@ Funciones:
             var entero func1var1, func1var2;
             var flotante func1var3;
         Bloque:
-            func1var1 = 9;
-            func1var2 = func1var1;
-            func1var3 = 3.9;
+            a = 30;
+            func1var2 = 10;
+            func1var1 = 20;
+            imprime(func1var1);
             Regresa 128;
 
 Esp:
-    b = 4;
-    a = 20; 
+    a = 10;
+    b = 4 + a;
     funcion1(1, 'a', verdadero);
-    imprime(b);
 Pse;

@@ -4,6 +4,7 @@ from directorio import Directorio
 from semantica import Semantica
 from cuadruplos import Cuadruplos
 from directorio import Constantes
+from maquinaVirtual import MaquinaVirtual
 tokens = lexico.tokens
 
 pilaTipos = []
@@ -776,14 +777,13 @@ def p_pn_crear_cuadruplo_arreglo(p):
     contadorAvail = contadorAvail + 1
 
     pCuadruplos.generarCuadruplo(
-        contadorCuadruplos, "+DIR", dir_indice, dir_base, direccionAvail+ + contadorAvail - 1)
+        contadorCuadruplos, "+DIR", dir_indice, dir_base, direccionAvail + + contadorAvail - 1)
     pilaOper.append(f"({pilaDir[-1]})")
 
 
 def p_pn_verificar_matriz(p):
     '''pn_verificar_matriz : empty'''
     directorio.directorio[funcionActual][1].verificarMatriz(id_arreglo)
-    
 
 
 def p_pn_crear_cuadruplo_matriz(p):
@@ -824,12 +824,12 @@ def p_pn_crear_cuadruplo_matriz(p):
         contadorCuadruplos, "VERIFICADIM", dir_j, 0, d2)
 
     base = pilaOper.pop()
-    dir_base = directorio.directorio[funcionActual][1].regresarDireccion(id_arreglo)
+    dir_base = directorio.directorio[funcionActual][1].regresarDireccion(
+        id_arreglo)
 
     global contadorAvail
     global direccionAvail
 
-    
     t0 = direccionAvail + contadorAvail
     contadorAvail = contadorAvail + 1
 
@@ -855,7 +855,6 @@ def p_pn_crear_cuadruplo_matriz(p):
     print(f"Operadores: {pOper}")
     print(f"Direccion : {pilaDir}")
     print("\n")
-
 
 
 # AGREGAR OPERADORES
@@ -1304,8 +1303,8 @@ yacc.yacc()
 yacc.parse(data)
 lexer = lexico.lexer
 lexer.input(data)
-# mv = MaquinaVirtual(nombrePrograma, pCuadruplos,
-#                    directorio, tablaConstantes)
-# mv.ejecucion()
+mv = MaquinaVirtual(nombrePrograma, pCuadruplos,
+                    directorio, tablaConstantes)
+mv.ejecucion()
 # for tok in lexer:
 # print(tok)
