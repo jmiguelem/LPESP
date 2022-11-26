@@ -18,7 +18,7 @@ class MemoriaVirtual:
     def agregarArre(self, dirMemoria, id, valor, dimension1=None):
         if dirMemoria in self.memoriaVirtual.keys():
             print(self.memoriaVirtual)
-            print("Ese espacio de memoria ya esta en uso", dirMemoria)
+            print("Ese espacio de memoria ya esta en uso (agregarArre)", dirMemoria)
             exit()
         else:
             self.memoriaVirtual[dirMemoria] = [id, valor, dimension1]
@@ -26,7 +26,7 @@ class MemoriaVirtual:
     def agregarMat(self, dirMemoria, id, valor, dimension1=None, dimension2=None, desplazo=None):
         if dirMemoria in self.memoriaVirtual.keys():
             print(self.memoriaVirtual)
-            print("Ese espacio de memoria ya esta en uso", dirMemoria)
+            print("Ese espacio de memoria ya esta en uso (agregaMatriz)", dirMemoria)
             exit()
         else:
             self.memoriaVirtual[dirMemoria] = [
@@ -55,6 +55,15 @@ class MemoriaVirtual:
         for memoria in self.memoriaVirtual:
             print("[", memoria, self.memoriaVirtual[memoria]
                   [0], self.memoriaVirtual[memoria][1], "]")
+
+    def checarExistenciaValor(self, dirMemoria):
+        if dirMemoria in self.memoriaVirtual.keys():
+            return True
+        else:
+            if dirMemoria >= 200000:
+                self.agregar(dirMemoria, "", "")
+            else:
+                return False
 
     def obtenerValor(self, dirMemoria):
         if dirMemoria in self.memoriaVirtual.keys():
@@ -94,6 +103,7 @@ class MaquinaVirtual:
     cuadruplos = []
     nombrePrograma = ""
     migajas = []
+    valorReturn = ""
     codigosOperaciones = {
         'GOTO MAIN': 0,
         '=': 1,
@@ -123,7 +133,6 @@ class MaquinaVirtual:
     directorioFunciones = Directorio()
     tablaConstantes = Constantes()
     memoriaVirtual = MemoriaVirtual()
-    memoriaLocal = MemoriaVirtual()
 
     def __init__(self, nombrePrograma, cuadruplos, directorio, tablaConstantes):
         self.nombrePrograma = nombrePrograma
@@ -150,10 +159,16 @@ class MaquinaVirtual:
         print(f"Corriendo cuaduplo: {indice}")
 
     def crearMemoriaLocal(self, nombre_funcion):
-        # Tabla Globales
+        # Tabla Locales
         global tablaVariablesLocales
         tablaVariablesLocales = TablaVariables()
         tablaVariablesLocales = self.directorioFunciones.directorio[nombre_funcion][1]
+
+        global memoriaLocal
+        memoriaLocal = MemoriaVirtual()
+
+        #numeroParams = self.directorioFunciones.directorio[nombre_funcion][3]
+        #numeroVars = self.directorioFunciones.directorio[nombre_funcion][4]
 
         for variableLocal in tablaVariablesLocales.tabla:
             if len(tablaVariablesLocales.tabla[variableLocal]) == 3:
@@ -337,7 +352,10 @@ class MaquinaVirtual:
                 indice += 1
 
             elif cuadruplo[0] == 6:  # ENDFUNC
-                indice = self.migajas.pop()
+                indice_temp = self.migajas.pop()
+                cuadruplo = pila[indice_temp]
+                memoria.actualizarValor(cuadruplo[1], self.valorReturn)
+                indice = indice_temp
 
             elif cuadruplo[0] == 7:  # ERA
                 # CARGAR MEMORIA LOCAL
@@ -515,6 +533,7 @@ class MaquinaVirtual:
                 memoria.actualizarValor(cuadruplo[-1], res)
                 indice += 1
             elif cuadruplo[0] == 23:  # RET
+                self.valorReturn = memoria.obtenerValor(cuadruplo[-1])
                 indice += 1
             else:
                 print("CICLOOOOO")

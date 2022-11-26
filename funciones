@@ -1,22 +1,17 @@
 LpEsp funciones;
 
 Variables:
-    var entero a, b;
-     
+    var entero a, n, i, total;
 Funciones:
-    entero funcion1(entero parametro1, texto parametro2, logico parametro3):
-        Variables:
-            var entero func1var1, func1var2;
-            var flotante func1var3;
-        Bloque:
-            a = 30;
-            func1var2 = 10;
-            func1var1 = 20;
-            imprime(func1var1);
-            Regresa 128;
 
 Esp:
-    a = 10;
-    b = 4 + a;
-    funcion1(1, 'a', verdadero);
+    n = 5;
+    i = 1;
+    total = 1;
+    mientras(i < n + 1):
+	    total =  total * i;
+        imprime(total);
+        i = i + 1;
+    fin;
+
 Pse;

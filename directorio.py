@@ -98,6 +98,12 @@ class TablaVariables:
             print(f"Error en codigo - Variable {nombre} no definida")
             exit()
 
+    def existeVariableLocal(self, nombre):
+        if nombre in self.tabla.keys():
+            return True
+        else:
+            return False
+
     def limpiarTabla(self):
         del (self.tabla)
         self.tabla = {}

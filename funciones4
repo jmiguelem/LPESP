@@ -1,0 +1,33 @@
+LpEsp funciones4;
+
+Variables:
+    var entero resultado;
+     
+Funciones:
+
+     entero funcion1(entero y):
+    
+            Variables:
+                var entero temporal;
+            Bloque:
+                
+                Regresa 10;
+
+    entero funcion2(entero x, entero y, flotante z):
+    
+            Variables:
+                var entero temporal;
+                var flotante temporal2;
+            Bloque:
+               
+                
+                Regresa  10;
+                
+
+
+Esp:
+    resultado = funcion2(3, 6, 5.9);
+    imprime(resultado);
+    
+
+Pse;

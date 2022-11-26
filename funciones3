@@ -1,0 +1,31 @@
+LpEsp funciones3;
+
+Variables:
+    var entero a, a1, b1, c1, d1, entero1, entero2, z,x,y,w,v, i, j;
+    var flotante b, c, d;
+    var texto e;
+    var logico f;
+    arreglo entero array [5];
+    matriz entero matrix [2][2];
+        
+Funciones:
+
+Esp:
+    i = 0;
+    j = 0;
+    a = 0;
+    mientras(i < 2):
+        j = 0;
+        mientras(j < 2):
+            matrix[i][j] = a;
+            a = a + 1;
+            j = j + 1;
+        fin;
+        i = i + 1;
+    fin;
+    imprime(matrix);
+    i = matrix[0][1];
+    imprime(i);
+    
+
+Pse;

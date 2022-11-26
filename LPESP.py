@@ -250,8 +250,7 @@ def p_estatuto(p):
                 | lectura
                 | si
                 | ciclo_dowhile
-                | ciclo_while
-                | llamada_funcion'''
+                | ciclo_while'''
 
 # ----- GRAMATICA Y PNS DE ASSIGN -----
 
@@ -302,6 +301,7 @@ def p_pn_asignar(p):
         pCuadruplos.generarCuadruplo(
             contadorCuadruplos, operador, dir_der, "", dir_izq)
         print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
+        print("TORO", contadorCuadruplos, dir_der, dir_izq)
 
     else:
         print(f"Error - Asignacion invalida")
@@ -545,6 +545,7 @@ def p_factor(p):
 
 def p_var_cte(p):
     '''var_cte : ID pn_agregar_id acceder_arreglo
+            | ID pn_agregar_id llamada_funcion
             | CTEENT pn_agregar_ENT
             | CTEFLOT pn_agregar_FLOT
             | CTETEXTO pn_agregar_TEXTO
@@ -667,13 +668,34 @@ def p_acceder_matriz(p):
 
 def p_pn_agregar_id(p):
     '''pn_agregar_id : empty'''
-    directorio.directorio[funcionActual][1].verificarVariable(p[-1])
-    pilaOper.append(p[-1])
-    tipo = directorio.directorio[funcionActual][1].regresarTipo(p[-1])
-    pilaTipos.append(tipo)
-    direccion = directorio.directorio[funcionActual][1].regresarDireccion(
-        p[-1])
-    pilaDir.append(direccion)
+    # Si se busca en el main
+    if funcionActual == nombrePrograma:
+        directorio.directorio[nombrePrograma][1].verificarVariable(p[-1])
+        pilaOper.append(p[-1])
+        tipo = directorio.directorio[nombrePrograma][1].regresarTipo(p[-1])
+        pilaTipos.append(tipo)
+        direccion = directorio.directorio[nombrePrograma][1].regresarDireccion(
+            p[-1])
+        pilaDir.append(direccion)
+    # Si se busca en una funcion
+    else:
+        # Es variable global
+        if directorio.directorio[nombrePrograma][1].existeVariableLocal(p[-1]):
+            pilaOper.append(p[-1])
+            tipo = directorio.directorio[nombrePrograma][1].regresarTipo(p[-1])
+            pilaTipos.append(tipo)
+            direccion = directorio.directorio[nombrePrograma][1].regresarDireccion(
+                p[-1])
+            pilaDir.append(direccion)
+
+        else:
+            directorio.directorio[funcionActual][1].verificarVariable(p[-1])
+            pilaOper.append(p[-1])
+            tipo = directorio.directorio[funcionActual][1].regresarTipo(p[-1])
+            pilaTipos.append(tipo)
+            direccion = directorio.directorio[funcionActual][1].regresarDireccion(
+                p[-1])
+            pilaDir.append(direccion)
 
 # AGREGAR CONSTANTES
 
@@ -1042,7 +1064,7 @@ def p_bloque_funciones(p):
 
 
 def p_definicion_funciones(p):
-    '''definicion_funciones : tipo_funcion ID pn_insertar_funcion_tabla PARIZQ funcion_params PARDER DOSPUNTOS bloque_funcion_variables bloque_funcion_codigo regresa_bloque definicion_funcion
+    '''definicion_funciones : tipo_funcion ID pn_agrega_variable pn_insertar_funcion_tabla PARIZQ funcion_params PARDER DOSPUNTOS bloque_funcion_variables bloque_funcion_codigo regresa_bloque definicion_funcion
                         | empty'''
 
 
@@ -1059,14 +1081,16 @@ def p_tipo_funcion(p):
                     | NULO'''
 
     global tipoFuncion
+    global tipoVariable
     tipoFuncion = p[1]
+    tipoVariable = tipoFuncion
 
 
 def p_pn_insertar_funcion_tabla(p):
     '''pn_insertar_funcion_tabla : empty'''
     global idFuncion
     global funcionActual
-    idFuncion = p[-1]
+    idFuncion = p[-2]
     funcionActual = idFuncion
     directorio.agregarNuevaFuncion(idFuncion, tipoFuncion)
     directorio.crearTablaVariables(idFuncion)
@@ -1191,29 +1215,28 @@ def p_pn_verificar_tipo_retorno(p):
 
 # Llamada Funciones
 def p_llamada_funcion(p):
-    '''llamada_funcion : ID pn_verificar_funcion_existe PARIZQ pn_inicializacion_llamada_funciones bloque_expresiones_llamada_funciones PARDER pn_verificar_numero_de_parametros PUNTOCOMA'''
+    '''llamada_funcion : PARIZQ pn_verificar_funcion_existe bloque_expresiones_llamada_funciones_padre PARDER pn_verificar_numero_de_parametros'''
 
 
 def p_pn_verificar_funcion_existe(p):
     '''pn_verificar_funcion_existe : empty'''
-    global funcionAChecarParams
-    funcionAChecarParams = p[-1]
-    directorio.verificarFuncionExiste(funcionAChecarParams)
-
-
-def p_pn_inicializacion_llamada_funciones(p):
-    '''pn_inicializacion_llamada_funciones : empty'''
-    # Ya que se checó que existe
+    global id_funcion_a_checar
+    id_funcion_a_checar = pilaOper[-1]
+    directorio.verificarFuncionExiste(id_funcion_a_checar)
     global contadorCuadruplos
     contadorCuadruplos += 1
-    pilaCuadruplos.append(["ERA", "", "", funcionAChecarParams])
+    pilaCuadruplos.append(["ERA", "", "", id_funcion_a_checar])
     pCuadruplos.generarCuadruplo(
-        contadorCuadruplos, "ERA", "", "", funcionAChecarParams)
+        contadorCuadruplos, "ERA", "", "", id_funcion_a_checar)
+
+
+def p_bloque_expresiones_llamada_funciones_padre(p):
+    '''bloque_expresiones_llamada_funciones_padre : bloque_expresiones_llamada_funciones
+    | empty'''
 
 
 def p_bloque_expresiones_llamada_funciones(p):
-    '''bloque_expresiones_llamada_funciones : expr pn_verificar_tipo_parametro bloque_expresiones_llamada_funcion
-    | empty'''
+    '''bloque_expresiones_llamada_funciones : megaexpr pn_verificar_tipo_parametro bloque_expresiones_llamada_funcion'''
 
 
 def p_bloque_expresiones_llamada_funcion(p):
@@ -1231,9 +1254,9 @@ def p_pn_verificar_tipo_parametro(p):
     parameterCounterK += 1
     argumento = pilaOper.pop()
     tipoArgumento = pilaTipos.pop()
-    if directorio.directorio[funcionAChecarParams][3] >= parameterCounterK and tipoArgumento != directorio.directorio[funcionAChecarParams][2][parameterCounterK-1]:
+    if directorio.directorio[id_funcion_a_checar][3] >= parameterCounterK and tipoArgumento != directorio.directorio[id_funcion_a_checar][2][parameterCounterK-1]:
         print(
-            f"El parametro {parameterCounterK} de la funcion {funcionAChecarParams} de tipo {tipoArgumento} no coincide con el esperado.")
+            f"El parametro {parameterCounterK} de la funcion {id_funcion_a_checar} de tipo {tipoArgumento} no coincide con el esperado.")
         exit()
     else:
         global contadorCuadruplos
@@ -1262,36 +1285,47 @@ def p_pn_verificar_tipo_parametro(p):
 def p_pn_verificar_numero_de_parametros(p):
     '''pn_verificar_numero_de_parametros : empty'''
     global parameterCounterK
-    if directorio.directorio[funcionAChecarParams][3] != parameterCounterK:
+    if directorio.directorio[id_funcion_a_checar][3] != parameterCounterK:
         print(
-            f"La llamada de la funcion {funcionAChecarParams} contiene un numero incorrecto de parametros.")
+            f"La llamada de la funcion {id_funcion_a_checar} contiene un numero incorrecto de parametros.")
         exit()
     else:
         global contadorCuadruplos
         contadorCuadruplos += 1
         parameterCounterK = 0
         pilaCuadruplos.append(
-            ["GOSUB", funcionAChecarParams, "", directorio.directorio[funcionAChecarParams][5]])
+            ["GOSUB", id_funcion_a_checar, "", directorio.directorio[id_funcion_a_checar][5]])
         pCuadruplos.generarCuadruplo(
-            contadorCuadruplos, "GOSUB", funcionAChecarParams, "", directorio.directorio[funcionAChecarParams][5])
+            contadorCuadruplos, "GOSUB", id_funcion_a_checar, "", directorio.directorio[id_funcion_a_checar][5])
 
-        global tipoFuncion
-        global cge, cgf, cgl, cgt
-        if tipoFuncion == "entero":
-            cge += 1
-            direccion = 1000 + cge
-        elif tipoFuncion == "flotante":
-            cgf += 1
-            direccion = 5000 + cgf
-        elif tipoFuncion == "texto":
-            cgt += 1
-            direccion = 9000 + cgt
-        elif tipoFuncion == "logico":
-            cgl += 1
-            direccion = 13000 + cgl
-        directorio.directorio[nombrePrograma][1].crear(
-            funcionAChecarParams, tipoFuncion, direccion)
-        print("VARIABLES GLOBALES", cge, cgf, cgt, cgl)
+        direccionGlobalFuncion = directorio.directorio[nombrePrograma][1].regresarDireccion(
+            id_funcion_a_checar)
+        tipoFuncion = directorio.directorio[id_funcion_a_checar][0]
+
+        global contadorAvail
+        global direccionAvail
+        contadorCuadruplos += 1
+        resultado = "t" + str(contadorAvail)
+        pilaDir.pop()
+        pilaOper.pop()
+        pilaTipos.pop()
+
+        pilaDir.append(direccionAvail + contadorAvail)
+        pilaOper.append(resultado)
+        pilaTipos.append(tipoFuncion)
+        pilaCuadruplos.append(["=", direccionGlobalFuncion, "", resultado])
+        pCuadruplos.generarCuadruplo(
+            contadorCuadruplos, "=", direccionGlobalFuncion, "", direccionAvail + contadorAvail)
+        contadorAvail = contadorAvail + 1
+
+
+"""
+print(directorio.directorio[nombrePrograma])
+        pilaCuadruplos.append(
+            ["=", "", "", direccion])
+        pCuadruplos.generarCuadruplo(
+            contadorCuadruplos, "=", "", "", direccion)
+"""
 
 
 # ----- EJECUTAR CODIGO -----

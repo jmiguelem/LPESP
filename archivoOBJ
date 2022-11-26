@@ -1,28 +1,26 @@
 Directorio de Funciones 
-Funcion: funciones{'a': ['entero', 1001], 'b': ['entero', 1002], 'funcion1': ['entero', 1003]}
-Funcion: funcion1{'parametro1': ['entero', 10001], 'parametro2': ['texto', 90001], 'parametro3': ['logico', 130001], 'func1var1': ['entero', 10002], 'func1var2': ['entero', 10003], 'func1var3': ['flotante', 50001]}
+Funcion: funciones4{'resultado': ['entero', 1001], 'funcion1': ['entero', 1002], 'funcion2': ['entero', 1003]}
+Funcion: funcion1{'y': ['entero', 10001], 'temporal': ['entero', 10002]}
+Funcion: funcion2{'x': ['entero', 10001], 'y': ['entero', 10002], 'z': ['flotante', 50001], 'temporal': ['entero', 10003], 'temporal2': ['flotante', 50002]}
 Tabla de Constantes
 FALSO : 36000
 VERDADERO : 36001
 NULO : 36002
 10 : 30001
-20 : 30002
-128 : 30003
-4 : 30004
-1 : 30005
-'a' : 34001
+3 : 30002
+6 : 30003
+5.9 : 32001
 Cuadruplos 
-1 : ['GOTO MAIN', '', '', 7]
-2 : ['=', 30001, '', 10003]
-3 : ['=', 30002, '', 10002]
-4 : ['IMPRIME', '', '', 10002]
-5 : ['RET', '', '', 30003]
-6 : ['ENDFunc', '', '', '']
-7 : ['=', 30001, '', 1001]
-8 : ['+', 30004, 1001, 200000]
-9 : ['=', 200000, '', 1002]
-10 : ['ERA', '', '', 'funcion1']
-11 : ['PARAMETER', 30005, '', 10001]
-12 : ['PARAMETER', 34001, '', 90001]
-13 : ['PARAMETER', 36001, '', 130001]
-14 : ['GOSUB', 'funcion1', '', 2]
+1 : ['GOTO MAIN', '', '', 6]
+2 : ['RET', '', '', 30001]
+3 : ['ENDFunc', '', '', '']
+4 : ['RET', '', '', 30001]
+5 : ['ENDFunc', '', '', '']
+6 : ['ERA', '', '', 'funcion2']
+7 : ['PARAMETER', 30002, '', 10001]
+8 : ['PARAMETER', 30003, '', 10002]
+9 : ['PARAMETER', 32001, '', 50001]
+10 : ['GOSUB', 'funcion2', '', 4]
+11 : ['=', 1003, '', 200000]
+12 : ['=', 200000, '', 1001]
+13 : ['IMPRIME', '', '', 1001]
