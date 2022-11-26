@@ -9,7 +9,6 @@ class MemoriaVirtual:
 
     def agregar(self, dirMemoria, id, valor):
         if dirMemoria in self.memoriaVirtual.keys():
-            print(self.memoriaVirtual)
             print("Ese espacio de memoria ya esta en uso", dirMemoria)
             exit()
         else:
@@ -39,7 +38,6 @@ class MemoriaVirtual:
             if dirMemoria >= 200000:
                 self.agregar(dirMemoria, "", valor)
             else:
-                print(self.memoriaVirtual)
                 print("Ese espacio de memoria no existe")
                 exit()
 
@@ -47,7 +45,6 @@ class MemoriaVirtual:
         if dirMemoria in self.memoriaVirtual.keys():
             self.memoriaVirtual[dirMemoria][0] = [id]
         else:
-            print(self.memoriaVirtual)
             print("Ese espacio de memoria no existe")
             exit()
 
@@ -78,7 +75,6 @@ class MemoriaVirtual:
                 self.agregar(dirMemoria, "", "")
             else:
                 print(f"Espacio {dirMemoria} de memoria no existe")
-                print(self.memoriaVirtual)
                 exit()
 
     def obtenerLen(self, dirMemoria):
@@ -90,12 +86,14 @@ class MemoriaVirtual:
     def obtenerDimMatriz(self, dirMemoria):
         return self.memoriaVirtual[dirMemoria][4]
 
+    def obtenerDims(self, dirMemoria):
+        return self.memoriaVirtual[dirMemoria][2], self.memoriaVirtual[dirMemoria][3]
+
     def obtenerId(self, dirMemoria):
         if dirMemoria in self.memoriaVirtual.keys():
             return self.memoriaVirtual[dirMemoria][0]
         else:
             print("Ese espacio de memoria no existe")
-            print(self.memoriaVirtual)
             exit()
 
 
@@ -145,12 +143,9 @@ class MaquinaVirtual:
     def inicializarCuadruplos(self):
         pila = self.cuadruplos.pilaCuadruplos
         for indice in pila:
-            print(f"{indice} : {pila[indice]}")
             cuadruplo = pila[indice]
             if cuadruplo[0] in self.codigosOperaciones:
                 self.cuadruplos.pilaCuadruplos[indice][0] = self.codigosOperaciones[cuadruplo[0]]
-
-        print(self.cuadruplos.pilaCuadruplos)
 
     def validarTipo(self, direccion):
         pass
@@ -235,21 +230,14 @@ class MaquinaVirtual:
                 self.memoriaVirtual.agregar(
                     tablaVariablesGlobales.tabla[variable][1], variable, "")
 
-        # self.memoriaVirtual.imprimirMemoriaVirtual()
-        # print(self.memoriaVirtual.obtenerId(30001))
-        # self.memoriaVirtual.actualizarValor(30001, "holA")
-        # self.memoriaVirtual.imprimirMemoriaVirtual()
-
     def ejecucion(self):
         memoria = self.memoriaVirtual
         pila = self.cuadruplos.pilaCuadruplos
         indice = 1
         while indice <= len(pila):
             cuadruplo = pila[indice]
-            # print("\n")
-            # self.debug(indice)
-            # print(cuadruplo)
-            # memoria.imprimirMemoriaVirtual()
+            print(cuadruplo)
+            memoria.imprimirMemoriaVirtual()
 
             if cuadruplo[0] == 0:  # GOTOMAIN
                 indice = cuadruplo[-1]
@@ -300,6 +288,7 @@ class MaquinaVirtual:
                     indice += 1
 
             elif cuadruplo[0] == 2:  # SUMA
+
                 dir_op1 = cuadruplo[1]
                 op1 = memoria.obtenerValor(dir_op1)
 
@@ -401,15 +390,21 @@ class MaquinaVirtual:
                     dim = memoria.obtenerDimArreglo(direccion)
                     arreglo = '['
                     for i in range(dim):
-                        arreglo += str(memoria.obtenerValor(direccion + i + 1))
+                        arreglo += str(memoria.obtenerValor(direccion + i + 1)) + " "
+                    arreglo = arreglo[: -1]
                     arreglo += "]"
                     print(arreglo)
 
                 elif leng == 5:
+                    dim1, dim2 = memoria.obtenerDims(direccion)
                     dim = memoria.obtenerDimMatriz(direccion)
-                    arreglo = '['
-                    for i in range(dim):
-                        arreglo += str(memoria.obtenerValor(direccion + i + 1))
+                    arreglo = '[ \n'
+                    i = 0
+                    for j in range(dim1):
+                        for k in range(dim2):
+                            arreglo += str(memoria.obtenerValor(direccion + i + 1)) + " "
+                            i += 1
+                        arreglo += "\n"
                     arreglo += "]"
                     print(arreglo)
                 else:
@@ -445,7 +440,7 @@ class MaquinaVirtual:
                 indice += 1
 
             elif cuadruplo[0] == 12:  # GOTOF
-                if memoria.obtenerValor(cuadruplo[1]) == "FALSO" or memoria.obtenerValor(cuadruplo[1]) == False:
+                if memoria.obtenerValor(cuadruplo[1]) == memoria.obtenerValor(36000) or memoria.obtenerValor(cuadruplo[1]) == False:
                     indice = cuadruplo[-1]
                 else:
                     indice += 1
@@ -454,7 +449,7 @@ class MaquinaVirtual:
                 indice = cuadruplo[-1]
 
             elif cuadruplo[0] == 14:  # GOTOT
-                if memoria.obtenerValor(cuadruplo[1]) == "VERDADERO" or memoria.obtenerValor(cuadruplo[1]) == True:
+                if memoria.obtenerValor(cuadruplo[1]) == memoria.obtenerValor(36001) or memoria.obtenerValor(cuadruplo[1]) == True:
                     indice = cuadruplo[-1]
                 else:
                     indice += 1
@@ -480,22 +475,88 @@ class MaquinaVirtual:
                 indice += 1
 
             elif cuadruplo[0] == 17:  # <
-                dir_op1 = cuadruplo[1]
-                op1 = memoria.obtenerValor(dir_op1)
-                dir_op2 = cuadruplo[2]
-                op2 = memoria.obtenerValor(dir_op2)
-                res = op1 < op2
-                memoria.actualizarValor(cuadruplo[-1], res)
-                indice += 1
+                if type(cuadruplo[2]) == type(""):
+                    direccion = int(cuadruplo[2][1:-1])
+                    direccion_arreglo = memoria.obtenerValor(direccion)
+                    valor_arreglo = memoria.obtenerValor(direccion_arreglo)
+                    direccion_op2 = cuadruplo[1]
+                    op2 = memoria.obtenerValor(direccion_op2)
+                    res = valor_arreglo < op2
+                    if res:
+                        res = memoria.obtenerValor(36001)
+                    else:
+                        res = res = memoria.obtenerValor(36000)
+                    memoria.actualizarValor(cuadruplo[-1], res)
+                    indice += 1
+
+                elif type(cuadruplo[1]) == type(""):
+                    direccion = int(cuadruplo[1][1:-1])
+                    dir_arreglo = memoria.obtenerValor(direccion)
+                    valor_arreglo = memoria.obtenerValor(dir_arreglo)
+                    direccion_op2 = cuadruplo[2]
+                    op2 = memoria.obtenerValor(direccion_op2)
+                    res = valor_arreglo < op2
+                    if res:
+                        res = memoria.obtenerValor(36001)
+                    else:
+                        res = res = memoria.obtenerValor(36000)
+                    memoria.actualizarValor(cuadruplo[-1], res)
+                    indice += 1
+                else:
+                    dir_op1 = cuadruplo[1]
+                    op1 = memoria.obtenerValor(dir_op1)
+                    dir_op2 = cuadruplo[2]
+                    op2 = memoria.obtenerValor(dir_op2)
+                    res = op1 < op2
+                    if res:
+                        res = memoria.obtenerValor(36001)
+                    else:
+                        res = res = memoria.obtenerValor(36000)
+                    memoria.actualizarValor(cuadruplo[-1], res)
+                    memoria.actualizarValor(cuadruplo[-1], res)
+                    indice += 1
 
             elif cuadruplo[0] == 18:  # >
-                dir_op1 = cuadruplo[1]
-                op1 = memoria.obtenerValor(dir_op1)
-                dir_op2 = cuadruplo[2]
-                op2 = memoria.obtenerValor(dir_op2)
-                res = op1 > op2
-                memoria.actualizarValor(cuadruplo[-1], res)
-                indice += 1
+                if type(cuadruplo[2]) == type(""):
+                    direccion = int(cuadruplo[2][1:-1])
+                    direccion_arreglo = memoria.obtenerValor(direccion)
+                    valor_arreglo = memoria.obtenerValor(direccion_arreglo)
+                    direccion_op2 = cuadruplo[1]
+                    op2 = memoria.obtenerValor(direccion_op2)
+                    res = valor_arreglo > op2
+                    if res:
+                        res = memoria.obtenerValor(36001)
+                    else:
+                        res = res = memoria.obtenerValor(36000)
+                    memoria.actualizarValor(cuadruplo[-1], res)
+                    indice += 1
+
+                elif type(cuadruplo[1]) == type(""):
+                    direccion = int(cuadruplo[1][1:-1])
+                    dir_arreglo = memoria.obtenerValor(direccion)
+                    valor_arreglo = memoria.obtenerValor(dir_arreglo)
+                    direccion_op2 = cuadruplo[2]
+                    op2 = memoria.obtenerValor(direccion_op2)
+                    res = valor_arreglo > op2
+                    if res:
+                        res = memoria.obtenerValor(36001)
+                    else:
+                        res = res = memoria.obtenerValor(36000)
+                    memoria.actualizarValor(cuadruplo[-1], res)
+                    indice += 1
+                else:
+                    dir_op1 = cuadruplo[1]
+                    op1 = memoria.obtenerValor(dir_op1)
+                    dir_op2 = cuadruplo[2]
+                    op2 = memoria.obtenerValor(dir_op2)
+                    res = op1 > op2
+                    if res:
+                        res = memoria.obtenerValor(36001)
+                    else:
+                        res = res = memoria.obtenerValor(36000)
+                    memoria.actualizarValor(cuadruplo[-1], res)
+                    memoria.actualizarValor(cuadruplo[-1], res)
+                    indice += 1
 
             elif cuadruplo[0] == 19:  # <>
                 dir_op1 = cuadruplo[1]
@@ -507,31 +568,134 @@ class MaquinaVirtual:
                 indice += 1
 
             elif cuadruplo[0] == 20:  # ==
-                dir_op1 = cuadruplo[1]
-                op1 = memoria.obtenerValor(dir_op1)
-                dir_op2 = cuadruplo[2]
-                op2 = memoria.obtenerValor(dir_op2)
-                res = op1 < op2
-                memoria.actualizarValor(cuadruplo[-1], res)
-                indice += 1
+
+                if type(cuadruplo[2]) == type(""):
+                    direccion = int(cuadruplo[2][1:-1])
+                    direccion_arreglo = memoria.obtenerValor(direccion)
+                    valor_arreglo = memoria.obtenerValor(direccion_arreglo)
+                    direccion_op2 = cuadruplo[1]
+                    op2 = memoria.obtenerValor(direccion_op2)
+                    res = valor_arreglo == op2
+                    if res:
+                        res = memoria.obtenerValor(36001)
+                    else:
+                        res = res = memoria.obtenerValor(36000)
+                    memoria.actualizarValor(cuadruplo[-1], res)
+                    indice += 1
+
+                elif type(cuadruplo[1]) == type(""):
+                    direccion = int(cuadruplo[1][1:-1])
+                    dir_arreglo = memoria.obtenerValor(direccion)
+                    valor_arreglo = memoria.obtenerValor(dir_arreglo)
+                    direccion_op2 = cuadruplo[2]
+                    op2 = memoria.obtenerValor(direccion_op2)
+                    res = valor_arreglo == op2
+                    if res:
+                        res = memoria.obtenerValor(36001)
+                    else:
+                        res = res = memoria.obtenerValor(36000)
+                    memoria.actualizarValor(cuadruplo[-1], res)
+                    indice += 1
+
+                else:
+                    dir_op1 = cuadruplo[1]
+                    op1 = memoria.obtenerValor(dir_op1)
+                    dir_op2 = cuadruplo[2]
+                    op2 = memoria.obtenerValor(dir_op2)
+                    res = op1 == op2
+                    if res:
+                        res = memoria.obtenerValor(36001)
+                    else:
+                        res = memoria.obtenerValor(36000)
+                    memoria.actualizarValor(cuadruplo[-1], res)
+                    memoria.actualizarValor(cuadruplo[-1], res)
+                    indice += 1
 
             elif cuadruplo[0] == 21:  # ||
-                dir_op1 = cuadruplo[1]
-                op1 = memoria.obtenerValor(dir_op1)
-                dir_op2 = cuadruplo[2]
-                op2 = memoria.obtenerValor(dir_op2)
-                res = op1 or op2
-                memoria.actualizarValor(cuadruplo[-1], res)
-                indice += 1
+                if type(cuadruplo[2]) == type(""):
+                    direccion = int(cuadruplo[2][1:-1])
+                    direccion_arreglo = memoria.obtenerValor(direccion)
+                    valor_arreglo = memoria.obtenerValor(direccion_arreglo)
+                    direccion_op2 = cuadruplo[1]
+                    op2 = memoria.obtenerValor(direccion_op2)
+                    res = valor_arreglo or op2
+                    if res:
+                        res = memoria.obtenerValor(36001)
+                    else:
+                        res = res = memoria.obtenerValor(36000)
+                    memoria.actualizarValor(cuadruplo[-1], res)
+                    indice += 1
+
+                elif type(cuadruplo[1]) == type(""):
+                    direccion = int(cuadruplo[1][1:-1])
+                    dir_arreglo = memoria.obtenerValor(direccion)
+                    valor_arreglo = memoria.obtenerValor(dir_arreglo)
+                    direccion_op2 = cuadruplo[2]
+                    op2 = memoria.obtenerValor(direccion_op2)
+                    res = valor_arreglo or op2
+                    if res:
+                        res = memoria.obtenerValor(36001)
+                    else:
+                        res = res = memoria.obtenerValor(36000)
+                    memoria.actualizarValor(cuadruplo[-1], res)
+                    indice += 1
+                else:
+                    dir_op1 = cuadruplo[1]
+                    op1 = memoria.obtenerValor(dir_op1)
+                    dir_op2 = cuadruplo[2]
+                    op2 = memoria.obtenerValor(dir_op2)
+                    res = op1 == memoria.obtenerValor(
+                        36001) or op2 == memoria.obtenerValor(36001)
+                    if res:
+                        res = memoria.obtenerValor(36001)
+                    else:
+                        res = res = memoria.obtenerValor(36000)
+                    memoria.actualizarValor(cuadruplo[-1], res)
+                    memoria.actualizarValor(cuadruplo[-1], res)
+                    indice += 1
 
             elif cuadruplo[0] == 22:  # &&
-                dir_op1 = cuadruplo[1]
-                op1 = memoria.obtenerValor(dir_op1)
-                dir_op2 = cuadruplo[2]
-                op2 = memoria.obtenerValor(dir_op2)
-                res = op1 and op2
-                memoria.actualizarValor(cuadruplo[-1], res)
-                indice += 1
+                if type(cuadruplo[2]) == type(""):
+                    direccion = int(cuadruplo[2][1:-1])
+                    direccion_arreglo = memoria.obtenerValor(direccion)
+                    valor_arreglo = memoria.obtenerValor(direccion_arreglo)
+                    direccion_op2 = cuadruplo[1]
+                    op2 = memoria.obtenerValor(direccion_op2)
+                    res = valor_arreglo and op2
+                    if res:
+                        res = memoria.obtenerValor(36001)
+                    else:
+                        res = res = memoria.obtenerValor(36000)
+                    memoria.actualizarValor(cuadruplo[-1], res)
+                    indice += 1
+
+                elif type(cuadruplo[1]) == type(""):
+                    direccion = int(cuadruplo[1][1:-1])
+                    dir_arreglo = memoria.obtenerValor(direccion)
+                    valor_arreglo = memoria.obtenerValor(dir_arreglo)
+                    direccion_op2 = cuadruplo[2]
+                    op2 = memoria.obtenerValor(direccion_op2)
+                    res = valor_arreglo and op2
+                    if res:
+                        res = memoria.obtenerValor(36001)
+                    else:
+                        res = res = memoria.obtenerValor(36000)
+                    memoria.actualizarValor(cuadruplo[-1], res)
+                    indice += 1
+                else:
+                    dir_op1 = cuadruplo[1]
+                    op1 = memoria.obtenerValor(dir_op1)
+                    dir_op2 = cuadruplo[2]
+                    op2 = memoria.obtenerValor(dir_op2)
+                    res = op1 == memoria.obtenerValor(
+                        36001) and op2 == memoria.obtenerValor(36001)
+                    print(res, "\n")
+                    if res == memoria.obtenerValor(36001) or res:
+                        res = memoria.obtenerValor(36001)
+                    else:
+                        res = res = memoria.obtenerValor(36000)
+                    memoria.actualizarValor(cuadruplo[-1], res)
+                    indice += 1
             elif cuadruplo[0] == 23:  # RET
                 self.valorReturn = memoria.obtenerValor(cuadruplo[-1])
                 indice += 1
