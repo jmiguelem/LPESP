@@ -71,10 +71,10 @@ class TablaVariables:
         else:
             if esArreglo:
                 self.tabla[nombre] = [tipo, direccion, 0]
-                print(f"Se creo variable {nombre} con {self.tabla[nombre]}")
+                #print(f"Se creo variable {nombre} con {self.tabla[nombre]}")
             else:
                 self.tabla[nombre] = [tipo, direccion]
-                print(f"Se creo variable {nombre} con {self.tabla[nombre]}")
+                #print(f"Se creo variable {nombre} con {self.tabla[nombre]}")
 
     def regresarTipo(self, nombre):
         try:
@@ -149,8 +149,8 @@ class Constantes:
 
     def __init__(self):
         self.tablaConstantes = {}
-        self.tablaConstantes["FALSO"] = self.dirL
-        self.tablaConstantes["VERDADERO"] = self.dirL + 1
+        self.tablaConstantes["falso"] = self.dirL
+        self.tablaConstantes["verdadero"] = self.dirL + 1
         self.tablaConstantes["NULO"] = self.dirL + 2
 
     def agregarConstante(self, valor, direccion, tipo):

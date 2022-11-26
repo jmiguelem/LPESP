@@ -80,12 +80,12 @@ def p_pn_generaroGOTOMAIN(p):
     pCuadruplos.generarCuadruplo(
         contadorCuadruplos, "GOTO MAIN", "", "", "PENDIENTE")
     pilaSaltos.append(contadorCuadruplos)
-    print("GOTOMAIN", pilaSaltos)
+    #print("GOTOMAIN", pilaSaltos)
 
 
 def p_pn_rellenaGOTOMAIN(p):
     '''pn_rellenaGOTOMAIN : empty'''
-    print(pilaSaltos)
+    #print(pilaSaltos)
     global contadorCuadruplos
     uno = pilaSaltos.pop()
     pCuadruplos.rellenarSalto(uno, contadorCuadruplos + 1)
@@ -274,7 +274,6 @@ def p_pn_agregar_idarreglo(p):
     '''pn_agregar_idarreglo : empty'''
     global id_arreglo
     id_arreglo = p[-1]
-    print(id_arreglo)
     pilaOper.append(p[-1])
     tipo = directorio.directorio[funcionActual][1].regresarTipo(p[-1])
     pilaTipos.append(tipo)
@@ -301,7 +300,7 @@ def p_pn_asignar(p):
         pilaCuadruplos.append([operador, op_der, "", op_izq])
         pCuadruplos.generarCuadruplo(
             contadorCuadruplos, operador, dir_der, "", dir_izq)
-        print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
+        #print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
 
     else:
         print(f"Error - Asignacion invalida")
@@ -330,7 +329,7 @@ def p_pn_imprimir(p):
     pCuadruplos.generarCuadruplo(
         contadorCuadruplos, "IMPRIME", "", "", pilaDir.pop())
     pilaTipos.pop()
-    print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
+    #print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
 
 # ----- GRAMATICA Y PNS DE READ -----
 
@@ -359,7 +358,7 @@ def p_pn_lectura(p):
     pilaCuadruplos.append(["LEER", "", "", p[-1]])
     pCuadruplos.generarCuadruplo(
         contadorCuadruplos, "LEER", "", "", dir_variable)
-    print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
+    #print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
 
 
 # ----- GRAMATICA Y PNS DE IF -----
@@ -374,7 +373,7 @@ def p_si2(p):
 
 def p_pn_agregar_exp_if(p):
     '''pn_agregar_exp_if : empty'''
-    print(f"\nPila SALTOS: {pilaSaltos}")
+    #print(f"\nPila SALTOS: {pilaSaltos}")
     condicion = pilaOper.pop()
     tipo_condicion = pilaTipos.pop()
     dir = pilaDir.pop()
@@ -386,32 +385,32 @@ def p_pn_agregar_exp_if(p):
     pilaCuadruplos.append(["GOTOF", condicion, "", "PENDIENTE"])
     pCuadruplos.generarCuadruplo(
         contadorCuadruplos, "GOTOF", dir, "", "PENDIENTE")
-    print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
+    #print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
     pilaSaltos.append(contadorCuadruplos)
-    print(f"Pila SALTOS: {pilaSaltos}")
+    #print(f"Pila SALTOS: {pilaSaltos}")
 
 
 def p_pn_salida_if(p):
     '''pn_salida_if : empty'''
-    print(f"\nPila SALTOS: {pilaSaltos}")
+    #print(f"\nPila SALTOS: {pilaSaltos}")
     pendiente = pilaSaltos.pop()
     pCuadruplos.rellenarSalto(pendiente, contadorCuadruplos + 1)
-    print(f"Pila SALTOS: {pilaSaltos}")
+    #print(f"Pila SALTOS: {pilaSaltos}")
 
 
 def p_pn_generar_goto(p):
     '''pn_generar_goto : empty'''
-    print(f"\nPila SALTOS: {pilaSaltos}")
+    #print(f"\nPila SALTOS: {pilaSaltos}")
     falso = pilaSaltos.pop()
     global contadorCuadruplos
     contadorCuadruplos += 1
     pilaCuadruplos.append(["GOTO", "", "", "PENDIENTE"])
     pCuadruplos.generarCuadruplo(
         contadorCuadruplos, "GOTO", "", "", "PENDIENTE")
-    print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
+    #print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
     pilaSaltos.append(contadorCuadruplos)
     pCuadruplos.rellenarSalto(falso, contadorCuadruplos+1)
-    print(f"Pila SALTOS: {pilaSaltos}")
+    #print(f"Pila SALTOS: {pilaSaltos}")
 
 # ----- GRAMATICA Y PNS DE DOWHILE -----
 
@@ -424,12 +423,12 @@ def p_pn_salto_dowhile(p):
     '''pn_salto_dowhile : empty'''
     global contadorCuadruplos
     pilaSaltos.append(contadorCuadruplos + 1)
-    print(f"\nSe guardo salto de dowhile: {pilaSaltos}")
+    #print(f"\nSe guardo salto de dowhile: {pilaSaltos}")
 
 
 def p_pn_retorno_dowhile(p):
     '''pn_retorno_dowhile : empty'''
-    print(f"\nPila SALTOS: {pilaSaltos}")
+    #print(f"\nPila SALTOS: {pilaSaltos}")
     retorno = pilaSaltos.pop()
     condicion = pilaOper.pop()
     tipo_condicion = pilaTipos.pop()
@@ -442,8 +441,8 @@ def p_pn_retorno_dowhile(p):
     pilaCuadruplos.append(["GOTOT", condicion, "", retorno])
     pCuadruplos.generarCuadruplo(
         contadorCuadruplos, "GOTOT", dir, "", retorno)
-    print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
-    print(f"Pila SALTOS: {pilaSaltos}")
+    #print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
+    #print(f"Pila SALTOS: {pilaSaltos}")
 
 # ----- GRAMATICA Y PNS DE WHILE -----
 
@@ -456,12 +455,12 @@ def p_pn_salto_exp(p):
     '''pn_salto_exp : empty'''
     global contadorCuadruplos
     pilaSaltos.append(contadorCuadruplos + 1)
-    print(f"\nSe guardo salto de while: {pilaSaltos}")
+    #print(f"\nSe guardo salto de while: {pilaSaltos}")
 
 
 def p_pn_agregar_exp_while(p):
     '''pn_agregar_exp_while : empty'''
-    print(f"\nPila SALTOS: {pilaSaltos}")
+    #print(f"\nPila SALTOS: {pilaSaltos}")
     condicion = pilaOper.pop()
     tipo_condicion = pilaTipos.pop()
     dir = pilaDir.pop()
@@ -473,14 +472,14 @@ def p_pn_agregar_exp_while(p):
     pilaCuadruplos.append(["GOTOF", condicion, "", "PENDIENTE"])
     pCuadruplos.generarCuadruplo(
         contadorCuadruplos, "GOTOF", dir, "", "PENDIENTE")
-    print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
+    #print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
     pilaSaltos.append(contadorCuadruplos)
-    print(f"Pila SALTOS: {pilaSaltos}")
+    #print(f"Pila SALTOS: {pilaSaltos}")
 
 
 def p_pn_salida_while(p):
     '''pn_salida_while : empty'''
-    print(f"\nPila SALTOS: {pilaSaltos}")
+    #print(f"\nPila SALTOS: {pilaSaltos}")
     falso = pilaSaltos.pop()
     salto_exp = pilaSaltos.pop()
 
@@ -489,10 +488,10 @@ def p_pn_salida_while(p):
 
     pilaCuadruplos.append(["GOTO", "", "", salto_exp])
     pCuadruplos.generarCuadruplo(contadorCuadruplos, "GOTO", "", "", salto_exp)
-    print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
+    #print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
 
     pCuadruplos.rellenarSalto(falso, contadorCuadruplos+1)
-    print(f"Pila SALTOS: {pilaSaltos}")
+    #print(f"Pila SALTOS: {pilaSaltos}")
 
 
 # ----- GRAMATICA DE EXPRESIONES -----
@@ -557,41 +556,8 @@ def p_acceder_arreglo(p):
     '''acceder_arreglo : CORIZQ pn_verificar_arreglo exp pn_crear_cuadruplo_arreglo CORDER acceder_matriz
                     | empty'''
 
-# PUNTOS NEURALGICOS
-
-# ESTRUCTURA DEL PROGRAMA
-
-
-def p_pn_crear_directorio(p):
-    '''pn_crear_directorio : empty'''
-
-    # Se crean variables globales
-    global directorio
-    global nombrePrograma
-    global funcionActual
-    global tablaConstantes
-
-    # Se crea el directorio de funciones
-    directorio = Directorio()
-
-    # Se crea la tabla de constantes
-    tablaConstantes = Constantes()
-
-    # Actualiza las variables con el id del programa
-    nombrePrograma = p[-1]
-    funcionActual = nombrePrograma
-
-    # Se agrega la funcion de global
-    directorio.agregarNuevaFuncion(nombrePrograma, "void")
-
 
 # VARIABLES
-
-
-def p_pn_crear_tabla_variables(p):
-    '''pn_crear_tabla_variables : empty'''
-    directorio.crearTablaVariables(nombrePrograma)
-    # print("Se creo tabla")
 
 
 def p_pn_agrega_variable(p):
@@ -611,7 +577,7 @@ def p_pn_agrega_variable(p):
         direccion = 13000 + cgl
     directorio.directorio[nombrePrograma][1].crear(
         p[-1], tipoVariable, direccion)
-    print("VARIABLES GLOBALES", cge, cgf, cgt, cgl)
+    #print("VARIABLES GLOBALES", cge, cgf, cgt, cgl)
 
 
 def agrega_variable_local(p):
@@ -631,7 +597,7 @@ def agrega_variable_local(p):
 
     directorio.directorio[idFuncion][1].crear(
         p, tipoVariableFuncion, direccion)
-    print("VARIABLES LOCALES", cle, clf, clt, cll)
+    #print("VARIABLES LOCALES", cle, clf, clt, cll)
 
 
 def agrega_variable_local_param(p):
@@ -650,7 +616,7 @@ def agrega_variable_local_param(p):
         direccion = 130000 + cll
     directorio.directorio[idFuncion][1].crear(
         p, tipoParamFuncion, direccion)
-    print("VARIABLES LOCALES", cle, clf, clt, cll)
+    #print("VARIABLES LOCALES", cle, clf, clt, cll)
 
 
 # EXPRESIONES
@@ -716,11 +682,11 @@ def p_pn_agregar_LOGICO(p):
     global ccl
     global constantes
     if p[-1] == "falso":
-        pilaDir.append(tablaConstantes.regresarDireccion("FALSO"))
-        pilaOper.append("FALSO")
+        pilaDir.append(tablaConstantes.regresarDireccion("falso"))
+        pilaOper.append("falso")
     else:
-        pilaDir.append(tablaConstantes.regresarDireccion("VERDADERO"))
-        pilaOper.append("VERDADERO")
+        pilaDir.append(tablaConstantes.regresarDireccion("verdadero"))
+        pilaOper.append("verdadero")
     pilaTipos.append("logico")
 
 
@@ -744,10 +710,10 @@ def p_pn_verificar_arreglo(p):
 
 def p_pn_crear_cuadruplo_arreglo(p):
     '''pn_crear_cuadruplo_arreglo : empty'''
-    print(f"Tipos: {pilaTipos}")
-    print(f"Operandos: {pilaOper}")
-    print(f"Operadores: {pOper}")
-    print(f"Direccion : {pilaDir}")
+    #print(f"Tipos: {pilaTipos}")
+    #print(f"Operandos: {pilaOper}")
+    #print(f"Operadores: {pOper}")
+    #print(f"Direccion : {pilaDir}")
     if directorio.directorio[funcionActual][1].esArregloMatriz(id_arreglo) == 5:
         return
     global contadorCuadruplos
@@ -776,6 +742,9 @@ def p_pn_crear_cuadruplo_arreglo(p):
     pilaDir.append(f"({direccionAvail + contadorAvail})")
     contadorAvail = contadorAvail + 1
 
+    if dir_base in pilaDir:
+        pilaDir.remove(dir_base)
+
     pCuadruplos.generarCuadruplo(
         contadorCuadruplos, "+DIR", dir_indice, dir_base, direccionAvail + + contadorAvail - 1)
     pilaOper.append(f"({pilaDir[-1]})")
@@ -792,10 +761,10 @@ def p_pn_crear_cuadruplo_matriz(p):
         print(
             f"Error - Se esta tratando de acceder a {id_arreglo} como matriz")
         quit()
-    print(f"Tipos: {pilaTipos}")
-    print(f"Operandos: {pilaOper}")
-    print(f"Operadores: {pOper}")
-    print(f"Direccion : {pilaDir}")
+    #print(f"Tipos: {pilaTipos}")
+    #print(f"Operandos: {pilaOper}")
+    #print(f"Operadores: {pOper}")
+    #print(f"Direccion : {pilaDir}")
     global contadorCuadruplos
 
     j = pilaOper.pop()
@@ -850,11 +819,11 @@ def p_pn_crear_cuadruplo_matriz(p):
         pilaDir.remove(dir_base)
 
     pilaOper.append(f"({pilaDir[-1]})")
-    print(f"Tipos: {pilaTipos}")
-    print(f"Operandos: {pilaOper}")
-    print(f"Operadores: {pOper}")
-    print(f"Direccion : {pilaDir}")
-    print("\n")
+    #print(f"Tipos: {pilaTipos}")
+    #print(f"Operandos: {pilaOper}")
+    #print(f"Operadores: {pOper}")
+    #print(f"Direccion : {pilaDir}")
+    #print("\n")
 
 
 # AGREGAR OPERADORES
@@ -866,11 +835,11 @@ def p_pn_agregar_oper(p):
 # SACAR OPERADORES
 def p_pn_sacar_poperLog(p):
     '''pn_sacar_poperLog : empty'''
-    print("\n")
-    print(f"Tipos: {pilaTipos}")
-    print(f"Operandos: {pilaOper}")
-    print(f"Operadores: {pOper}")
-    print(f"Direccion : {pilaDir}")
+    #print("\n")
+    #print(f"Tipos: {pilaTipos}")
+    #print(f"Operandos: {pilaOper}")
+    #print(f"Operadores: {pOper}")
+    #print(f"Direccion : {pilaDir}")
     if pOper[-1] == "&&" or pOper[-1] == "||":
         op_der = pilaOper.pop()
         tipo_der = Semantica.obtener_tipo(pilaTipos.pop())
@@ -894,7 +863,7 @@ def p_pn_sacar_poperLog(p):
             pilaTipos.append(Semantica.obtener_token(tipo_resultado))
             pCuadruplos.generarCuadruplo(
                 contadorCuadruplos, operador, dir_izq, dir_der, pilaDir[-1])
-            print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
+            #print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
 
         else:
             print("Error - Tipo de dato erroneo")
@@ -903,11 +872,11 @@ def p_pn_sacar_poperLog(p):
 
 def p_pn_sacar_poperRel(p):
     '''pn_sacar_poperRel : empty'''
-    print("\n")
-    print(f"Tipos: {pilaTipos}")
-    print(f"Operandos: {pilaOper}")
-    print(f"Operadores: {pOper}")
-    print(f"Direccion : {pilaDir}")
+    #print("\n")
+    #print(f"Tipos: {pilaTipos}")
+    #print(f"Operandos: {pilaOper}")
+    #print(f"Operadores: {pOper}")
+    #print(f"Direccion : {pilaDir}")
     if pOper[-1] == "<=" or pOper[-1] == ">=" or pOper[-1] == "<>" or pOper[-1] == "<" or pOper[-1] == ">" or pOper[-1] == "==":
         op_der = pilaOper.pop()
         tipo_der = Semantica.obtener_tipo(pilaTipos.pop())
@@ -931,7 +900,7 @@ def p_pn_sacar_poperRel(p):
             pilaTipos.append(Semantica.obtener_token(tipo_resultado))
             pCuadruplos.generarCuadruplo(
                 contadorCuadruplos, operador, dir_izq, dir_der, pilaDir[-1])
-            print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
+            #print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
 
         else:
             print("Error - Tipo de dato erroneo")
@@ -940,11 +909,11 @@ def p_pn_sacar_poperRel(p):
 
 def p_pn_sacar_poper2(p):
     '''pn_sacar_poper2 : empty'''
-    print("\n")
-    print(f"Tipos: {pilaTipos}")
-    print(f"Operandos: {pilaOper}")
-    print(f"Operadores: {pOper}")
-    print(f"Direccion : {pilaDir}")
+    #print("\n")
+    #print(f"Tipos: {pilaTipos}")
+    #print(f"Operandos: {pilaOper}")
+    #print(f"Operadores: {pOper}")
+    #print(f"Direccion : {pilaDir}")
     if pOper[-1] == "*" or pOper[-1] == "/":
         op_der = pilaOper.pop()
         tipo_der = Semantica.obtener_tipo(pilaTipos.pop())
@@ -968,7 +937,7 @@ def p_pn_sacar_poper2(p):
             pilaTipos.append(Semantica.obtener_token(tipo_resultado))
             pCuadruplos.generarCuadruplo(
                 contadorCuadruplos, operador, dir_izq, dir_der, pilaDir[-1])
-            print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
+            #print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
 
         else:
             print("Error - Tipo de dato erroneo")
@@ -977,11 +946,11 @@ def p_pn_sacar_poper2(p):
 
 def p_pn_sacar_poper1(p):
     '''pn_sacar_poper1 : empty'''
-    print("\n")
-    print(f"Tipos: {pilaTipos}")
-    print(f"Operandos: {pilaOper}")
-    print(f"Operadores: {pOper}")
-    print(f"Direccion : {pilaDir}")
+    #print("\n")
+    #print(f"Tipos: {pilaTipos}")
+    #print(f"Operandos: {pilaOper}")
+    #print(f"Operadores: {pOper}")
+    #print(f"Direccion : {pilaDir}")
     if pOper[-1] == "+" or pOper[-1] == "-":
         op_der = pilaOper.pop()
         tipo_der = Semantica.obtener_tipo(pilaTipos.pop())
@@ -1005,7 +974,7 @@ def p_pn_sacar_poper1(p):
             pilaTipos.append(Semantica.obtener_token(tipo_resultado))
             pCuadruplos.generarCuadruplo(
                 contadorCuadruplos, operador, dir_izq, dir_der, pilaDir[-1])
-            print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
+            #print(f"Se genero cuadruplo {pilaCuadruplos[-1]}")
         else:
             print("Error - Tipo de dato erroneo")
             quit()
@@ -1291,7 +1260,7 @@ def p_pn_verificar_numero_de_parametros(p):
             direccion = 13000 + cgl
         directorio.directorio[nombrePrograma][1].crear(
             funcionAChecarParams, tipoFuncion, direccion)
-        print("VARIABLES GLOBALES", cge, cgf, cgt, cgl)
+        #print("VARIABLES GLOBALES", cge, cgf, cgt, cgl)
 
 
 # ----- EJECUTAR CODIGO -----

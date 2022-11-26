@@ -1,0 +1,53 @@
+LpEsp bubblesort;
+
+Variables:
+arreglo entero ARR [5];
+var entero a, i, n, izq, der, valorABuscar, mitad;
+var logico loEncontro;
+        
+Funciones:
+
+Esp:
+n = 5;
+    imprime('RELLENAR ARREGLO');
+    i = 0;
+    mientras( i < n):
+        leer(a);
+        ARR[i] = a;
+        i = i + 1;
+    fin;
+    imprime('Arreglo Llenado:', ARR);
+
+    izq = 0;
+    der = n - 1;
+    leer(valorABuscar);
+    loEncontro = falso;
+
+    mientras(der - izq > 1):
+        mitad = (der + izq) / 2;
+
+        si(ARR[mitad] < valorABuscar):
+            izq = mitad + 1;
+        sino:
+            der = mitad;
+        fin;
+    fin;
+    si(ARR[izq] == valorABuscar):
+        i = izq;
+    sino:
+        si(ARR[der] == valorABuscar):
+            i = der;
+        sino:
+            i = -1;
+        fin;
+    fin;
+    
+
+
+
+    imprime('Resultado de BINARY SEARCH:');
+    imprime(i);
+    
+    
+
+Pse;

@@ -1,0 +1,40 @@
+LpEsp bubblesort;
+
+Variables:
+arreglo entero ARR [5];
+var entero a, i, n, j, mit1, mit2;
+        
+Funciones:
+
+Esp:
+n = 5;
+    imprime('RELLENAR ARREGLO');
+    i = 0;
+    mientras( i < n):
+        leer(a);
+        ARR[i] = a;
+        i = i + 1;
+    fin;
+    imprime('Arreglo Llenado:', ARR);
+
+    i = 0;
+    mientras(i < n - 1):
+        j = 0;
+        mientras( j < n - i - 1):
+            mit1 = ARR[j];
+            mit2 = ARR[j + 1];
+
+            si (mit1 > mit2):
+                ARR[j] = mit2;
+                ARR[j + 1] = mit1;
+            fin;
+            j = j + 1;
+        fin;
+        i = i + 1;
+    fin;
+
+    imprime('Arreglo Ordenado:', ARR);
+    
+    
+
+Pse;
