@@ -1,0 +1,40 @@
+LpEsp bubblesort;
+
+Variables:
+    var entero a, i, j, cont;
+    arreglo entero b[5];
+    matriz entero c[3][3];
+    matriz entero d[3][3];
+    matriz entero f[3][3];
+        
+Funciones:
+
+Esp:
+i = 0;
+cont = 0;
+mientras (i < 3):
+    j = 0;
+    mientras (j < 3):
+        c[i][j] = cont;
+        d[j][i] = cont; 
+        cont = cont + 1;
+        j = j + 1;
+    fin;
+    i = i + 1;
+fin;
+
+imprime(c);
+imprime(d);
+
+i = 0;
+mientras (i < 3):
+    j = 0;
+    mientras (j < 3):
+        f[i][j] = c[i][j] / d[i][j];
+        j = j + 1;
+    fin;
+    i = i + 1;
+fin;
+
+imprime(f);
+Pse;
