@@ -59,48 +59,59 @@ class MaquinaVirtual:
                 self.cuadruplos.pilaCuadruplos[indice][0] = self.codigosOperaciones[cuadruplo[0]]
 
     def obtenerValor(self, dirMemoria):
+        try:
+            direccion = int(dirMemoria[1:-1])
+        except:
+            direccion = dirMemoria
         # Memoria Global
-        if dirMemoria >= 1000 and dirMemoria < 20000:
+        if direccion >= 1000 and direccion < 20000:
             return self.memoriaGlobal.obtenerValor(dirMemoria)
         # Memoria Local
-        elif dirMemoria >= 20000 and dirMemoria < 39999:
+        elif direccion >= 20000 and direccion < 39999:
             memoriaLocal = self.memoriasLocales[-1]
             return memoriaLocal.obtenerValor(dirMemoria)
         # Memoria Constante
-        elif dirMemoria >= 40000 and dirMemoria < 49999:
+        elif direccion >= 40000 and direccion < 49999:
             return self.memoriaConstantes.obtenerValor(dirMemoria)
         # Memoria Temporales
-        elif dirMemoria >= 50000:
+        elif direccion >= 50000:
             return self.memoriaTemporales.obtenerValor(dirMemoria)
 
     def obtener_direccion(self, dirMemoria):
-        # Memoria Global
-        if dirMemoria >= 1000 and dirMemoria < 20000:
+        try:
+            direccion = int(dirMemoria[1:-1])
+        except:
+            direccion = dirMemoria
+        if direccion >= 1000 and direccion < 20000:
             return self.memoriaGlobal.obtenerDireccion(dirMemoria)
         # Memoria Local
-        elif dirMemoria >= 20000 and dirMemoria < 39999:
+        elif direccion >= 20000 and direccion < 39999:
             memoriaLocal = self.memoriasLocales[-1]
             return memoriaLocal.obtenerDireccion(dirMemoria)
         # Memoria Constante
-        elif dirMemoria >= 40000 and dirMemoria < 49999:
+        elif direccion >= 40000 and direccion < 49999:
             return self.memoriaConstantes.obtenerDireccion(dirMemoria)
         # Memoria Temporales
-        elif dirMemoria >= 50000:
+        elif direccion >= 50000:
             return self.memoriaTemporales.obtenerDireccion(dirMemoria)
 
     def agregar(self, dirMemoria, id, valor):
+        try:
+            direccion = int(dirMemoria[1:-1])
+        except:
+            direccion = dirMemoria
         # Memoria Global
-        if dirMemoria >= 1000 and dirMemoria < 20000:
+        if direccion >= 1000 and direccion < 20000:
             return self.memoriaGlobal.agregar(dirMemoria, id, valor)
         # Memoria Local
-        elif dirMemoria >= 20000 and dirMemoria < 39999:
+        elif direccion >= 20000 and direccion < 39999:
             memoriaLocal = self.memoriasLocales[-1]
             memoriaLocal.agregar(dirMemoria, id, valor)
         # Memoria Constante
-        elif dirMemoria >= 40000 and dirMemoria < 49999:
+        elif direccion >= 40000 and direccion < 49999:
             return self.memoriaConstantes.agregar(dirMemoria, id, valor)
         # Memoria Temporales
-        elif dirMemoria >= 50000:
+        elif direccion >= 50000:
             return self.memoriaTemporales.agregar(dirMemoria, id, valor)
 
     def agregarArre(self, dirMemoria, id, valor, dimension1=None):
@@ -166,18 +177,22 @@ class MaquinaVirtual:
             return self.memoriaTemporales.actualizarId(dirMemoria, id)
 
     def obtenerLen(self, dirMemoria):
-        if dirMemoria >= 1000 and dirMemoria < 20000:
-            return self.memoriaGlobal.obtenerLen(dirMemoria)
+        try:
+            direccion = int(dirMemoria[1:-1])
+        except:
+            direccion = dirMemoria
+        if direccion >= 1000 and direccion < 20000:
+            return self.memoriaGlobal.obtenerLen(direccion)
         # Memoria Local
-        elif dirMemoria >= 20000 and dirMemoria < 39999:
+        elif direccion >= 20000 and direccion < 39999:
             memoriaLocal = self.memoriasLocales[-1]
-            return memoriaLocal.obtenerLen(dirMemoria)
+            return memoriaLocal.obtenerLen(direccion)
         # Memoria Constante
-        elif dirMemoria >= 40000 and dirMemoria < 49999:
-            return self.memoriaConstantes.obtenerLen(dirMemoria)
+        elif direccion >= 40000 and direccion < 49999:
+            return self.memoriaConstantes.obtenerLen(direccion)
         # Memoria Temporales
-        elif dirMemoria >= 50000:
-            return self.memoriaTemporales.obtenerLen(dirMemoria)
+        elif direccion >= 50000:
+            return self.memoriaTemporales.obtenerLen(direccion)
 
     def obtenerDimArreglo(self, dirMemoria):
         if dirMemoria >= 1000 and dirMemoria < 20000:
@@ -326,7 +341,10 @@ class MaquinaVirtual:
         indice = 1
         while indice <= len(pila):
             cuadruplo = pila[indice]
-            # print(cuadruplo)
+            #print(cuadruplo)
+            #self.memoriaConstantes.imprimirMemoriaVirtual()
+            #self.memoriaGlobal.imprimirMemoriaVirtual()
+            #self.memoriaTemporales.imprimirMemoriaVirtual()
 
             if cuadruplo[0] == 0:  # GOTOMAIN
                 indice = cuadruplo[-1]
@@ -418,7 +436,7 @@ class MaquinaVirtual:
                     print(
                         "Error - Error al hacer la division. Verifica valor de operadores")
 
-                self.actualizarValor(dir_resultado, resultado)
+                self.actualizarValor(direccion_resultado, resultado)
                 indice += 1
 
             elif cuadruplo[0] == 6:  # ENDFUNC
@@ -490,8 +508,9 @@ class MaquinaVirtual:
                         valor += "\n"
                     valor += "]"
                 else:
+                    direccion = self.obtener_direccion(direccion)
                     valor = self.obtenerValor(direccion)
-                    print(valor)
+                print(valor)
                 indice += 1
 
             # LEER
@@ -503,7 +522,7 @@ class MaquinaVirtual:
                         valor = int(valor)
                     except:
                         print(
-                            f"Error de Ejecucion - se esta tratando de asignar un tipo de dato incorrecto a: {variable}")
+                            f"Error de Ejecucion - leer se esta tratando de asignar un tipo de dato incorrecto a: {variable}")
                         quit()
                 elif cuadruplo[-1] >= 5000 and cuadruplo[-1] < 9000:
                     try:
