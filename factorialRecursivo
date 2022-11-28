@@ -1,7 +1,7 @@
 LpEsp factorialRecursivo;
 
 Variables:
-    var entero resultado;
+    var entero resultado, n;
      
 Funciones:
 
@@ -21,7 +21,9 @@ Funciones:
 
 
 Esp:
-    resultado = factorial(3);
+    imprime('Ingresa un valor para encontrar su factorial: ');
+    leer(n);
+    resultado = factorial(n);
     imprime(resultado);
 
 Pse;
