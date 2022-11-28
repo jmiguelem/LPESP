@@ -73,6 +73,21 @@ class MaquinaVirtual:
         elif dirMemoria >= 50000:
             return self.memoriaTemporales.obtenerValor(dirMemoria)
 
+    def obtener_direccion(self, dirMemoria):
+        # Memoria Global
+        if dirMemoria >= 1000 and dirMemoria < 20000:
+            return self.memoriaGlobal.obtenerDireccion(dirMemoria)
+        # Memoria Local
+        elif dirMemoria >= 20000 and dirMemoria < 39999:
+            memoriaLocal = self.memoriasLocales[-1]
+            return memoriaLocal.obtenerDireccion(dirMemoria)
+        # Memoria Constante
+        elif dirMemoria >= 40000 and dirMemoria < 49999:
+            return self.memoriaConstantes.obtenerDireccion(dirMemoria)
+        # Memoria Temporales
+        elif dirMemoria >= 50000:
+            return self.memoriaTemporales.obtenerDireccion(dirMemoria)
+
     def agregar(self, dirMemoria, id, valor):
         # Memoria Global
         if dirMemoria >= 1000 and dirMemoria < 20000:
@@ -305,15 +320,6 @@ class MaquinaVirtual:
             else:
                 self.agregar(
                     tablaVariablesGlobales.tabla[variable][1], variable, "")
-
-    def obtener_direccion(self, direccion):
-        memoria = self.memoriaVirtual
-        if type(direccion) == type(' '):
-            apuntador = int(direccion[1:-1])
-            dir_arreglo = memoria.obtenerValor(apuntador)
-            return dir_arreglo
-        else:
-            return direccion
 
     def ejecucion(self):
         pila = self.cuadruplos.pilaCuadruplos

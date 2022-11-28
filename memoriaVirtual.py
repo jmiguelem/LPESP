@@ -75,6 +75,14 @@ class MemoriaVirtual:
                 print(f"Espacio {dirMemoria} de memoria no existe")
                 exit()
 
+    def obtenerDireccion(self, direccion):
+        if type(direccion) == type(' '):
+            apuntador = int(direccion[1:-1])
+            dir_arreglo = self.obtenerValor(apuntador)
+            return dir_arreglo
+        else:
+            return direccion
+
     def obtenerLen(self, dirMemoria):
         return len(self.memoriaVirtual[dirMemoria])
 
