@@ -525,7 +525,7 @@ class MaquinaVirtual:
             # GOTOF
             elif cuadruplo[0] == 12:
                 direccion = self.obtener_direccion(cuadruplo[1])
-                if self.obtenerValor(direccion) == self.obtenerValor(36000) or self.obtenerValor(direccion) == False:
+                if self.obtenerValor(direccion) == self.obtenerValor(46000) or self.obtenerValor(direccion) == False:
                     indice = cuadruplo[-1]
                 else:
                     indice += 1
@@ -537,7 +537,7 @@ class MaquinaVirtual:
             # GOTOT
             elif cuadruplo[0] == 14:
                 direccion = self.obtener_direccion(cuadruplo[1])
-                if self.obtenerValor(direccion) == self.obtenerValor(36001) or self.obtenerValor(direccion) == True:
+                if self.obtenerValor(direccion) == self.obtenerValor(46001) or self.obtenerValor(direccion) == True:
                     indice = cuadruplo[-1]
                 else:
                     indice += 1
@@ -580,9 +580,9 @@ class MaquinaVirtual:
 
                 resultado = op1 < op2
                 if resultado:
-                    resultado = self.obtenerValor(36001)
+                    resultado = self.obtenerValor(46001)
                 else:
-                    resultado = self.obtenerValor(36000)
+                    resultado = self.obtenerValor(46000)
 
                 self.actualizarValor(dir_resultado, resultado)
                 indice += 1
@@ -598,9 +598,9 @@ class MaquinaVirtual:
 
                 resultado = op1 > op2
                 if resultado:
-                    resultado = self.obtenerValor(36001)
+                    resultado = self.obtenerValor(46001)
                 else:
-                    resultado = self.obtenerValor(36000)
+                    resultado = self.obtenerValor(46000)
 
                 self.actualizarValor(dir_resultado, resultado)
                 indice += 1
@@ -616,9 +616,9 @@ class MaquinaVirtual:
 
                 resultado = op1 != op2
                 if resultado:
-                    resultado = self.obtenerValor(36001)
+                    resultado = self.obtenerValor(46001)
                 else:
-                    resultado = self.obtenerValor(36000)
+                    resultado = self.obtenerValor(46000)
 
                 self.actualizarValor(dir_resultado, resultado)
                 indice += 1
@@ -634,9 +634,9 @@ class MaquinaVirtual:
 
                 resultado = op1 == op2
                 if resultado:
-                    resultado = self.obtenerValor(36001)
+                    resultado = self.obtenerValor(46001)
                 else:
-                    resultado = self.obtenerValor(36000)
+                    resultado = self.obtenerValor(46000)
 
                 self.actualizarValor(dir_resultado, resultado)
                 indice += 1
@@ -650,11 +650,11 @@ class MaquinaVirtual:
                 op2 = self.obtenerValor(dir_op2)
 
                 resultado = op1 == self.obtenerValor(
-                    36001) or op2 == self.obtenerValor(36001)
+                    46001) or op2 == self.obtenerValor(46001)
                 if resultado:
-                    resultado = self.obtenerValor(36001)
+                    resultado = self.obtenerValor(46001)
                 else:
-                    resultado = self.obtenerValor(36000)
+                    resultado = self.obtenerValor(46000)
 
                 self.actualizarValor(dir_resultado, resultado)
                 indice += 1
@@ -668,11 +668,11 @@ class MaquinaVirtual:
                 op2 = self.obtenerValor(dir_op2)
 
                 resultado = op1 == self.obtenerValor(
-                    36001) and op2 == self.obtenerValor(36001)
+                    46001) and op2 == self.obtenerValor(46001)
                 if resultado:
-                    resultado = self.obtenerValor(36001)
+                    resultado = self.obtenerValor(46001)
                 else:
-                    resultado = self.obtenerValor(36000)
+                    resultado = self.obtenerValor(46000)
 
                 self.actualizarValor(dir_resultado, resultado)
                 indice += 1
