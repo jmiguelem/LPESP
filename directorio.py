@@ -148,7 +148,7 @@ class TablaVariables:
 
 class Constantes:
     numeroConstantes = 2000
-    dirE = 30000
+    dirE = 40000
     dirF = dirE + numeroConstantes
     dirT = dirF + numeroConstantes
     dirL = dirT + numeroConstantes

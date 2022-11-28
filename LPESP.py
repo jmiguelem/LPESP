@@ -14,7 +14,8 @@ pOper = [""]
 pilaCuadruplos = []
 pilaSaltos = []
 contadorAvail = 0
-direccionAvail = 200000
+# Constante memoria locales
+direccionAvail = 50000
 pCuadruplos = Cuadruplos()
 contadorCuadruplos = 0
 parameterCounterK = 0
@@ -25,11 +26,25 @@ cgf = 0
 cgt = 0
 cgl = 0
 
+# Constantes de Memorias Variables Globales
+CGEDIR = 1000
+CGFDIR = 5000
+CGTDIR = 9000
+CGLDIR = 13000
+
+
 # Contadores de Variables Locales
 cle = 0
 clf = 0
 clt = 0
 cll = 0
+
+# Constantes de Memorias Variables Locales
+CLEDIR = 20000
+CLFDIR = 25000
+CLTDIR = 29000
+CLLDIR = 33000
+
 
 # Contadores de Constantes
 cce = 0
@@ -142,16 +157,16 @@ def p_pn_agrega_variable(p):
     global cge, cgf, cgl, cgt
     if tipoVariable == "entero":
         cge += 1
-        direccion = 1000 + cge
+        direccion = CGEDIR + cge
     elif tipoVariable == "flotante":
         cgf += 1
-        direccion = 5000 + cgf
+        direccion = CGFDIR + cgf
     elif tipoVariable == "texto":
         cgt += 1
-        direccion = 9000 + cgt
+        direccion = CGTDIR + cgt
     elif tipoVariable == "logico":
         cgl += 1
-        direccion = 13000 + cgl
+        direccion = CGLDIR + cgl
     directorio.directorio[funcionActual][1].crear(
         p[-1], tipoVariable, direccion)
     print("VARIABLES GLOBALES", cge, cgf, cgt, cgl)
@@ -168,16 +183,16 @@ def p_pn_agrega_variable_arreglo(p):
     global cge, cgf, cgl, cgt
     if tipoVariable == "entero":
         cge += 1
-        direccion = 1000 + cge
+        direccion = CGEDIR + cge
     elif tipoVariable == "flotante":
         cgf += 1
-        direccion = 5000 + cgf
+        direccion = CGFDIR + cgf
     elif tipoVariable == "texto":
         cgt += 1
-        direccion = 9000 + cgt
+        direccion = CGTDIR + cgt
     elif tipoVariable == "logico":
         cgl += 1
-        direccion = 13000 + cgl
+        direccion = CGLDIR + cgl
 
     global id_arreglo
     id_arreglo = p[-1]
@@ -565,16 +580,16 @@ def p_pn_agrega_variable(p):
     global cge, cgf, cgl, cgt
     if tipoVariable == "entero":
         cge += 1
-        direccion = 1000 + cge
+        direccion = CGEDIR + cge
     elif tipoVariable == "flotante":
         cgf += 1
-        direccion = 5000 + cgf
+        direccion = CGFDIR + cgf
     elif tipoVariable == "texto":
         cgt += 1
-        direccion = 9000 + cgt
+        direccion = CGTDIR + cgt
     elif tipoVariable == "logico":
         cgl += 1
-        direccion = 13000 + cgl
+        direccion = CGLDIR + cgl
     directorio.directorio[nombrePrograma][1].crear(
         p[-1], tipoVariable, direccion)
     #print("VARIABLES GLOBALES", cge, cgf, cgt, cgl)
@@ -584,16 +599,16 @@ def agrega_variable_local(p):
     global cle, clf, cll, clt
     if tipoVariableFuncion == "entero":
         cle += 1
-        direccion = 10000 + cle
+        direccion = CLEDIR + cle
     elif tipoVariableFuncion == "flotante":
         clf += 1
-        direccion = 50000 + clf
+        direccion = CLFDIR + clf
     elif tipoVariableFuncion == "texto":
         clt += 1
-        direccion = 90000 + clt
+        direccion = CLTDIR + clt
     elif tipoVariableFuncion == "logico":
         cll += 1
-        direccion = 130000 + cll
+        direccion = CLLDIR + cll
 
     directorio.directorio[idFuncion][1].crear(
         p, tipoVariableFuncion, direccion)
@@ -604,16 +619,16 @@ def agrega_variable_local_param(p):
     global cle, clf, cll, clt
     if tipoParamFuncion == "entero":
         cle += 1
-        direccion = 10000 + cle
+        direccion = CLEDIR + cle
     elif tipoParamFuncion == "flotante":
         clf += 1
-        direccion = 50000 + clf
+        direccion = CLFDIR + clf
     elif tipoParamFuncion == "texto":
         clt += 1
-        direccion = 90000 + clt
+        direccion = CLTDIR + clt
     elif tipoParamFuncion == "logico":
         cll += 1
-        direccion = 130000 + cll
+        direccion = CLLDIR + cll
     directorio.directorio[idFuncion][1].crear(
         p, tipoParamFuncion, direccion)
     #print("VARIABLES LOCALES", cle, clf, clt, cll)
@@ -1196,6 +1211,11 @@ def p_pn_verificar_funcion_existe(p):
     pilaCuadruplos.append(["ERA", "", "", id_funcion_a_checar])
     pCuadruplos.generarCuadruplo(
         contadorCuadruplos, "ERA", "", "", id_funcion_a_checar)
+    global cle, clf, clt, cll
+    cle = 0
+    clf = 0
+    clt = 0
+    cll = 0
 
 
 def p_bloque_expresiones_llamada_funciones_padre(p):
@@ -1235,16 +1255,16 @@ def p_pn_verificar_tipo_parametro(p):
         global cle, clf, cll, clt
         if tipoArgumento == "entero":
             cle += 1
-            direccion = 10000 + cle
+            direccion = CLEDIR + cle
         elif tipoArgumento == "flotante":
             clf += 1
-            direccion = 50000 + clf
+            direccion = CLFDIR + clf
         elif tipoArgumento == "texto":
             clt += 1
-            direccion = 90000 + clt
+            direccion = CLTDIR + clt
         elif tipoArgumento == "logico":
             cll += 1
-            direccion = 130000 + cll
+            direccion = CLLDIR + cll
 
         pCuadruplos.generarCuadruplo(
             contadorCuadruplos, "PARAMETER", memoriaExp, "", direccion)

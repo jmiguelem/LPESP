@@ -1,0 +1,27 @@
+LpEsp funciones5;
+
+Variables:
+    var entero resultado;
+     
+Funciones:
+
+    entero funcion1(entero x):
+    
+            Variables:
+                var entero temporalLocal;
+            Bloque:
+                si (x < 2):
+                    temporalLocal = 1;
+                sino:
+                    temporalLocal = x * funcion1(x - 1);
+                fin;
+                
+                Regresa temporalLocal;
+                
+
+
+Esp:
+    resultado = funcion1(3);
+    imprime(resultado);
+
+Pse;
