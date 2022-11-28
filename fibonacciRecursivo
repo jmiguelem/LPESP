@@ -1,0 +1,33 @@
+LpEsp fibonacciRecursivo;
+
+Variables:
+    var entero i, resultado, n;
+     
+Funciones:
+
+    entero fibonacci(entero x):
+    
+            Variables:
+                var entero temporalLocal, local1;
+            Bloque:
+                si (x < 2):
+                    temporalLocal = x;
+                sino:
+                    local1 = fibonacci(x - 1);
+                    temporalLocal = ( local1 + fibonacci(x - 2));
+                fin;
+                
+                Regresa temporalLocal;
+                
+
+
+Esp:
+    i = 0;
+    mientras(i < 15):
+        resultado = fibonacci(i);
+        imprime(resultado);
+        i = i + 1;
+    fin;
+    
+
+Pse;

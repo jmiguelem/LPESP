@@ -1,0 +1,24 @@
+LpEsp factorialCiclica;
+
+Variables:
+    var entero i, factorial, n;
+     
+Funciones:
+
+Esp:
+    i = 1;
+    factorial = 1;
+    n = 4;
+    si (n == 0):
+        imprime('El factorial es 1');
+    sino:
+        mientras(i < n + 1 ):
+        factorial = factorial * i;
+        i = i + 1;
+
+        fin;
+    fin;
+
+    imprime(factorial);
+
+Pse;

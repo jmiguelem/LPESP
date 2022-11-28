@@ -13,7 +13,7 @@ class MemoriaVirtual:
 
     def agregarArre(self, dirMemoria, id, valor, dimension1=None):
         if dirMemoria in self.memoriaVirtual.keys():
-            print(self.memoriaVirtual)
+           # print(self.memoriaVirtual)
             print("Ese espacio de memoria ya esta en uso (agregarArre)", dirMemoria)
             exit()
         else:
@@ -35,8 +35,8 @@ class MemoriaVirtual:
             if dirMemoria >= 50000:
                 self.agregar(dirMemoria, "", valor)
             else:
-                print(dirMemoria, valor,
-                      "Ese espacio de memoria no existe (actualizarValor)")
+                print(
+                    "Ese espacio de memoria no existe (actualizarValor)")
                 exit()
 
     def actualizarId(self, dirMemoria, id):
@@ -63,8 +63,8 @@ class MemoriaVirtual:
     def obtenerValor(self, dirMemoria):
         if dirMemoria in self.memoriaVirtual.keys():
             if self.memoriaVirtual[dirMemoria][1] == '':
-                print(dirMemoria,
-                      f"Error en Ejecucion- Variable {self.memoriaVirtual[dirMemoria][0]} no tiene asignado un valor")
+                print(
+                    f"Error en Ejecucion- Variable {self.memoriaVirtual[dirMemoria][0]} no tiene asignado un valor")
                 quit()
 
             return self.memoriaVirtual[dirMemoria][1]

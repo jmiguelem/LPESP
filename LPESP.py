@@ -1309,7 +1309,7 @@ def p_pn_verificar_numero_de_parametros(p):
 
 # ----- EJECUTAR CODIGO -----
 print("Bienvenido a LPESP")
-archivo = input("Escribe el nombre del archivo a leer:")
+archivo = input("Escribe el nombre del archivo a leer: ")
 code = open(archivo, 'r')
 data = str(code.read())
 yacc.yacc()

@@ -1,0 +1,32 @@
+LpEsp fibonacciCiclico;
+
+Variables:
+    var entero i, t1, t2, siguiente, n;
+     
+Funciones:
+
+Esp:
+    t1 = 0;
+    t2 = 1;
+    n = 15;
+    i = 2;
+    mientras(i < n + 1 ):
+        si (i < 3):
+            si (i < 2):
+                imprime(t1);
+            sino:
+                imprime(t2);
+            fin;
+        sino:
+            siguiente = t1 + t2;
+            t1 = t2;
+            t2 = siguiente;
+            imprime(siguiente);
+
+        fin;
+        i = i + 1;
+        
+    fin;
+
+
+Pse;

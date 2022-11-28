@@ -1,11 +1,11 @@
-LpEsp funciones5;
+LpEsp factorialRecursivo;
 
 Variables:
     var entero resultado;
      
 Funciones:
 
-    entero funcion1(entero x):
+    entero factorial(entero x):
     
             Variables:
                 var entero temporalLocal;
@@ -13,7 +13,7 @@ Funciones:
                 si (x < 2):
                     temporalLocal = 1;
                 sino:
-                    temporalLocal = x * funcion1(x - 1);
+                    temporalLocal = x * factorial(x - 1);
                 fin;
                 
                 Regresa temporalLocal;
@@ -21,7 +21,7 @@ Funciones:
 
 
 Esp:
-    resultado = funcion1(4);
+    resultado = factorial(3);
     imprime(resultado);
 
 Pse;

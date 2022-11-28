@@ -326,7 +326,7 @@ class MaquinaVirtual:
         indice = 1
         while indice <= len(pila):
             cuadruplo = pila[indice]
-            print(cuadruplo)
+            # print(cuadruplo)
 
             if cuadruplo[0] == 0:  # GOTOMAIN
                 indice = cuadruplo[-1]
